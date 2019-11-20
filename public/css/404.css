@@ -1,0 +1,15 @@
+/* RESET */
+* {
+    margin: 0; 
+    padding: 0;
+}
+
+body {
+    /* background: black; */
+    background: #222222;
+
+}
+
+canvas {
+    display: block;
+}

@@ -1,0 +1,21 @@
+body {
+    font-size: 12px;
+    /* font-family: monospace; */
+    color: greenyellow;
+    background: #222222;
+}
+
+banner {
+    font-size: 16px;
+    letter-spacing: 0px;
+    font-family: monospace;
+    color: greenyellow;
+}
+
+span {
+    letter-spacing: -1px;
+}
+
+a {
+    color: red;
+}
