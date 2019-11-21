@@ -11,7 +11,7 @@ matrix.width = window.innerWidth;
 //rain = rain.split(""); // array
 var rain = ["4","0"];
 
-var fontSize = 20;
+var fontSize = 24;
 var columns = matrix.width/fontSize; // number of columns to fill the screen
 var drops = [];
 

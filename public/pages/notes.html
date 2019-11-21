@@ -33,7 +33,141 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
                         </pre>                                                                                                                      
                     </div>
         
-        
+                    <div id="welcome">
+                        <banner>
+                        <pre>
+//=====< 2019-11-21T08:58:58+00:00 >==============================================\\
+||                                                                                ||
+||     Hi again!                                                                  ||
+||                                                                                ||
+||     I'm not a big fan of writing blogs so I figure shairing my notes on        ||
+||     what I've been working on be a good compromise. Below is the story of      ||
+||     the first cool thing I've done with a radio. :3                            ||
+||                                                                                ||
+||     When I used to go to bars I always thought to myself how neat it woud      ||
+||     be to just play music from the Jukebox for free. You know? ?ike 'The Fonz' ||
+||     from the 70's sitcom 'Happy Days'. My target was an IOT jukebox made by    ||
+||     TouchTunes®️ and they where populer in the Seattle area. After reading up   ||
+||     on some of there manules, I learned that they used a wireless remote that  ||
+||     TXed on 433.92MHz. Armed with that knologe I bought myself a remote from   ||
+||     eBay for about $40.                                                        ||
+||                                                                                ||
+||     Having never done this before, I Youtubed everything I could on reversing  ||
+||     wireless protocols. I realy owe thanks for the foaks at Hak5 and Michael   ||
+||     Osman from GSG for speanding the time to create detailed videos on the     ||
+||     the topic. Using a HackRF and the program inspectrum I was able to learn   ||
+||     enough about the wireless remote to program my Yard Stick One to stream    ||
+||     line the process. The next step was to the record all the messages and     ||
+||     compaire them with each other.                                             ||
+||                                                                                ||
+||     TL;DR when I first looked at this protocol, I only knew the modulation     ||
+||     type (ASK/OOK), the symble rate (1766), preamble (0xFFFF00), and the       ||
+||     encoded sync word. Not knowing what the encoding method was I recorded     ||
+||     every posable message from pin 000 to 255, created 3 ungly look up tables  ||
+||     used a little python hackery to make it work! And it did! :D               ||
+||                                                                                ||
+||     About a year latter, a VERRY talented person (Furrtek) ported my work      ||
+||     over to his portapack firmware port, Havoc. I didn't figure this out       ||
+||     untill I updated my portapack with his firmware and I was a bit tickled    ||
+||     to see a TX option for TouchTunes®️ at the bottem. :D                       ||
+||                                                                                ||
+||     Not only did he port my work, he also figured out the encoding scheam      ||
+||     from my hacked togeather code. Turned out to be NEC which is an IR         ||
+||     protocol used for TV remotes. NEC is simple. 1's are encoded to (1 0 0 0)  ||
+||     which for OOK is (ON OFF OFF OFF) per the symble rate and 0's are just     ||
+||     (1 0) or (ON OFF).                                                         ||
+||                                                                                ||
+||     With this better understanding of how the TouchTunes®️ remote works I       ||
+||     updated my code to encode and decode the NEC protocol. Anyway if you       ||
+||     are intristed in poking at some jukeboxs feel free and check out           ||
+||     'The-Fonz' project for the Yard Stick One. Furrtek also ported this over   ||
+||     to the portapack with the Havor firmware. Also, I wrote an app for the     ||
+||     goodwatch project so this research is now suported on three platforms! :D  ||
+||                                                                                ||
+||     --> The-Fonz:  <a href="https://github.com/notpike/The-Fonz">https://github.com/notpike/The-Fonz</a>                         ||
+||     --> Havoc:     <a href="https://github.com/furrtek/portapack-havoc">https://github.com/furrtek/portapack-havoc</a>                  ||
+||     --> goodwatch: <a href="https://github.com/travisgoodspeed/goodwatch">https://github.com/travisgoodspeed/goodwatch</a>                ||
+||                                                                                ||
+||     Below is all the technical data reguarding the remote...                   ||
+||                                                                                ||
+||     * Frequency: 433.92MHz                                                     ||
+||     * Modulation: ASK/OOK                                                      ||
+||     * Protocol: NEC                                                            ||
+||     * Symbol Rate: 1766                                                        ||
+||     * Symbol Period: 566us                                                     ||
+||                                                                                ||
+||       ==NEC Format==                                                           ||
+||     * Short(0): 10   (ON OFF)                                                  ||
+||     * Long (1): 1000 (ON OFF OFF OFF)                                          ||
+||                                                                                ||
+||     * Structure:                 {SYNC} {PREAMBLE} {PIN} {COMMAND} {TAIL}      ||
+||     * Sync (Literal Symbols):    0xFFFF00                                      ||
+||     * Preamble (Decoded NEC):    0x5D                                          ||
+||     * PIN 000-255 (Decoded NEC): 0x00-0xFF (LSB)                               ||
+||     * Tail (Literal Symbols):    0x8                                           ||
+||                                                                                ||
+||     * Commnds:                                                                 ||
+||     * Note: Commands are doubled with the 2nd half being reversed.             ||
+||             For example, Pause 0x32 will translate to 0x3223 before            ||
+||             being encoded to the literal symbols. \xA8\x8A\x8A\xA2\xA8\x80     ||
+||                                                                                ||
+||                               0x32, // Pause                                   ||
+||                               0x78, // On/Off                                  ||
+||                               0x70, // P1                                      ||
+||                               0x60, // P2 Edit Queue                           ||
+||                               0xCA, // P3 Skip                                 ||
+||                               0x20, // F1 Restart                              ||
+||                               0xF2, // Up                                      ||
+||                               0xA0, // F2 Key                                  ||
+||                               0x84, // Left                                    ||
+||                               0x44, // OK                                      ||
+||                               0xC4, // Right                                   ||
+||                               0x30, // F3 Mic A Mute                           ||
+||                               0x80, // Down                                    ||
+||                               0xB0, // F4 Mic B Mute                           ||
+||                               0xF0, // 1                                       ||
+||                               0x08, // 2                                       ||
+||                               0x88, // 3                                       ||
+||                               0x48, // 4                                       ||
+||                               0xC8, // 5                                       ||
+||                               0x28, // 6                                       ||
+||                               0xA8, // 7                                       ||
+||                               0x68, // 8                                       ||
+||                               0xE8, // 9                                       ||
+||                               0x18, // * Music_Karaoke                         ||
+||                               0x98, // 0                                       ||
+||                               0x58, // # Lock_Queue                            ||
+||                               0xD0, // Zone 1 Vol+                             ||
+||                               0x90, // Zone 2 Vol+                             ||
+||                               0xC0, // Zone 3 Vol+                             ||
+||                               0x50, // Zone 1 Vol-                             ||
+||                               0x10, // Zone 2 Vol-                             ||
+||                               0x40, // Zone 3 Vol-                             ||
+||                                                                                ||
+||       ==Example==                                                              ||
+||     * Command:             Pin 000 - On/Off                                    ||
+||     * Literal Symbols HEX: ffff00 a2888a2 aaaa 8888aa2aa2220                   ||
+||     * Literal Symbols BIN: 11111111111111110000 10 1000 10 1000 1000 1000      ||
+||                            10 1000 10 10 10 10 10 10 10 10 10 1000 1000        ||
+||                            1000 1000 10 10 10 1000 10 10 10 10 1000 1000       ||
+||                            1000 100000                                         ||
+||                                                                                ||
+||     * Decoded Symbols:     SYNC         S  L    S  L    L    L    S  L         ||
+||                            S  S  S  S  S  S  S  S  S  L    L    L    L         ||
+||                            S  S  S  L    S  S  S  S  L    L    L    TAIL       ||
+||                                                                                ||
+||     -- NotPike                                                                 ||
+||                                                                                ||
+\\================================================================================//
+                                                            \                       
+                                                             \   ^__^               
+                                                              \  (oo)\_______       
+                                                                 (__)\       )\/\   
+                                                                     ||----w |      
+                                                                     ||     ||      
+                        </pre>
+                        </banner>
+                    </div>
                 </center>    
     </body>
 </html>
