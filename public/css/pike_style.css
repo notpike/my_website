@@ -1,21 +1,50 @@
 body {
     font-size: 12px;
-    /* font-family: monospace; */
+    font-family: monospace;
     color: greenyellow;
     background: #222222;
 }
 
 banner {
     font-size: 16px;
-    letter-spacing: 0px;
     font-family: monospace;
     color: greenyellow;
 }
 
-span {
+login {
+    font-size: 16px;
+    color: greenyellow;    
+}
+
+input {
+    background-color: #585858;
+    color: greenyellow;
+    border: 1px black;
+    padding: 4px 2px;
+    margin: 4px 0;
+    box-sizing: border-box;    
+}
+
+input[type="submit"]:hover {
+    background-color: #999999;
+}
+
+/* Blinking curser */
+.blink {
     letter-spacing: -1px;
 }
 
+.bio {
+    font-size: 16px;
+    font-family: monospace;
+    color: greenyellow;
+}
+
+/* Links */
 a {
-    color: red;
+    color: rgb(255, 0, 0);
+}
+
+a:hover {
+    COLOR: rgb(218, 124, 0);
 }
