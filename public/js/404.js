@@ -1,3 +1,9 @@
+/*
+ * Name: NotPike
+ * File: 404.js
+ * Licence: MIT
+ */
+
 //Logic refered from https://codepen.io/P3R0/pen/MwgoKv
 var matrix = document.getElementById("matrix");
 var ctx = matrix.getContext("2d");
@@ -32,7 +38,7 @@ function draw() {
     // drop loop
     for(i = 0; i < drops.length; i++) {
         //var text = rain[Math.floor(Math.random() * rain.length)]; // random rain char
-        var text = rain[i%2]; 
+        var text = rain[i%2]; // 0 for even, 1 for odd
         ctx.fillText(text, i*fontSize, drops[i]*fontSize);
 
         // restart drop

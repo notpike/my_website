@@ -53,3 +53,8 @@ a {
 a:hover {
     COLOR: rgb(218, 124, 0);
 }
+
+/* Img */
+img {
+    width: 31%;
+}

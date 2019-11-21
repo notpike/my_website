@@ -44,18 +44,18 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     what I've been working on be a good compromise. Below is the story of      ||
 ||     the first cool thing I've done with a radio. :3                            ||
 ||                                                                                ||
-||     When I used to go to bars I always thought to myself how neat it would     ||
+||     When I used to go to bars, I always thought to myself how neat it would    ||
 ||     be to just play music from the Jukebox for free. You know? like 'The Fonz' ||
 ||     from the 70's sitcom 'Happy Days'? My target was an IOT jukebox made by    ||
 ||     TouchTunes®️ and they where popular in the Seattle area. After reading up   ||
 ||     on some of their manuals, I learned that they used a wireless remote that  ||
 ||     TXed on 433.92MHz. Promotional credits where another feature I found that  ||
-||     could be exploited with the remote. Armed with that knologe I bought       ||
+||     could be exploited with the remote. Armed with that knologe, I bought      ||
 ||     myself a remote from eBay for about $40.                                   ||
 ||                                                                                ||
 ||     Having never done this before, I Youtubed everything I could on reversing  ||
 ||     wireless protocols. I realy owe thanks for the foaks at Hak5 and Michael   ||
-||     Osman from GSG for speanding the time to create detailed videos on the     ||
+||     Osman from GSG for spending the time to create detailed videos on the      ||
 ||     the topic. Using a HackRF and the program inspectrum I was able to learn   ||
 ||     enough about the wireless remote to program a Yard Stick One to stream     ||
 ||     line the process. The next step was to the record all the messages and     ||
@@ -64,39 +64,46 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     TL;DR, when I first looked at this protocol, I only knew the modulation    ||
 ||     type (ASK/OOK), the symbol rate (1766), preamble (0xFFFF00), and the       ||
 ||     encoded sync word. Not knowing what the encoding method was I recorded     ||
-||     every posable message from pin 000 to 255, created 3 ugly look up tables,  ||
-||     and used a little Python hackery to make it work! And it did! :D           ||
+||     every possable message from pin 000 to 255, created three ugly look up     ||
+||     tables, and used a little Python hackery to make it work! And it did!      ||
 ||                                                                                ||
-||     About a year latter, a VERRY talented person (Furrtek) ported my work      ||
+||     About a year later, a VERRY talented person (Furrtek) ported my work       ||
 ||     over to his portapack firmware fork, Havoc. I didn't figure this out       ||
 ||     untill I updated my portapack with his firmware. TBH I was a bit tickled   ||
-||     to see a TX option for TouchTunes®️ at the bottom. definitely a feel good   || 
+||     to see a TX option for TouchTunes®️ at the bottom. definitely a feel good   ||
 ||     moment! :D                                                                 ||
 ||                                                                                ||
 ||     So not only did he port my work, he also figured out the encoding schema   ||
-||     from my hacked together code. Turned out to be NEC which is an IR          ||
+||     from my hacked together code. It turned out to be NEC which is an IR       ||
 ||     protocol used for TV remotes. NEC is simple, 1's are encoded to (1 0 0 0)  ||
 ||     which for OOK is (ON OFF OFF OFF) per the symbol rate and 0's are just     ||
 ||     (1 0) or (ON OFF). NEC isn't something wireless engineers go out of their  ||
 ||     way to use for a fire and forget application but there it was. :D          ||
 ||                                                                                ||
-||     With a better understanding of how the TouchTunes®️ remote's worked, I      ||
+||     With a better understanding of how the TouchTunes®️ remotes worked, I       ||
 ||     updated my code to encode and decode the NEC protocol. I also added a few  ||
 ||     other 'features' such as a brute forcing method where it runs a command    ||
-||     from pin 000 to 255 and an Electronic Warfare (EW) mode. EW is DOD speek   ||
+||     from pin 000 to 255 and an Electronic Warfare (EW) mode. EW is DOD speak   ||
 ||     for jamming when you want to jam and not jamming when you don't want to    ||
 ||     jam... Clear as mud? If not read the sorce code because it's unlawful AF!  ||
-||     Only use EW mode for testing and in a closed RF environment!               ||    
+||     Only use EW mode for testing and in a closed RF environment!               ||
 ||                                                                                ||
-||     SO! if you're intristed in poking some jukeboxs feel free and check out    ||
+||     --> Test Environment: <a href="../img/tf_1.jpg" target="_blank">IMG</a>                                                  ||
+||     --> FFT:              <a href="../img/tf_2.jpg" target="_blank">IMG</a>                                                  ||
+||                                                                                ||
+||     SO! if you're interested in poking some jukeboxs feel free and check out   ||
 ||     'The-Fonz' project for the Yard Stick One. Furrtek also ported this over   ||
 ||     to the portapack with the Havor firmware. Also, I wrote an app for the     ||
 ||     goodwatch project so this research is now supported on three platforms!    ||
 ||     :D                                                                         ||
 ||                                                                                ||
-||     --> The-Fonz:  <a href="https://github.com/notpike/The-Fonz">https://github.com/notpike/The-Fonz</a>                         ||
-||     --> Havoc:     <a href="https://github.com/furrtek/portapack-havoc">https://github.com/furrtek/portapack-havoc</a>                  ||
-||     --> goodwatch: <a href="https://github.com/travisgoodspeed/goodwatch">https://github.com/travisgoodspeed/goodwatch</a>                ||
+||     --> The-Fonz:  <a href="https://github.com/notpike/The-Fonz" target="_blank">https://github.com/notpike/The-Fonz</a>                         ||
+||     --> Havoc:     <a href="https://github.com/furrtek/portapack-havoc" target="_blank">https://github.com/furrtek/portapack-havoc</a>                  ||
+||     --> goodwatch: <a href="https://github.com/travisgoodspeed/goodwatch" target="_blank">https://github.com/travisgoodspeed/goodwatch</a>                ||
+||                                                                                ||
+||                                                                                ||
+||     ======================================================================     ||
+||                                                                                ||
 ||                                                                                ||
 ||     Below is all the technical data regarding the remote...                    ||
 ||                                                                                ||
@@ -172,7 +179,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 \\================================================================================//
                                                             \                       
                                                              \   ^__^               
-                                                              \  (oo)\_______       
+                                                              \  (==)\_______       
                                                                  (__)\       )\/\   
                                                                      ||----w |      
                                                                      ||     ||      
