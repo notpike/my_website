@@ -31,11 +31,14 @@ input[type="submit"]:hover {
 
 /* Blinking curser */
 .blink {
+    font-size: 16px;
     letter-spacing: -1px;
+    color: greenyellow;
 }
 
 .blinkShade {
     letter-spacing: -1px;
+    font-size: 16px;
     color: rgb(82, 136, 0);
 }
 

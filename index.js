@@ -18,13 +18,16 @@ const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
 
+function postRX(req, callback) {
+  
+}
+
 
 /* ---------- MAIN SERVER LOOP ---------- */
 const server = http.createServer((req,res) => {
     
-    // Handle Post Requests
-    if (req.method === 'POST') {
-        //console.log("POST! :D");
+    // // Handle Post Requests
+    if (req.method === 'POST' && req.url === '/login') {
         let pData ='';
         req.on('data', chunk => {
             pData += chunk.toString(); // Buf 2 Str
@@ -51,6 +54,8 @@ const server = http.createServer((req,res) => {
         target = req.url;
     }
     let filePath = path.join(__dirname, 'public', target);
+
+    //console.log(filePath);
 
     // Extension of file
     let extname = path.extname(filePath);
