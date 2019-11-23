@@ -1,8 +1,17 @@
 body {
-    font-size: 12px;
+    font-size: 16px;
     font-family: monospace;
     color: greenyellow;
     background: #222222;
+}
+
+mediaCenter {
+    margin: auto;
+    text-align: left;
+}
+
+profilePic {
+    font-size: 12px; 
 }
 
 banner {

@@ -124,8 +124,9 @@ const server = http.createServer((req,res) => {
             // Sucess
 
             // Hacky hack hack hack! :D
+            // Lets load a list of links and update krad.html!
             if(req.url === '/krad') {
-                content = content.replace('ThisIsSomeHackyCode', 'SOON!'); 
+                content = kr.buildContent(content) 
             }
 
             res.writeHead(200, { 'Content-Type': contentType});
