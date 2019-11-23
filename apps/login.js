@@ -1,9 +1,21 @@
+import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants"
+
 /*
  * Name: NotPike
  * File: login.js
  * Licence: MIT
  */
 
- /* ----------REQUIREMENTS---------- */
+/* ----------REQUIREMENTS---------- */
+const Logger = require('./apps/logger');
 
-//ToDo: THIS ENTIRE SCRIPT!! :D
+
+Class Login {
+
+    login(msg) {
+
+    }
+}
+
+module.exports = Login;
+

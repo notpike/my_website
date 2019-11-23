@@ -11,11 +11,16 @@ banner {
     color: greenyellow;
 }
 
+bs {
+    color: rgb(82, 136, 0);
+}
+
 login {
     font-size: 16px;
     color: greenyellow;    
 }
 
+/* Forms */
 input {
     background-color: #585858;
     color: greenyellow;
@@ -28,6 +33,7 @@ input {
 input[type="submit"]:hover {
     background-color: #999999;
 }
+
 
 /* Blinking curser */
 .blink {
@@ -42,11 +48,6 @@ input[type="submit"]:hover {
     color: rgb(82, 136, 0);
 }
 
-bio {
-    font-size: 16px;
-    font-family: monospace;
-    color: greenyellow;
-}
 
 /* Links */
 a {
@@ -56,6 +57,16 @@ a {
 a:hover {
     COLOR: rgb(218, 124, 0);
 }
+
+.hiddenLink {
+    color: greenyellow; 
+    text-decoration: none;
+}
+
+.hiddenLink:hover {
+    color: greenyellow;
+}
+
 
 /* Img */
 img {

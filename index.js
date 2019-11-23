@@ -18,44 +18,69 @@ const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
 
-function postRX(req, callback) {
-  
+
+/* ------------ POST FUNCTION ----------- */
+function postRX(req) {
+
+    let pData ='';
+    req.on('data', chunk => {
+        pData += chunk.toString(); // Buf 2 Str
+    });
+
+    // After being gathered check to see who made the request
+    req.on('end', () => {
+        switch(req.url) { // Where did this POST come from?
+            case '/login':
+                logger.log(pData);
+                break;
+        }
+    });
+
+}
+
+/* ------------ PATH FUNCTION ----------- */
+function buildReqPath(req) {
+
+    var target = "";
+
+    switch(req.url) {
+        case '/':
+            target = "index.html"
+            break;
+        case '/about':
+            target = "pages/about.html";
+            break;
+        case '/notes':
+            target = "pages/notes.html";
+            break;
+        case '/contact':
+            target = "pages/contact.html";
+            break;
+        case '/login':
+            target = "pages/login.html";
+            break;
+        case '/krad':
+            target = "pages/krad.html";
+            break;
+        default:
+            target = req.url;
+            break;
+    }
+
+    return path.join(__dirname, 'public', target);
 }
 
 
 /* ---------- MAIN SERVER LOOP ---------- */
 const server = http.createServer((req,res) => {
     
-    // // Handle Post Requests
-    if (req.method === 'POST' && req.url === '/login') {
-        let pData ='';
-        req.on('data', chunk => {
-            pData += chunk.toString(); // Buf 2 Str
-        });
-        req.on('end', () => {
-            logger.log(pData);
-        });
+    // Handle Post Requests
+    if (req.method === 'POST') {
+        postRX(req);
     }
-
 
     // Build the file path
-    var target = "";
-    if (req.url === '/')  {
-        target = "index.html";
-    } else if(req.url === '/about') {
-        target = "pages/about.html";
-    } else if(req.url === '/notes') {
-        target = "pages/notes.html";
-    } else if(req.url === '/contact') {
-        target = "pages/contact.html";
-    } else if(req.url === '/login') {
-        target = "pages/login.html";
-    } else {
-        target = req.url;
-    }
-    let filePath = path.join(__dirname, 'public', target);
-
-    //console.log(filePath);
+    let filePath = buildReqPath(req);
 
     // Extension of file
     let extname = path.extname(filePath);
