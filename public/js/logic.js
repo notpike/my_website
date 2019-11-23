@@ -4,6 +4,7 @@
  * Licence: MIT
  */
 
+
 //Flashing lights and cold hard steel
 //https://www.oreilly.com/library/view/css-cookbook/0596005768/ch03s03.html
 function blink(delay) {
@@ -14,3 +15,5 @@ function blink(delay) {
     }
     setTimeout('blink(' + delay + ')', delay);
 }
+
+

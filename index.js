@@ -7,6 +7,7 @@
 
 /* ------------ REQUIREMENTS ------------ */
 const Logger = require('./apps/logger');
+const Krad = require('./apps/krad');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -17,6 +18,9 @@ const { parse } = require('querystring');
 const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
+
+/* ------------- Krad PAGE -------------- */
+const kr = new Krad();
 
 
 /* ------------ POST FUNCTION ----------- */
@@ -61,6 +65,7 @@ function buildReqPath(req) {
             break;
         case '/krad':
             target = "pages/krad.html";
+            //kr.load();
             break;
         default:
             target = req.url;
@@ -108,7 +113,7 @@ const server = http.createServer((req,res) => {
     }
 
     // Read file
-    fs.readFile(filePath, (err, content) => {
+    fs.readFile(filePath, "utf8", (err, content) => {
         if(err) {
             // 404 Page
             fs.readFile(path.join(__dirname, 'public/pages/', '404.html'), (err, content) => {
@@ -117,6 +122,12 @@ const server = http.createServer((req,res) => {
             });
         } else {
             // Sucess
+
+            // Hacky hack hack hack! :D
+            if(req.url === '/krad') {
+                content = content.replace('ThisIsSomeHackyCode', 'SOON!'); 
+            }
+
             res.writeHead(200, { 'Content-Type': contentType});
             res.end(content, 'utf8');
         }
