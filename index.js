@@ -77,6 +77,7 @@ function buildReqPath(req) {
 function findContentType(extname) {
     
     let contentType;            
+    //contentType = 'text/html';
     switch(extname) {                         // Check extname and set contentType
         case '.html':
             contentType = 'text/html';
@@ -96,13 +97,13 @@ function findContentType(extname) {
         case '.jpg':
             contentType = 'image/jpg';
             break;
-        case '.zip':
-            contentType = 'application/zip';  // Download
+        case '.zip':                         // Download
+            contentType = 'application/zip';
             break;
-        case '.pdf':
-            contentType = 'application/pdf';  // Download
+        case '.pdf':                         // Download
+            contentType = 'application/pdf';  
             break; 
-        default:                              // Download everything else
+        default:                             // Download everything else
             contentType = 'text/plain';
             break;          
     }
@@ -128,23 +129,26 @@ const server = http.createServer((req,res) => {
     let contentType = findContentType(extname);
 
     // Read file
-    fs.readFile(filePath, "utf8", (err, content) => {
+    fs.readFile(filePath, (err, content) => {
+    
         if(err) {
             // Any error goes to the 404 page
             fs.readFile(path.join(__dirname, 'public/pages/', '404.html'), (err, content) => {
                 res.writeHead(200, { 'Content-Type': 'text/html'});
                 res.end(content, 'utf8');
             });
+            
         } else {
             // Sucess!
 
             // Hacky hack hack hack! :D
             // Lets load a list of links and update krad.html!
             if(req.url === '/krad') {
+                content = content.toString();
                 content = kr.buildContent(content)
             }
 
-            if(extname === '.pdf' || extname === '.zip') {                          // DOWNLOAD
+            if(extname === '.pdf' || extname === '.zip' || contentType === 'text/plain') { // DOWNLOAD
                 res.writeHead(200, {
                     "Content-Type": contentType,
                     "Content-disposition": "attachment; filename=" + req.url.replace('/krad/','')
@@ -152,7 +156,7 @@ const server = http.createServer((req,res) => {
 
                 const inputStream = fs.createReadStream(filePath);
                 inputStream.pipe(res);
-            } else {                                                                // WEB PAGES
+            } else {                                                                      // WEB PAGE
                 res.writeHead(200, { 'Content-Type': contentType});
                 res.end(content, 'utf8');
             }

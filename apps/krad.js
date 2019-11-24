@@ -23,7 +23,7 @@ class Krad {
         var i;
         for(i=0; i < rootDir.length; i++) {
 
-            if(rootDir[i] === '.gitignore') { // Don't list .gitignore
+            if(rootDir[i] === '.gitignore') {               // Don't list .gitignore
                 continue;
             } 
 
