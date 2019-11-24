@@ -5,7 +5,7 @@
  */
 
 
-//Flashing lights and cold hard steel
+//Flashing lights and cold hard steel!
 //https://www.oreilly.com/library/view/css-cookbook/0596005768/ch03s03.html
 function blink(delay) {
     var target = document.body.getElementsByTagName('SPAN');

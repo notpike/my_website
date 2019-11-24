@@ -11,7 +11,6 @@ const Krad = require('./apps/krad');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
-const zlib = require("zlib");
 const { parse } = require('querystring');
 
 
@@ -145,14 +144,13 @@ const server = http.createServer((req,res) => {
                 content = kr.buildContent(content)
             }
 
-            if(extname === ('.pdf' || '.zip')) {                                    // DOWNLOAD
+            if(extname === '.pdf' || extname === '.zip') {                          // DOWNLOAD
                 res.writeHead(200, {
                     "Content-Type": contentType,
-                    "Content-disposition": "attachment; filename=" + "Download.pdf"
+                    "Content-disposition": "attachment; filename=" + req.url.replace('/krad/','')
                 });
 
                 const inputStream = fs.createReadStream(filePath);
-                //const gzipStream = zlib.createGzip();
                 inputStream.pipe(res);
             } else {                                                                // WEB PAGES
                 res.writeHead(200, { 'Content-Type': contentType});
