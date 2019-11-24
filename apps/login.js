@@ -6,6 +6,8 @@ import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants"
  * Licence: MIT
  */
 
+// TODO: "This script"
+
 /* ----------REQUIREMENTS---------- */
 const Logger = require('./apps/logger');
 

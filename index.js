@@ -11,6 +11,7 @@ const Krad = require('./apps/krad');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+const zlib = require("zlib");
 const { parse } = require('querystring');
 
 
@@ -19,7 +20,7 @@ const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
 
-/* ------------- Krad PAGE -------------- */
+/* ------------- KRAD PAGE -------------- */
 const kr = new Krad();
 
 
@@ -42,7 +43,7 @@ function postRX(req) {
 
 }
 
-/* ------------ PATH FUNCTION ----------- */
+/* ------------ ROUTER FUNCTION ----------- */
 function buildReqPath(req) {
 
     var target = "";
@@ -65,36 +66,22 @@ function buildReqPath(req) {
             break;
         case '/krad':
             target = "pages/krad.html";
-            //kr.load();
             break;
         default:
             target = req.url;
             break;
     }
-
     return path.join(__dirname, 'public', target);
 }
 
-
-/* ---------- MAIN SERVER LOOP ---------- */
-const server = http.createServer((req,res) => {
+/* -------- CONTENT TYPE FUNCTION ------- */
+function findContentType(extname) {
     
-    // Handle Post Requests
-    if (req.method === 'POST') {
-        postRX(req);
-    }
-
-    // Build the file path
-    let filePath = buildReqPath(req);
-
-    // Extension of file
-    let extname = path.extname(filePath);
-
-    // Init content type
-    let contentType = 'text/html';
-
-    // Check ext and set content type
-    switch(extname) {
+    let contentType;            
+    switch(extname) {                         // Check extname and set contentType
+        case '.html':
+            contentType = 'text/html';
+            break;
         case '.js':
             contentType = 'text/javascript';
             break;
@@ -110,27 +97,67 @@ const server = http.createServer((req,res) => {
         case '.jpg':
             contentType = 'image/jpg';
             break;
+        case '.zip':
+            contentType = 'application/zip';  // Download
+            break;
+        case '.pdf':
+            contentType = 'application/pdf';  // Download
+            break; 
+        default:                              // Download everything else
+            contentType = 'text/plain';
+            break;          
     }
+    return contentType;
+}
+
+
+/* ---------- MAIN SERVER LOOP ---------- */
+const server = http.createServer((req,res) => {
+    
+    // Handle Post Requests
+    if (req.method === 'POST') {
+        postRX(req);
+    }
+
+    // Build the file path
+    let filePath = buildReqPath(req);
+ 
+    // Extension of file
+    let extname = path.extname(filePath); 
+    
+    // Find Content Type (ex. 'text/html')
+    let contentType = findContentType(extname);
 
     // Read file
     fs.readFile(filePath, "utf8", (err, content) => {
         if(err) {
-            // 404 Page
+            // Any error goes to the 404 page
             fs.readFile(path.join(__dirname, 'public/pages/', '404.html'), (err, content) => {
                 res.writeHead(200, { 'Content-Type': 'text/html'});
                 res.end(content, 'utf8');
             });
         } else {
-            // Sucess
+            // Sucess!
 
             // Hacky hack hack hack! :D
             // Lets load a list of links and update krad.html!
             if(req.url === '/krad') {
-                content = kr.buildContent(content) 
+                content = kr.buildContent(content)
             }
 
-            res.writeHead(200, { 'Content-Type': contentType});
-            res.end(content, 'utf8');
+            if(extname === ('.pdf' || '.zip')) {                                    // DOWNLOAD
+                res.writeHead(200, {
+                    "Content-Type": contentType,
+                    "Content-disposition": "attachment; filename=" + "Download.pdf"
+                });
+
+                const inputStream = fs.createReadStream(filePath);
+                //const gzipStream = zlib.createGzip();
+                inputStream.pipe(res);
+            } else {                                                                // WEB PAGES
+                res.writeHead(200, { 'Content-Type': contentType});
+                res.end(content, 'utf8');
+            }
         }
     });
 });

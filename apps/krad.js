@@ -31,8 +31,9 @@ class Krad {
                 links += "            ├────  <a href=\"../krad/" + rootDir[i] + "\" download >" + rootDir[i] + "</a><br/>            |<br/>"; 
             } else { // last item
                 links += "            └────  <a href=\"../krad/" + rootDir[i] + "\" download >" + rootDir[i] + "</a><br/>"; 
-
             }
+
+            
         }
 
         return content.replace('ThisIsSomeHackyCode', links);
