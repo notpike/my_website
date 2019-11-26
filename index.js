@@ -151,7 +151,7 @@ const server = http.createServer((req,res) => {
             if(extname === '.pdf' || extname === '.zip' || contentType === 'text/plain') { // DOWNLOAD
                 res.writeHead(200, {
                     "Content-Type": contentType,
-                    "Content-disposition": "attachment; filename=" + req.url.replace('/krad/','')
+                    "Content-disposition": "attachment; filename=" + path.basename(req.url)
                 });
 
                 const inputStream = fs.createReadStream(filePath);

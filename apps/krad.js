@@ -18,6 +18,11 @@ class Krad {
     }
 
     buildTree(path,level) {
+        console.log(path);
+        let indexPath = path.search('krad');
+        let rootPath = path.slice(indexPath)
+        console.log(rootPath);
+
         let rootDir = this.listDir(path); // List files in dir
         let links = "";                   // Init return var
 
@@ -85,7 +90,7 @@ class Krad {
                     }
                 }
 
-                links += " ".repeat(8) + "├────  <a href=\"../krad/" + rootDir[i] + "\" download >" 
+                links += " ".repeat(8) + "├────  <a href=\"../" + rootPath +  "/" + rootDir[i] + "\" download >" 
                 links += rootDir[i] + "</a><br/>";
                 
 
@@ -106,7 +111,7 @@ class Krad {
                     }
                 }
                 
-                links +=  " ".repeat(8)  + "└────  <a href=\"../krad/" + rootDir[i] + "\" download >" 
+                links +=  " ".repeat(8)  + "└────  <a href=\"../" + rootPath +  "/" + rootDir[i] + "\" download >" 
                 links += rootDir[i] + "</a><br/>"
                 
                 // Newline twice and add "|" to tree           
