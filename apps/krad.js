@@ -17,112 +17,126 @@ class Krad {
         return fs.readdirSync(path);
     }
 
-    buildTree(path,level) {
-        console.log(path);
-        let indexPath = path.search('krad');
-        let rootPath = path.slice(indexPath)
-        console.log(rootPath);
+    buildTree(path, level, last) {
 
-        let rootDir = this.listDir(path); // List files in dir
-        let links = "";                   // Init return var
+        // Find the path to the root dir
+        let indexPath = path.search('krad');      // Find index of where 'krad' is
+        let rootPath = path.slice(indexPath);     // Then slice it from path
 
-        // IF EMPTY
+        let rootDir = this.listDir(path);         // List files in dir
+        let links = "";                           // Init return string
+
+        // IF DIR IS EMPTY
         if(rootDir.length == 0) {
-            var offset = 0
-            var j;
-            for(j=0; j < level; j++) {
-                if( j < level - offset) {      // Put a "|" every 8 spaces per level
+            var tabs;
+            for(tabs=0; tabs < level; tabs++) {
+                if( tabs < level && !last ) {     // Put a "|" every 8 spaces per level
                     links += " ".repeat(8) + "|";
-                } else {                  // Last level just gets 8 spaces
+                } else {                          // Last level just gets 8 spaces
                     links += " ".repeat(8);
                 }
             } 
 
             links += " ".repeat(9) + "└────  "  + "*EMPTY*" + "<br/>";
 
-            // Newline twice and add "|" to tree           
-            let gaps;
-            for(gaps=0; gaps < 2; gaps++) {
-                for(j=0; j < level - offset; j++) {
-                    links += " ".repeat(8) + "|";
+            // Newline twice and add "|" to tree
+            if(!last) {          
+                let returns;
+                for(returns=0; returns < 2; returns++) {
+                    for(tabs=0; tabs < level; tabs++) {
+                        links += " ".repeat(8) + "|";
+                    }
+                        links += "<br/>";
                 }
-                    links += "<br/>";
+            } else {
+                last = false;
             }
         }
 
-        var i;
-        for(i=0; i < rootDir.length; i++) {
+        var file;
+        for(file=0; file < rootDir.length; file++) {
 
-            if(rootDir[i] === '.gitignore') {               // Don't list .gitignore
-                continue;
-            }
+            // IF LAST FILE
+            if(file == rootDir.length - 1 && rootPath === 'krad') last = true;
+
+            // Don't list .gitignore
+            if(rootDir[file] === '.gitignore') continue;
             
             // IF DIR
             // NOW WITH MORE RECURSION!!
-            let tempPath =  path + "/"+rootDir[i];
+            let tempPath =  path + "/"+rootDir[file];
             let isDir = fs.lstatSync(tempPath).isDirectory()
             if(isDir) {
-                var j;
-                for(j=0; j < level; j++) {
-                    if(j < level ) {
+                var tabs;
+                for(tabs=0; tabs < level; tabs++) {
+                    if(tabs < level && !last) {
                         links += " ".repeat(8) + "|"
                     } else {
                         links += " ".repeat(8)
                     }
                 } 
 
-                links += " ".repeat(8) + "└────  "  + rootDir[i] + "/<br/>";
+                links += " ".repeat(8) + "└────  "  + rootDir[file] + "/<br/>";
                 level++;
-                links += this.buildTree(tempPath, level);
+                links += this.buildTree(tempPath, level, last);
                 level--;
                 continue;
             }
             
             // IF FILE
-            if(i != rootDir.length - 1) { 
+            if(file != rootDir.length - 1) { 
 
-                var j;
-                for(j=0; j < level; j++) {
-                    if(j < level) {
+                var tabs;
+                for(tabs=0; tabs < level; tabs++) {
+                    if(tabs < level && !last) {
                         links += " ".repeat(8) + "|"
                     } else {
                         links += " ".repeat(8)
                     }
                 }
 
-                links += " ".repeat(8) + "├────  <a href=\"../" + rootPath +  "/" + rootDir[i] + "\" download >" 
-                links += rootDir[i] + "</a><br/>";
+                links += " ".repeat(8) + "├────  <a href=\"../" + rootPath +  "/" + rootDir[file] + "\" download >" 
+                links += rootDir[file] + "</a><br/>";
                 
-
-                for(j=0; j <= level; j++) {
-                        links += " ".repeat(8) + "|"
+                // TODO, Fix this loop
+                for(tabs=0; tabs <= level; tabs++) {
+                    if(!last) {
+                        links += " ".repeat(8) + "|";
+                     } else {
+                        links += " ".repeat(8 * (level + 1) ) + "|";
+                        break;
+                    }
                 }
                 links += "<br/>"
 
-            // Last File    
+            // ELSE LAST FILE    
             } else { 
 
-                var j;
-                for(j=0; j < level; j++) {
-                    if(j < level) {
+                var tabs;
+                for(tabs=0; tabs < level; tabs++) {
+                    if(tabs < level && !last) {
                         links += " ".repeat(8) + "|"
                     } else {
                         links += " ".repeat(8)
                     }
                 }
                 
-                links +=  " ".repeat(8)  + "└────  <a href=\"../" + rootPath +  "/" + rootDir[i] + "\" download >" 
-                links += rootDir[i] + "</a><br/>"
+                links +=  " ".repeat(8)  + "└────  <a href=\"../" + rootPath +  "/" + rootDir[file] + "\" download >" 
+                links += rootDir[file] + "</a><br/>"
                 
-                // Newline twice and add "|" to tree           
-                let gaps;
-                for(gaps=0; gaps < 2; gaps++) {
-                    for(j=0; j < level; j++) {
-                        links += " ".repeat(8) + "|";
+                // Newline twice and add "|" to tree
+                if(!last) {           
+                    let returns;
+                    for(returns=0; returns < 2; returns++) {
+                        for(tabs=0; tabs < level; tabs++) {
+                            links += " ".repeat(8) + "|";
+                        }
+                            links += "<br/>";
                     }
-                        links += "<br/>";
+                } else {
+                    last = false;
                 }
-            }   
+            }
         }
 
         return links;
@@ -131,10 +145,13 @@ class Krad {
     buildContent(content) {
         let path = __dirname.replace('apps','public/krad'); // Go back one folder then move to public/krad
         let level = 0;                                      // How Many folders deep are we in?
-        let links =  "     krad/<br/>";                     // Start of the tree
-        links += this.buildTree(path, level);
-
+        let last = false;                                   // If last file in dir
+        
+        // BUILD TREE
+        let links =  "      krad/<br/>";
+        links += this.buildTree(path, level, last);
         links += "<br/><br/>     user@dev:~/krad$ <span class=\"blink\">&#x2588;</span><br/><br/>"
+       
         return content.replace('ThisIsSomeHackyCode', links);
     }
 }
