@@ -57,6 +57,9 @@ function buildReqPath(req) {
         case '/notes':
             target = "pages/notes.html";
             break;
+        case '/notes_ble':
+            target = "pages/notes_ble.html";
+            break;            
         case '/contact':
             target = "pages/contact.html";
             break;
@@ -70,7 +73,7 @@ function buildReqPath(req) {
             target = req.url;
             break;
     }
-    return path.join(__dirname, 'public', target);
+    return path.join(__dirname, 'public', target); // Nothing goes behind public
 }
 
 /* -------- CONTENT TYPE FUNCTION ------- */
