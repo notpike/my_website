@@ -39,43 +39,46 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
                         <pre>
 //=====< 2019-11-30T23:15:45+00:00 >==============================================\\
 ||                                                                                ||
+||     Hi! :3                                                                     ||
+||                                                                                ||
 ||     == INTRO ==                                                                ||
 ||                                                                                ||
-||     I’m not going to lie, I don’t find poking Bluetooth or Bluetooth Low       ||
-||     Energy (BLE) very fun. Not that’s hard to figure out but  there’s little   ||
+||     I’m not going to lie, I don’t find poking at Bluetooth or Bluetooth Low    ||
+||     Energy (BLE) very fun. Not that’s hard to figure out but there’s little    ||
 ||     to no mystery about it any more. Everyone has a tool for it, most of it’s  ||
-||     vulnerabilities are known, and is the 2nd most popular wireless protocol   ||
-||     to hack besides WiFi. Feelings aside, there are some fun things to play    ||
-||     with that use this tech that can make for a fun evening. The techniques I  ||
-||     used to explore this device where learned from hackgnar's <a href="https://github.com/hackgnar/ble_ctf" target="_blank">ble_ctf</a>          ||
-||     and I recommend checking it out! :D                                        ||
+||     vulnerabilities are known, and is the 2nd most popular wireless tech to    ||
+||     hack besides WiFi. However! There's some fun to be had playing with this   ||
+||     tech and you'll have good time messing around with it. The techniques I    ||
+||     used to explore this device where learned from hackgnar's <a href="https://github.com/hackgnar/ble_ctf" target="_blank">ble_ctf.</a>         ||
+||     I recommend checking it out if you never used BLE before! :D               ||
 ||                                                                                ||
 ||                                                                                ||
 ||     == TARGET ==                                                               ||
 ||                                                                                ||
-||     Kestrel builds pocket weather and wind meters for professionals. The one   ||
-||     I’m poking at today is a 5500 Fire Weather Meter Pro and was designed to   ||
-||     be used during wildfires. More or less it’s the same as the other ones     ||
-||     however it has features that do math to output the Probability of Ignition ||
-||     (PIG) and Fine Dead Fuel Moisture… Also you’re paying an extra $200 but    ||
+||     Kestrel is in the business of building weather and wind meters. The one    ||
+||     I’m poking at is a 5500 Fire Weather Meter Pro and was designed for        ||
+||     wildland fighters in mind. More or less it’s the same as the other meters  ||
+||     and can do some wize bang math to output the Probability of Ignition       ||
+||     (POI) and Fine Dead Fuel Moisture… Also you’re paying an extra $200 but    ||
 ||     you know lol, you’re paying the price for something built for “Emergency   ||
-||     Response”.  To help keep track of this data they created a phone app that  ||
-||     connects to these devices using BLE to store the weather readings and map  ||
+||     Response”. To help keep track of this data Kestrel built a phone app that  ||
+||     connects to these devices using BLE. It stores weather mesurements and maps||
 ||     out trends in the weather. Because there’s no real consequences (As far as ||
-||     I can tell) for open communication between the Kestrel and the phone, the  ||
-||     developers didn’t bother implementing crypto/authentication for the BLE    ||
-||     link.                                                                      ||
+||     I can tell) for open communication, the developers didn't bother           ||
+||     implementing crypto / authentication for the BLE link.                     ||
 ||                                                                                ||
 ||                                                                                ||
 ||     IMG: <a href="../img/ble_1.jpg" target="_blank">Kestrel 5500</a>                                                          ||
 ||                                                                                ||
 ||     == BLE ==                                                                  ||
 ||                                                                                ||
-||     BLE shares many of the same qualities as it’s bigger brother Bluetooth     ||
-||     but both are different protocols. They share the same frequency hopping    ||
-||     tech, frequency range, and can both share the same hardware however        ||
-||     they’re not the same. Below is a list of capabilities and characteristics  ||
-||     for BLE...                                                                 ||
+||     BLE shares many of the same qualities as it’s older brother Bluetooth      ||
+||     but both are different beasts. The similarities include using the same     ||
+||     frequency hopping tech, frequency range, and can be used on the same       ||
+||     hardware. BLE was built to be cheaper and use less resources then          ||
+||     Bluetooth it's capabilities have been reduced to support that. Below is a  ||
+||     list of capabilities and characteristics for BLE...                        ||
+||                                                                                ||
 ||                                                                                ||
 ||          → Max Power: ~10mW (10dBm)                                            ||
 ||          → Latency: 3ms                                                        ||
@@ -94,10 +97,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     → Hardware: SENA UD100 Bluetooth dongle                                    ||
 ||     → Software: <a href='https://github.com/pwnieexpress/blue_hydra' target="_blank">blue_hydra</a>                                                     ||
 ||                                                                                ||
-||     blue_hydra is a cool tool maintained by the foaks at Pwnie Express that’s  ||
-||     good for scanning the area for Bluetooth and BLE. It also takes advantage  ||
-||     of some BLE features that will tell you range to the device if enabled.    ||
-||     Below are the commands I used to search for the target device...           ||
+||     blue_hydra is a cool tool maintained by the folks at Pwnie Express for     ||
+||     scanning the area for Bluetooth and or BLE devices. Below are the commands ||
+||     I used to search for the target device...                                  ||
 ||                                                                                ||
 ||     > hcitool dev 		# List HCI devices                                ||
 ||     > hciconfig hci0 up	# Turn on on hci0                                 ||
@@ -110,17 +112,17 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     → Software: <a href='https://github.com/evilsocket/bleah' target="_blank">Bleah</a>                                                          ||
 ||                                                                                ||
-||     I used evilsocket’s ‘bleah’ tool to enumerate the GATT service the BLE     ||
-||     device uses. Bleah is now depreciated but it can still be found in his     ||
-||     bettercap project. The Generic Attribute Profile (GATT) service can be     ||
-||     described as a server client relationship but things get muddled fairly    ||
+||     I used evilsocket’s ‘bleah’ tool to enumerate the GATT service of the      ||
+||     target device. Unfortunately bleah is now depreciated and his work has been||
+||     ported to the bettercap project. The GATT service can be can be described  ||
+||     as a server client relationship between devices. Things get muddled fairly ||
 ||     quickly when we also think about BLE’s Master Slave relationship. Using    ||
 ||     the Attribute Protocol (ATT), a Master/Client(The Phone with the app for   ||
 ||     this application) can read and write data from the Slave/Server(Kestrel).  ||
 ||     The Slave/Server can also notify a Master/Client and push updates. The     ||
-||     Kestrel pushes weather updates threw these services. More information about||
+||     Kestrel pushes weather updates threw Notify services. Information about    ||
 ||     BLE’s GATT service can be found <a href='https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt' target="_blank">here.</a> Below are the commands used and      ||
-||     the results I found.                                                       ||
+||     the results I found enumerating the Kestrel.                               ||
 ||                                                                                ||
 ||     > bleah -b "88:6B:0F:9F:D1:15" -e                                          ||
 ||                                                                                ||
@@ -191,33 +193,34 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 \\                                                                                //
 ||                                                                                ||
 ||     → Headers: Headers in in the GATT are kinda like Ports in the TCP/IP       ||
-||     world. They act as an address for each function used by the GATT server.   ||
+||                world. They act as an address for each function that can be     ||
+||                read or written too.                                            ||
 ||                                                                                ||
 ||     → Service > Characteristics: Description for each service                  ||
 ||                                                                                ||
 ||     → Properties: What each service will do. For the Kestrel, there are        ||
-||       services that will READ | WRITE |  NOTIFY | INDICATE.                    ||
-||       <a href='https://www.oreilly.com/library/view/getting-started-with/9781491900550/ch04.html' target="_blank">More info can be found here</a>                                              ||
+||                   services that will READ | WRITE |  NOTIFY | INDICATE.        ||
+||                   <a href='https://www.oreilly.com/library/view/getting-started-with/9781491900550/ch04.html' target="_blank">More info can be found here</a>                                  ||
 ||                                                                                ||
 ||     → Data: HEX, Little Endian, strings can be encoded in bash using...        ||
-||            > $(echo -n "STRING"|xxd -ps)                                       ||
-||       And decoded when you pipe the data into...                               ||
-||            > awk -F':' '{print $2}'|tr -d ' '|xxd -r -p;printf '\n'            ||
+||                 > $(echo -n "STRING"|xxd -ps)                                  ||
+||            And decoded when you pipe the data into...                          ||
+||                 > awk -F':' '{print $2}'|tr -d ' '|xxd -r -p;printf '\n'       ||
 ||                                                                                ||
 ||                                                                                ||
 ||     == REVERSING BLE ==                                                        ||
 ||                                                                                ||
 ||     Android has a feature under (Settings → Developer Options → Bluetooth HCI  ||
-||     snoop log) where you can enable packet capturing for Bluetooth packets.    ||
+||     snoop log) where you can enable packet capturing for Bluetooth and.        ||
 ||     Earlier versions of android saved the Bluetooth pcap under                 ||
-||     ‘/sdcard/btsnoop_hci.log’ however on my device (Samsung S7) it opened up   ||
-||     a port via “USB debugging” and I was able to watch the data pass threw     ||
-||     on port 5037. Mileage may vary and figuring this out took me the most      ||
-||     time so don’t feel bad if this slows you down. :3                          ||
+||     ‘/sdcard/btsnoop_hci.log’ however on my device, (Samsung S7) opened up     ||
+||     a port via “USB debugging”. Using wireshark I was able to capture BLE      ||
+||     packets on port 5037. Mileage may vary and figuring this out took me the   ||
+||     most time so don’t feel bad if this slows you down. :3                     ||
 ||                                                                                ||
-||     Figuring out how these devices are controlled is very simple.  All you do  ||
+||     Learning how these devices are controlled is very simple. All you do       ||
 ||     is send a message via the phone app then look at the raw data in the pcap. ||
-||     You should be looking for ‘Sent Write Request’ packet with an BLE Handle   ||
+||     You should be looking for ‘Sent Write Request’ packet with a BLE handle    ||
 ||     address (ex. 0x0022) found in the details. The raw data is Little Endian   ||
 ||     so it may appear backwards and stupid at first but that’s how the data     ||
 ||     gets transmitted. After the address, (which will look like 2200 because    ||
@@ -227,36 +230,36 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     transmitted from the phone app and not the received messages from the      ||
 ||     Kestrel.                                                                   ||
 ||                                                                                ||
-||     == Header 0x0022 ==                                                        ||
-||     Manage live readings                                                       ||
-||             TIME SEC                                                           ||
-||     100e0001   02   000100000f                                                 ||
+||     == Header 0x0022 (NOTIFY | READ | WRITE) ==                                ||
+||     → Manage live readings                                                     ||
+||                  TIME SEC                                                      ||
+||          100e0001   02   000100000f                                            ||
 ||                                                                                ||
-||     Value: 100e000102000100000f #2 sec                                         ||
-||     Value: 100e000105000100000f #5 sec                                         ||
-||     Value: 100e00010a000100000f #10 sec                                        ||
-||     Value: 100e00013c000100000f #1 min                                         ||
+||          Value: 100e000102000100000f #2 sec                                    ||
+||          Value: 100e000105000100000f #5 sec                                    ||
+||          Value: 100e00010a000100000f #10 sec                                   ||
+||          Value: 100e00013c000100000f #1 min                                    ||
 ||                                                                                ||
-||     Manage Data Logs                                                           ||
-||     Value: 100e00013c000100000f #Warp Log ON                                   ||
-||     Value: 100e00013c000100000f #Warp Log Off                                  ||
+||     → Manage Data Logs                                                         ||
+||         Value: 100e00013c000100000f #Warp Log ON                               ||
+||         Value: 100e00013c000100000f #Warp Log Off                              ||
 ||                                                                                ||
-||     Data Logging Rate                                                          ||
-||     Value: 020000013c000100000f # 2sec                                         ||
-||     Value: 3c0000013c000100000f # 1min                                         ||
-||     Value: 100e00013c000100000f # 1hr                                          ||
-||     Value: 201c00013c000100000f # 2hr                                          ||
+||     → Data Logging Rate                                                        ||
+||         Value: 020000013c000100000f # 2sec                                     ||
+||         Value: 3c0000013c000100000f # 1min                                     ||
+||         Value: 100e00013c000100000f # 1hr                                      ||
+||         Value: 201c00013c000100000f # 2hr                                      ||
 ||                                                                                ||
-||     == Header 0x0025 ==                                                        ||
+||     == Header 0x0025 (READ | WRITE) ==                                         ||
 ||     Value: 000001 #RESET                                                       ||
 ||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 000001  ||
 ||                                                                                ||
 ||     Value: 010000 #Clear Device Log                                            ||
 ||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 010000  ||
 ||                                                                                ||
-||     == Header 0x0027 ==                                                        ||
+||     == Header 0x0027 (READ | WRITE) ==                                         ||
 ||     Set name                                                                   ||
-||          > gatttool -b MAC --char-write-req -a 0x0027 -n                       ||
+||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0027 -n         ||
 ||            $(echo -n "new_name"|xxd -ps)                                       ||
 ||          > gatttool -b 88:6B:0F:9F:D1:15 --char-read -a 0x000b|                ||
 ||            awk -F':' '{print $2}'|tr -d ' '|xxd -r -p;printf '\n'              ||
@@ -266,11 +269,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     == CONCLUSION ==                                                           ||
 ||                                                                                ||
-||     There’s still a lot to figure out with the Kestrel including how incoming  ||
-||     data from the Kestrel is decoded. Every Header that has a NOTIFY property  ||
-||     is most likely where the weather measurements are being piped threw.       ||
-||     Below are the pcaps I recorded while experimenting with this device so     ||
-||     feel free and contact me if you have any questions. :3                     ||
+||     There’s still a lot to be figure out with this Kestrel including how TXed  ||
+||     data from the Kestrel is read by the phone app. Every Header that has the  ||
+||     property of NOTIFY is most likely where the weather measurements are       ||
+||     comming from. Below are the pcaps I recorded while experimenting with this ||
+||     device so feel free and contact me if you have any questions. :3           ||
 ||                                                                                ||
 ||                                                                                ||
 ||     == PCAP ==                                                                 ||
@@ -281,9 +284,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 \\================================================================================//
                                                             \                       
                                                              \   ^__^               
-                                                              \  (==)\_______       
+                                                              \  (@@)\_______       
                                                                  (__)\       )\/\   
-                                                                     ||----w |      
+                                                                  U  ||----w |      
                                                                      ||     ||      
                         </pre>
                         </banner>
