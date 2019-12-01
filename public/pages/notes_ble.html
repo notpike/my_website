@@ -95,10 +95,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     → Software: <a href='https://github.com/pwnieexpress/blue_hydra' target="_blank">blue_hydra</a>                                                     ||
 ||                                                                                ||
 ||     blue_hydra is a cool tool maintained by the foaks at Pwnie Express that’s  ||
-||     good for scanning the area for Bluetooth and BLE devices in the area. It   ||
-||     also takes advantage of some BLE features that will give you range to the  ||
-||     device if enabled. Below are the commands I used to search for the target  ||
-||     device…                                                                    ||
+||     good for scanning the area for Bluetooth and BLE. It also takes advantage  ||
+||     of some BLE features that will tell you range to the device if enabled.    ||
+||     Below are the commands I used to search for the target device...           ||
 ||                                                                                ||
 ||     > hcitool dev 		# List HCI devices                                ||
 ||     > hciconfig hci0 up	# Turn on on hci0                                 ||
@@ -125,7 +124,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     > bleah -b "88:6B:0F:9F:D1:15" -e                                          ||
 ||                                                                                ||
-\\================================================================================//
+//                                                                                \\
 
 <bleah>
     ┌ 88:6b:0f:9f:d1:15 (-41 dBm) ─────────────────────────────────────────────┐                                                                                                                                          
@@ -189,7 +188,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
     └──────────────┴─────────────────────────────────────────────────────────────────────┴────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────┘    
 </bleah>
 
-//================================================================================\\
+\\                                                                                //
 ||                                                                                ||
 ||     → Headers: Headers in in the GATT are kinda like Ports in the TCP/IP       ||
 ||     world. They act as an address for each function used by the GATT server.   ||
@@ -208,12 +207,12 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     == REVERSING BLE ==                                                        ||
 ||                                                                                ||
-||     Android has a feature under (Settings →Developer Options →Bluetooth HCI    ||
+||     Android has a feature under (Settings → Developer Options → Bluetooth HCI  ||
 ||     snoop log) where you can enable packet capturing for Bluetooth packets.    ||
 ||     Earlier versions of android saved the Bluetooth pcap under                 ||
 ||     ‘/sdcard/btsnoop_hci.log’ however on my device (Samsung S7) it opened up   ||
-||     a port thru “USB debugging” and I was able to watch the data pass threw    ||
-||     via port 5037. Mileage may vary and figuring this out took me the most     ||
+||     a port via “USB debugging” and I was able to watch the data pass threw     ||
+||     on port 5037. Mileage may vary and figuring this out took me the most      ||
 ||     time so don’t feel bad if this slows you down. :3                          ||
 ||                                                                                ||
 ||     Figuring out how these devices are controlled is very simple.  All you do  ||
