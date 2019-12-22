@@ -59,7 +59,10 @@ function buildReqPath(req) {
             break;
         case '/notes_ble':
             target = "pages/notes_ble.html";
-            break;            
+            break; 
+        case '/notes_chemion':
+            target = "pages/notes_chemion.html";
+            break;                             
         case '/contact':
             target = "pages/contact.html";
             break;

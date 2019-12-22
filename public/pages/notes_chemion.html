@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NotPike | Notes</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+</head>
+
+<body>
+    <center>
+        <div id="mainBanner">
+            <pre>
+                        <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+--------------------------------------------------------------------------------
+<a href="/">HOME</a> | <a href="https://twitter.com/ifnotpike" target="_blank">TWITTER</a> | <a href="https://github.com/notpike" target="_blank">GITHUB</a> | <a href="/notes">NOTES</a> | <a href="/about">ABOUT</a> | <a href="/contact">CONTACT</a> | <a href="/login">LOGIN</a>
+--------------------------------------------------------------------------------
+
+<a href="/notes">TOUCHTUNES_JUKEBOX</a> | <a href="/notes_ble">KESTREL_BLE</a> | <a href="/notes_chemion">CHEMION_LED_GLASSES</a>
+                        </banner>
+                        </pre>
+        </div>
+        <div id="welcome">
+            <banner>
+                <!-- RFC 3339  Time Stamp -->
+                <pre>
+//=====< 2019-12-22T05:55:38+00:00 >==============================================\\
+||                                                                                ||
+||     こんにちは! (•̀ω•́)σ                                                           ||
+||                                                                                ||
+||      <b>== INTRO ==</b>                                                               ||
+||                                                                                ||
+||      LED Glasses are the way of the future for fashion and I will die on that  ||
+||      hill!  Nah just kidding, though these glasses are a lot of fun to play    ||
+||      with, I don’t honestly believe the masses would adopt this cyber wear.    ||
+||      It’s fun to dream though. ;)                                              ||
+||                                                                                ||
+||      So...                                                                     ||
+||                                                                                ||
+||      These LED Glasses that use Bluetooth Low Energy (BLE) and a Phone App     ||
+||      to program custom images and animations. Good fun! More fun because this  ||
+||      is a new vector to play some mean tricks on people who use the Chemion    ||
+||      LED Glasses. Turns out there are no authentication check or special       ||
+||      pairing sequences to connect to this device. It’s fair game for anyone    ||
+||      with the Phone App to connect to and play with. It just lets anyone       ||
+||      connect if it’s not actively connected. Also as far as we can tell it’s   ||
+||      always sending advertising messages so you’re never truly safe from       ||
+||      someone drawing silly things on your face while it’s on. :3               ||
+||                                                                                ||
+||      My motivation for poking at these glasses was purely for amusement. I     ||
+||      wanted to see if it was possible to create something that would draw      ||
+||      silly things on unsuspecting victims at mass. There are no redeeming      ||
+||      qualities coming from this research except we all get to laugh a little   ||
+||      and reinforce the idea that some form of multi-factor auth (Push a        ||
+||      button to pair) is better than nothing. ;)                                ||
+||                                                                                ||
+||      *Note: Tnayuki first created a way to communicate with these glasses      ||
+||      back in 2016. We didn’t discover this until we where ~90% done with       ||
+||      our research. Didn’t want anyone to think we stole his work and called    ||
+||      it our own. There was no detailed write up about the message format or    ||
+||      anything else regarding this work. However, we did learn how the check    ||
+||      sum works for the message from his software. His code that mimics the     ||
+||      client and server of this device can be found here.                       ||
+||                                                                                ||
+||      Tnayuki's code  -> <a href="https://qiita.com/tnayuki/items/f19764f25cb328c76742" target="_blank">https://qiita.com/tnayuki/items/f19764f25cb328c76742</a>   ||
+||                                                                                ||
+||                                                                                ||
+||      <b>== CHEMION LED GLASSES ==</b>                                                 ||
+||                                                                                ||
+||      The LED matrix is 24 x 9 – 6 (Missing LEDs for the nose) for a total of   ||
+||      210 LEDs. To help keep track of everything I created this matrix to       ||
+||      index each LED as seen bellow.                                            ||
+||                                                                                ||
+||                                                                                ||
+||              0 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              1 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              2 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              3 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              4 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              5 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              6 | X X X X X X X X X X X X X X X X X X X X X X X X               ||
+||              7 | X X X X X X X X X X X     X X X X X X X X X X X               ||
+||              8 | X X X X X X X X X X         X X X X X X X X X X               ||
+||                |________________________________________________               ||
+||                  0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N               ||
+||                                                                                ||
+||                                                                                ||
+||     The IC’s being used to drive the glasses are the Microchip Sam D20 and     ||
+||     nRF51822. We haven’t dumped the firmware of these IC’s, however we         ||
+||     believe the nRF is just passing the messages directly to the D20. No       ||
+||     way to prove this until we tap the chip but this is what we think after    ||
+||     looking at how the messages are formatted. There’s still more to come      ||
+||     from this so stand by! :D                                                  ||
+||                                                                                ||
+||     IMG: <a href="../img/chemion_ic.jpg" target="_blank">Chemion ICs</a>                                                           ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== BLE DISCOVERY && ENUMERATION ==</b>                                         ||
+||                                                                                ||
+||     To find the MAC address for this device you could use tools such as        ||
+||     blue_hydra but I used HCI_Snoop via Android’s debugging feature. It’s a    ||
+||     good way to capture packets being sent to the device and figure out the    ||
+||     MAC of your target. Other methods for BLE packet capture include using     ||
+||     an Ubertooth One or a micro:bit with btlejack. Both of these tools can     ||
+||     be used to follow the hopping sequence of a Bluetooth device and record    ||
+||     the data as a pcap (or pipe into wireshark) so this is an option if you    ||
+||     can’t pull a pcap from one of the devices.                                 ||
+||                                                                                ||
+||     btlejack      -> <a href="https://github.com/virtualabs/btlejack" target="_blank">https://github.com/virtualabs/btlejack</a>                    ||
+||     Ubertooth One -> <a href="https://github.com/greatscottgadgets/ubertooth" target="_blank">https://github.com/greatscottgadgets/ubertooth</a>            ||
+||                                                                                ||
+||                                                                                ||
+||     The GATT services where enumerated using the bleah tool. Still             ||
+||     depreciated but still useful. Below are the results from the scan.         ||
+||                                                                                ||
+||     > bleah -b “C7:46:5B:26:83:D5” -e                                          ||
+//                                                                                \\
+
+<bleah>
+    @ Scanning for 5s [-128 dBm of sensitivity] ...                                                                                                                                                          
+
+    ┌ c7:46:5b:26:83:d5 (-38 dBm) ───────────────────────────────────────────┐                                                                                                                               
+    │ Vendor                 │ ?                                             │                                                                                                                               
+    │ Allows Connections     │ ✓                                             │                                                                                                                               
+    │ Address Type           │ random                                        │                                                                                                                               
+    │ Complete 128b Services │ '6e400001-b5a3-f393-e0a9-e50e24dcca9e'        │                                                                                                                               
+    │ Complete Local Name    │ CHEMION-83:D5                                 │                                                                                                                               
+    │ Flags                  │ LE General Discoverable, BR/EDR Not Supported │                                                                                                                               
+    └────────────────────────┴───────────────────────────────────────────────┘                                                                                                                               
+    
+    @ Connecting to c7:46:5b:26:83:d5 ... connected.                                                                                                                                                         
+    @ Enumerating all the things ...                                                                                                                                                                         
+    
+    ┌──────────────┬───────────────────────────────────────────────────────────────────────────────────────┬──────────────────────────┬─────────────────────────────────────────────────────────────────────┐
+    │ Handles      │ Service > Characteristics                                                             │ Properties               │ Data                                                                │
+    ├──────────────┼───────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────┼─────────────────────────────────────────────────────────────────────┤
+    │ 0001 -> 0007 │ Generic Access ( 00001800-0000-1000-8000-00805f9b34fb )                               │                          │                                                                     │
+    │ 0003         │   Device Name ( 00002a00-0000-1000-8000-00805f9b34fb )                                │ READ WRITE               │ 'CHEMION-83:D5\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' │
+    │ 0005         │   Appearance ( 00002a01-0000-1000-8000-00805f9b34fb )                                 │ READ                     │ '4\x12'                                                             │
+    │ 0007         │   Peripheral Preferred Connection Parameters ( 00002a04-0000-1000-8000-00805f9b34fb ) │ READ                     │ Connection Interval: 8 -> 40                                        │
+    │              │                                                                                       │                          │ Slave Latency: 0                                                    │
+    │              │                                                                                       │                          │ Connection Supervision Timeout Multiplier: 400                      │
+    │              │                                                                                       │                          │                                                                     │
+    │ 0008 -> 000b │ Generic Attribute ( 00001801-0000-1000-8000-00805f9b34fb )                            │                          │                                                                     │
+    │ 000a         │   Service Changed ( 00002a05-0000-1000-8000-00805f9b34fb )                            │ INDICATE                 │                                                                     │
+    │              │                                                                                       │                          │                                                                     │
+    │ 000c -> ffff │ 6e400001-b5a3-f393-e0a9-e50e24dcca9e                                                  │                          │                                                                     │
+    │ 000e         │   6e400003-b5a3-f393-e0a9-e50e24dcca9e                                                │ NOTIFY                   │                                                                     │
+    │ 0011         │   6e400002-b5a3-f393-e0a9-e50e24dcca9e                                                │ WRITE NO RESPONSE WRITE  │                                                                     │
+    │              │                                                                                       │                          │                                                                     │
+    └──────────────┴───────────────────────────────────────────────────────────────────────────────────────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────┘
+</bleah>
+
+\\                                                                                //
+||     At first glance, the last two headers, 0x000e and 0x0011 look like any     ||
+||     other GATT characteristic but there’s a little more to these services.     ||
+||     I tried replaying some of the data we captured from  the phone app with    ||
+||     gatttool with no success.  After a quick google search of the UUID, I      ||
+||     learned this was Nordic’s method of emulating UART over BLE! :D            ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== Nordic UART Service == </b>                                                 ||
+||                                                                                ||
+||     Nordic UART Service (NUS) is a 3rd party communication standard created    ||
+||     by the fine folks at Nordic Semiconductors. The idea behind this method    ||
+||     was to fit more data through BLE by emulating UART. BLE packets are        ||
+||     limited on the size of the payload for each packet (20 Bytes) so NUS       ||
+||     solves this by treating the connection as UART. NUS can string a large     ||
+||     message together by breaking it up into multiple 20 byte messages that     ||
+||     are sent through BLE packets. The start of the NUS message is programmer   ||
+||     specific meaning It’s not defined by the NUS standard. Stop bytes need     ||
+||     to be defined so both sides know when the message ends. Check Sum’s and    ||
+||     CRC’s (methods to double check the message came in clear) can also be      ||
+||     implemented outside of the NUS standard. Below are the UUIDs for NUS.      ||
+||                                                                                ||
+||                                                                                ||
+||     -> Nordic UART Service (UUID: 6E400001-B5A3-F393-E0A9-E50E24DCCA9E)        ||
+||     -> RX Characteristic   (UUID: 6E400002-B5A3-F393-E0A9-E50E24DCCA9E)        ||
+||     -> TX Characteristic   (UUID: 6E400003-B5A3-F393-E0A9-E50E24DCCA9E)        ||
+||                                                                                ||
+||                                                                                ||
+||     So whose TX and RX are we talking about here? UART can be a little         ||
+||     tricky but when you look at this you should always tell yourself,          ||
+||     “This is the GATT server’s RX and TX, I need to send data to its RX        ||
+||     and listen from its TX”. Again, data is sent to the device’s RX            ||
+||     characteristic (Header 0x0011) and the GATT server ACK’s the received      ||
+||     messages on its TX characteristic (Header 0x00e). Nordic’s SoftDevice      ||
+||     (Vendor’s software framework for the nRF5) handles a lot of the flow       ||
+||     control and error correction for the BLE packets which makes it easier     ||
+||     for developers to build the thing.                                         ||
+||                                                                                ||
+||     Another good thing to know about NUS is that the raw data after the GATT   ||
+||     header 0x0011 (0x1100 when it’s Little Endian BTW) is Big Endian! The      ||
+||     rest of the BLE packet is still Little Endian which is interesting,        ||
+||     however it’s good to remember that UART handles incoming data 1 byte at    ||
+||     time as a stream and not a packet. This was learned by playing around      ||
+||     with the nRF UART app and looking at the raw data being sent from it.      ||
+||     Below is an example of a NUS message containing the value                  ||
+||     “abcdefghijklmnopqrs”.                                                     ||
+||                                                                                ||
+||     IMG: <a href="../img/NUS_BE.png" target="_blank">NUS Example</a>                                                           ||
+||                                                                                ||
+||                                                                                ||
+||     Nordic offers a lot of support for their products and it’s nice that       ||
+||     most of their software is open source. It makes reversing this device all  ||
+||     the less painful. Nordic also offers a wide selection of dev tools         ||
+||     including a Phone app called “nRF UART” that will act as a NUS client.     ||
+||     This is a useful tool for trouble shooting NUS Servers, however it wasn’t  ||
+||     built for stringing together large messages. You’re only limited to        ||
+||     sending 20 bytes at a time. To make a working Proof of Concept (POC) we    ||
+||     had to create something of our own outside of the available dev tools.     ||
+||                                                                                ||
+||     Android-nRF-UART -> <a href="https://github.com/NordicPlayground/Android-nRF-UART">https://github.com/NordicPlayground/Android-nRF-UART</a>   ||
+||                                                                                ||
+||                                                                                ||
+||     NUS was new for me, so I felt it was important to have a better            ||
+||     understanding of it before moving on. It’s good to learn through           ||
+||     experimentation but it’s still nice to have a working example to           ||
+||     reference when things don’t work. Because of this I picked up a few nRF5   ||
+||     Dev Kits to hack on and see how the bits make it from one side of the      ||
+||     room to the other. Even though we figured out a solution without the       ||
+||     nRF5 platform, It’s still not a bad idea to work with the original         ||
+||     device. It’s tricky when you’re trying to troubleshoot two unknowns at     ||
+||     the same time. I spent the cash to save my sanity. ;)                      ||
+||                                                                                ||
+||     More information regarding NUS can be found here.                          ||
+||                                                                                ||
+||     nRF NUS Server Example -> <a href="https://infocenter.nordicsemi.com/topic/sdk_nrf5_v16.0.0/ble_sdk_app_nus_eval.html" target="_blank">https://infocenter.nordicsemi.com/topic/sdk...</a>   ||
+||     nRF NUS Client Example -> <a href="https://infocenter.nordicsemi.com/topic/sdk_nrf5_v16.0.0/group__ble__nus__c.html" target="_blank">https://infocenter.nordicsemi.com/topic/sdk...</a>   ||
+||     nRF NUS API -> <a href="https://infocenter.nordicsemi.com/topic/sdk_nrf5_v16.0.0/group__ble__nus.html" target="_blank">https://infocenter.nordicsemi.com/topic/sdk_nrf5_v16.....</a>   ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== REVERSING NUS MESSAGES ==</b>                                               ||
+||                                                                                ||
+||     Armed with a better understanding of how NUS works, the method for         ||
+||     discovering how the message is formatted is no different than reversing    ||
+||     any other unknown format. Basically, you send a command, record what was   ||
+||     sent, send a different command, and then see how it’s different from the   ||
+||     last. It’s that easy! Just rinse and repeat until you figure something     ||
+||     out. This was accomplished by turning on and off the LED’s from the phone  ||
+||     app in a uniformed order. I Started at 0x0 and worked my way down to Nx8   ||
+||     going left to right, top to bottom. THANKFULLY!!! (big thankfully) the     ||
+||     pattern was discovered after the first row. I did not want to record all   ||
+||     210 possibilities… That’s a lot of work and you start losing it if you do  ||
+||     it too long… >_<                                                           ||
+||                                                                                ||
+||      Below is the message format being used for these glasses.                 ||
+//                                                                                \\
+
++----------------------------------------------------------------------------------------------------------------------+
+|       *START*                                           *LEDS*                                   *CHECK SUM*   *End* |
+| FA 03 00 39 01 00 06    0|  C     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         1|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         2|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         3|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         4|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         5|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         6|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         7|  0     0     0     0     0     0     0     0     0     0     0     0                      |
+|                         8|  0     0     0     0     0     0     0     0     0     0     0     0      C7        55 a9 |
+|                          |______________________________________________________________________                     |
+|                            0 1   2 3   4 5   6 7   8 9   A B   C D   E F   G H   I J   K L   M N                     |
++----------------------------------------------------------------------------------------------------------------------+
+
+\\                                                                                //
+||     Here are the details about the LED update message.                         ||
+||                                                                                ||
+||     -> Every message starts with 0xFA030039010006                              ||
+||     -> Every message ends with a 1 byte check sum then 0x55A9                  ||
+||     -> Every complete message is 64 Bytes                                      ||
+||     -> Phone app sends a complete map of the LED matrix every time there's     ||
+||        an update                                                               ||
+||     -> Animations are actively streamed to the Glasses and can be saved        ||
+||                                                                                ||
+||     Each row consists for 6 Bytes of data for a total of 54 Bytes for the LED  ||
+||     matrix. Every Crumb (Half a Nibble or 2 bits) after START controls 1 LED   ||
+||     along the X axis and its value controls the duty cycle. High Crumbs        ||
+||     (ex \b1100) control the Even LEDs along the X axis and the Low Crumbs      ||
+||     (ex \b0011) control the Odd positions. Below are the Crumb values used     ||
+||     for the LED *duty cycles (The 3 levels of brightness each LED can be).     ||
+||                                                                                ||
+||                                                                                ||
+||                  +---------------------------------------+                     ||
+||                  | *DUTY CYCLE | HIGH CRUMB |  LOW CRUMB |                     ||
+||                  +-------------+------------+------------+                     ||
+||                  |     100%    | \xC \b1100 | \x3 \b0011 |                     ||
+||                  +-------------+------------+------------+                     ||
+||                  |     50%     | \x8 \b1000 | \x2 \b0010 |                     ||
+||                  +-------------+------------+------------+                     ||
+||                  |     25%     | \x4 \b0100 | \x1 \b0001 |                     ||
+||                  +-------------+------------+------------+                     ||
+||                  |     0%      | \x0 \b0000 | \x0 \b0000 |                     ||
+||                  +---------------------------------------+                     ||
+||                                                                                ||
+||                                                                                ||
+||     Because the message format described above uses Bytes and Nibbles, here    ||
+||     are some examples of different Nibble values for when you have the 2       ||
+||     Crumbs added together.                                                     ||
+||                                                                                ||
+||                                                                                ||
+||    +----------------------------------------------------------------------+    ||
+||    |           LEDS          |        BIN VALUES        |    HEX VALUES   |    ||
+||    +-------------------------+--------------------------+-----------------+    ||
+||    | 0x0 100%ON + 1x0 100%ON | \b1100 + \b0011 = \b1111 | \xC + \x3 = \xF |    ||
+||    +-------------------------+--------------------------+-----------------+    ||
+||    | 0x0 100%ON + 1x0 50%ON  | \b1100 + \b0010 = \b1110 | \xC + \x2 = \xE |    ||
+||    +-------------------------+--------------------------+-----------------+    ||
+||    | 0x0 25%ON + 1x0 25%ON   | \b0100 + \b0001 = \b0101 | \x4 + \x1 = \x5 |    ||
+||    +-------------------------+--------------------------+-----------------+    ||
+||    | 0x0 25%ON + 1x0 50%ON   | \b0100 + \b0010 = \b0110 | \x4 + \x2 = \x6 |    ||
+||    +-------------------------+--------------------------+-----------------+    ||
+||    | 0x0 0%OFF + 1x0 100%ON  | \b0000 + \b0011 = \b0011 | \x0 + \x3 = \x3 |    ||
+||    +----------------------------------------------------------------------+    ||
+||     *Note: The percentages of each duty cycle are assumed.                     ||
+||                                                                                ||
+||                                                                                ||
+||     The method for finding the check sum comes from the LED matrix portion of  ||
+||     the message (Bytes 8 through 61). This value is calculated by taking 0x07  ||
+||     then XORing each Byte on top of the last from the LED matrix. Below is an  ||
+||     example of this function and can be found at /src/msg_checksum.c in the    ||
+||     github repo listed below.                                                  ||
+||                                                                                ||
+||                                                                                ||
+||     msg_checksum.c                                                             ||
+|| +----------------------------------------------------------------------------+ ||
+|| | uint8_t checkSum(uint8_t *in) {                                            | ||
+|| |     uint8_t checkSum = 0x07;       // Check Sum Magic Number               | ||
+|| |                                                                            | ||
+|| |     int i;                                                                 | ||
+|| |     for (i = 7; i <= 61; i ++) {   // Check Sum for 54Byte LED Matrix      | ||
+|| |           checkSum ^= in[i];       // Each Byte is XORed ontop of the last | ||
+|| |     }                                                                      | ||
+|| |     return checkSum;                                                       | ||
+|| | }                                                                          | ||
+|| +----------------------------------------------------------------------------+ ||
+||                                                                                ||
+||                                                                                ||
+||     Saving designs is a feature available for this device. The glasses have    ||
+||     the capability to store 5 CREATIONS. Below are the UART values being       ||
+||     passed for this event.                                                     ||
+||                                                                                ||
+||     == To Save for slot one ==                                                 ||
+||     -> Packet1 Value: fa0100030100050455a9                                     ||
+||     -> Packet2 Value: fa010004010014011455a9                                   ||
+||                                                                                ||
+||     (LED Matrix Values)                                                        ||
+||     -> Packet3 Value: fa01003b01000d010a00000000000000003c3c00                 ||
+||     -> Packet4 Value: 0000003c3c000000000000000000000003000000                 ||
+||     -> Packet5 Value: 03c00f00000000c00c000000003ff00000000000                 ||
+||     -> Packet6 Value: 000000cb55a9                                             ||
+||                                                                                ||
+||     -> Packet7 Value: fa01000301000c0d55a9                                     ||
+||                                                                                ||
+||                                                                                ||
+||     I didn’t spend too much time reversing the values that were being passed,  ||
+||     however you can see that it sends two messages to start the save process,  ||
+||     sends the LED matrix data for the next four, then one more to close the    ||
+||     save message. We tried implementing this for the POC with no success,      ||
+||     kept on soft bricking it which was still fun. :3                           ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== POC ==</b>                                                                  ||
+||                                                                                ||
+||     We played around with a lot of different programming languages and         ||
+||     hardware platforms before we settled with the ESP32 on the M5Stack. The    ||
+||     M5Stack is a nice platform to experiment with because the IO is built      ||
+||     into the device and there’s a good community built around it. Making our   ||
+||     life easier there were even NUS Server/Client examples available from the  ||
+||     Arduino library for the ESP32. Ultimately building the POC from scratch    ||
+||     gives us more control on how and when the messages where being sent.       ||
+||     Bellow is a video of the POC in use and its source code can be found in    ||
+||     the github repo linked below.                                              ||
+||                                                                                ||
+||     <a href="../img/working_poc.mp4">[Video]</a>                                                                    ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== CONCLUSION ==</b>                                                           ||
+||                                                                                ||
+||     The original motivation for poking this device was for piratical jokes at  ||
+||     conventions and raves. It was already known that anyone can change the     ||
+||     display on an unsuspecting person using the phone app. We figured if we    ||
+||     could streamline the process we could have a little more fun with it. Now  ||
+||     that we have a working POC, the next step would be to create an            ||
+||     application that would update the glasses outside of the phone app. This   ||
+||     is an ongoing project with a lot more to come so hopefully, there will be  ||
+||     an update soon! If you’re interested in contributing please don’t hesitate ||
+||     to make a pull request. Again, I can’t express enough gratitude to those   ||
+||     who started this project before us and contributed their time and energy   ||
+||     so we could reach this point! :D                                           ||
+||                                                                                ||
+||                    <a href="https://twitter.com/gsuberland" target="_blank">Gsuberland</a> | <a href="https://twitter.com/jilles_com" target="_blank">Jilles</a> | <a href="https://twitter.com/jurrejelle" target="_blank">Jurrejelle</a> | <a href="https://twitter.com/tnayuki" target="_blank">Tnayuki</a>                  ||
+||                                                                                ||
+||                                                                                ||
+||     <b>== GITHUB ==</b>                                                               ||
+||                                                                                ||
+||     <a href="https://github.com/notpike/ChemionHacking" target="_blank">https://github.com/notpike/ChemionHacking</a>                                  ||
+||                                                                                ||
+||     -- NotPike                                                                 ||
+||                                                                                ||
+\\================================================================================//
+                                                            \                       
+                                                             \   ^__^               
+                                                              \  (><)\_______       
+                                                                 (__)\       )\/\   
+                                                                     ||----w |      
+                                                                     ||     ||      
+                        </pre>
+            </banner>
+        </div>
+    </center>
+</body>
+
+</html>
