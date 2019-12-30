@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NotPike | Notes</title>
+    <title>NotPike | Notes_Chemion_LED_Glasses</title>
 
     <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
 
@@ -338,6 +338,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     msg_checksum.c                                                             ||
 || +----------------------------------------------------------------------------+ ||
+|| | #include &lt;stdio.h&gt;                                                         | ||
+|| | #include &lt;stdlib.h&gt;                                                        | ||
+|| | #include &lt;inttypes.h&gt;                                                      | ||
+|| |                                                                            | ||
+|| |                                                                            | ||
 || | uint8_t checkSum(uint8_t *in) {                                            | ||
 || |     uint8_t checkSum = 0x07;       // Check Sum Magic Number               | ||
 || |                                                                            | ||
@@ -347,6 +352,24 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 || |     }                                                                      | ||
 || |     return checkSum;                                                       | ||
 || | }                                                                          | ||
+|| |                                                                            | ||
+|| |                                                                            | ||
+|| | int main() {                                                               | ||
+|| |    uint8_t msg[64] = {0xFA, 0x03, 0x00, 0x39, 0x01, 0x00, 0x06,            | ||
+|| |                       0xC0, 0X00, 0X00, 0X00, 0X00, 0X00, // ^ Start Bytes | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00, // LED Matrix    | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00,                  | ||
+|| |                       0x00, 0X00, 0X00, 0X00, 0X00, 0X00};                 | ||
+|| |                                                                            | ||
+|| |    msg[62] = checkSum(msg);    // Get Check Sum                            | ||
+|| |    msg[63] = 0x55;             // Ending Bytes                             | ||
+|| |    msg[64] = 0xa9;             // Ending Bytes                             | ||
+|| |}                                                                           | ||
 || +----------------------------------------------------------------------------+ ||
 ||                                                                                ||
 ||                                                                                ||
