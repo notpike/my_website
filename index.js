@@ -154,7 +154,9 @@ const server = http.createServer((req,res) => {
                 content = kr.buildContent(content)
             }
 
-            if(extname === '.pdf' || extname === '.zip' || contentType === 'text/plain') { // DOWNLOAD
+            // if(extname === '.pdf' || extname === '.zip' || contentType === 'text/plain') { // DOWNLOAD
+            if(extname === '.pdf' || extname === '.zip') { // DOWNLOAD
+
                 res.writeHead(200, {
                     "Content-Type": contentType,
                     "Content-disposition": "attachment; filename=" + path.basename(req.url)
