@@ -1,0 +1,3 @@
+#Allow all except KRAD
+User-agent: * 
+Disallow: /krad/
