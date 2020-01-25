@@ -105,3 +105,9 @@ img {
 bleah {
     font-size: 12px;
 }
+
+/* Center Button for nrf51 notes */
+reset_button {
+    font-size: 16px;
+    letter-spacing: -1.5px;
+}
