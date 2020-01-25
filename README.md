@@ -1,4 +1,10 @@
 # my_website
+Hi and welcome to my_website!
+ 
+I spent way too much time learning JS and Node.js just to forget it so I built this website to retain this knowledge! All of this is made from scratch using the native Node.JS's http, path, and fs libraries. None of this was built using a known frame work. I built my site this way to better understand how Node.JS ticks. Because this is all from scratch I would like to stress that this is purely “experimental” and not to be used for production applications. It has not been thrown threw the ringer like many other web application frameworks so it’s safe to assume there’s unknown vulns I did not catch.
+
+This application proxy’s a http web server on 127.0.0.1:5000 into a Nginx web server. Nginx handles all the HTTPS traffic and all the security certificate that are incorporated with that task. Below are the start up commands for both the Dev and Production environments. 
+
 
 ## Dev Environment
 ```
