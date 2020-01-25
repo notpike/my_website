@@ -1,3 +1,5 @@
+[![Known Vulnerabilities](https://snyk.io/test/github/notpike/my_website/badge.svg?targetFile=package.json)](https://snyk.io/test/github/notpike/my_website?targetFile=package.json)
+
 # my_website
 Hi and welcome to my_website!
  
