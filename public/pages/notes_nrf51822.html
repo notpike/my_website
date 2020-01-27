@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  Notes_Dumping_nRF51822_Firmware</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+    </head>
+    <body>
+            <center>
+                    <div id="mainBanner">
+                        <pre>
+                        <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+--------------------------------------------------------------------------------
+<a href="/">HOME</a> | <a href="https://twitter.com/ifnotpike" target="_blank">TWITTER</a> | <a href="https://github.com/notpike" target="_blank">GITHUB</a> | <a href="/notes">NOTES</a> | <a href="/about">ABOUT</a> | <a href="/contact">CONTACT</a> | <a href="/login">LOGIN</a>
+--------------------------------------------------------------------------------
+<!-- <a href="/notes">TOUCHTUNES_JUKEBOX</a> | <a href="/notes_ble">KESTREL_BLE</a> | <a href="/notes_chemion">CHEMION_LED_GLASSES</a> -->
+<a href="/notes">TOUCHTUNES_JUKEBOX</a> | <a href="/notes_ble">KESTREL_BLE</a> | <a href="/notes_chemion">CHEMION_LED_GLASSES</a> | <a href="/notes_nrf51288">DUMPING_NRF51822_FIRMWARE</a>
+                        </banner></pre>                                                                                                                      
+                    </div>
+                    <div id="welcome"> 
+                        <pre>
+                            
+██████╗ ██╗   ██╗███╗   ███╗██████╗ ██╗███╗   ██╗ ██████╗     ████████╗██╗  ██╗███████╗
+██╔══██╗██║   ██║████╗ ████║██╔══██╗██║████╗  ██║██╔════╝     ╚══██╔══╝██║  ██║██╔════╝
+██║  ██║██║   ██║██╔████╔██║██████╔╝██║██╔██╗ ██║██║  ███╗       ██║   ███████║█████╗  
+██║  ██║██║   ██║██║╚██╔╝██║██╔═══╝ ██║██║╚██╗██║██║   ██║       ██║   ██╔══██║██╔══╝  
+██████╔╝╚██████╔╝██║ ╚═╝ ██║██║     ██║██║ ╚████║╚██████╔╝       ██║   ██║  ██║███████╗
+╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═══╝ ╚═════╝        ╚═╝   ╚═╝  ╚═╝╚══════╝
+
+              ███╗   ██╗██████╗ ███████╗███████╗ ██╗ █████╗ ██████╗ ██████╗            
+              ████╗  ██║██╔══██╗██╔════╝██╔════╝███║██╔══██╗╚════██╗╚════██╗           
+              ██╔██╗ ██║██████╔╝█████╗  ███████╗╚██║╚█████╔╝ █████╔╝ █████╔╝           
+              ██║╚██╗██║██╔══██╗██╔══╝  ╚════██║ ██║██╔══██╗██╔═══╝ ██╔═══╝            
+              ██║ ╚████║██║  ██║██║     ███████║ ██║╚█████╔╝███████╗███████╗           
+              ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═╝ ╚════╝ ╚══════╝╚══════╝            
+
+<!-- "ANSI Shadow" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2020-01-25T12:24:54+00:00 >===============================================\\
+||                                                                                 ||
+||     こんにちは! 再び! :D                                                          ||
+||                                                                                 ||
+||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||     Picking up from where we last left the Chemion LED Glasses I wanted to      ||
+||     see if it was possible to dump the firmware off of one of the IC’s. The     ||
+||     first IC we’re going to poke at is a Nordic nRF51822 System On a Chip       ||
+||     (SoC). The tools needed for this task included a computer capable of        ||
+||     running GNU Debugger (gdb) and a debugging preferential to interface with   ||
+||     the IC . For this write up I’ll be using Linux as my OS and a STM32         ||
+||     “Blue Pill” flashed with Blackmagic Probe to dump the bin.                  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== NRF51822 ==</b>                                                              ||
+||                                                                                 ||
+||     The Nordic nRF51822 System On a Chip (SoC) is 2.4GHz Gaussian               ||
+||     Frequency-Shift Keying (GFSK) radio built on-top of a 32-bit ARM Cortex     ||
+||     M0 processor. This chip was built to be an all in one system (hence the     ||
+||     acronym SoC) to drive hardware applications while being a fully capable     ||
+||     BLE transceiver. In the case of the Chemion LED Glassess, it appears only   ||
+||     to be a dedicated BLE device sending data to and from the Microchip Sam     ||
+||     D20. I still need to figure out if that’s the case or not but that’s my     ||
+||     current assumption. :3                                                      ||
+||                                                                                 ||
+||     Below are the attributes of the nRF51822...                                 ||
+||                                                                                 ||
+||          -> 32-bit ARM Cortex M0 processor                                      ||
+||          -> 256KB/128KB Flash and 32KB/16KB RAM                                 ||
+||          -> Frequency Range: 2.4GHz ISM ( 2.40000  2.4835GHz )                  ||
+||          -> Modulation: GFSK                                                    ||
+||          -> 31 Configurable GPIOs                                               ||
+||          -> Built In 16MHz Crystal Oscillator                                   ||
+||          -> 128-bit AES ECB/CCM/AAR co-processor                                ||
+||                                                                                 ||
+||     More details about this SoC can be found on Nordic’s website here...        ||
+||                                                                                 ||
+||     <a hre="https://www.nordicsemi.com/Products/Low-power-short-range-wireless/nRF51822" target="_blank">https://www.nordicsemi.com/Products/Low-power-short-range-wireless/nR...</a>    ||
+||                                                                                 ||
+||                                                                                 ||
+||     Nordic chips can be interfaced via a Serial Wire Debug (SWD) port which     ||
+||     is a stripped down version of JTAG. This tech, also refereed to as a        ||
+||     “2-Pin Debug Port” which replaces the normal 5 pin JTAG port with a single  ||
+||     bi-directional data pin (SWDIO) and a clock pin (SWCLK). The spirit of SWD  ||
+||     was to cut down on costs and the amount of pins needed for hardware devs    ||
+||     to debug an application. Fun fact! SWDIO uses the ARM bi-directional wire   ||
+||     protocol defined in the ARM Debug Interface v5! Just in case you wanted     ||
+||     some late night reading about SWD here’s a site where you can learn more    ||
+||     about this. ;)                                                              ||
+||                                                                                 ||
+||     <a href="https://developer.arm.com/architectures/cpu-architecture/debug-visibility-and-trace/coresight-architecture/serial-wire-debug" target="_blank">https://developer.arm.com/architectures/cpu-architecture/debug-visit...</a>     ||
+||                                                                                 ||
+||                                                                                 ||
+||     There’s also a known security flaw with the nRF51822s where it is possible  ||
+||     to bypass the Code Readout Protection (CRP). This means even if you set     ||
+||     the CRP to true, you can still dump the code memory provided if you have    ||
+||     physical access to the device. This flaw originates from the Cortext-M0     ||
+||     processor so any IC that uses this ARM processor as it’s foundation may be  ||
+||     vulnerable. The CRP protections for the target described in this write up   ||
+||     where set to false so this bypass wasn’t needed however I’ll briefly cover  ||
+||     it in this write up. If you would like to know more about this              ||
+||     vulnerability the white paper and POC can be found here.                    ||
+||                                                                                 ||
+||     <a href="https://blog.includesecurity.com/2015/11/NordicSemi-ARM-SoC-Firmware-dumping-technique.html" target="_blank">https://blog.includesecurity.com/2015/11/NordicSemi-ARM-SoC-Firmware...</a>     ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Blackmagic And The “Blue Pill” ==</b>                                        ||
+||                                                                                 ||
+||     In the spirit of “Hacking” and keeping things cheap I chose to use a        ||
+||     $2 STM32 “Blue Pill” with the Blackmagic Probe firmware installed as my     ||
+||     debugging preferential. Blackmagic Probe is capable of debugging not only   ||
+||     SWD but Serial communication as well. Bad news though, the official         ||
+||     hardware platform for Blackmagic normally goes for ~$70-80 which is a lot   ||
+||     of money TBH... However, open source being open source you can use the      ||
+||     same firmware for other hardware platforms at a cheaper price such as the   ||
+||     Blue Pill! I will not be going over the steps in building your own Blue     ||
+||     Pill however I would recommend following this guide linked bellow...        ||
+||                                                                                 ||
+||     <a href="https://medium.com/@paramaggarwal/converting-an-stm32f103-board-to-a-black-magic-probe-c013cf2cc38c" target="_blank">https://medium.com/@paramaggarwal/converting-an-stm32f103-board-to-a-..</a>     ||
+||                                                                                 ||
+||                                                                                 ||
+||     Also, more information about Blackmagic Probe and what platforms it can     ||
+||     debug can be found here...                                                  ||
+||                                                                                 ||
+||     <a href="https://github.com/blacksphere/blackmagic/wiki" target="_blank">https://github.com/blacksphere/blackmagic/wiki</a>                              ||
+||                                                                                 ||
+||                                                                                 ||
+||     Below is the pinout of the Blue Pill after it's been flashed with           ||
+||     Blackmagic.                                                                 ||
+||                 <!-- "Bloddy" Font From http://patorjk.com -->                                                                ||
+||                                                                  ░▓▀▀▀█▄        ||
+||                                                                 ▒█░     █▄      ||
+||   ▄▄▄▄    ██▓    █    ██ ▓█████     ██▓███   ██▓ ██▓     ██▓    ░█▓░     ▓░     ||
+||  ▓█████▄ ▓██▒    ██  ▓██▒▓█   ▀    ▓██░  ██▒▓██▒▓██▒    ▓██▒    ░░█░░  ▄▄▄█░    ||
+||  ▒██▒ ▄██▒██░   ▓██  ▒██░▒███      ▓██░ ██▓▒▒██▒▒██░    ▒██░     ░▒█▄▀▀  ▓▓█░   ||
+||  ▒██░█▀  ▒██░   ▓▓█  ░██░▒▓█  ▄    ▒██▄█▓▒ ▒░██░▒██░    ▒██░    ░ ░▒█░  <a class="hiddenLink" href='https://youtu.be/M7W2I9FGF9U' target="_blank">▓▓▓▓█</a>░  ||
+||  ░▓█  ▀█▓░██████▒▒█████▓ ░▒████▒   ▒██▒ ░  ░░██░░██████▒░██████▒  ░ ▒█░   ▓▓█░  ||
+||  ░▒▓███▀▒░ ▒░▓  ░▒▓▒ ▒ ▒ ░░ ▒░ ░   ▒▓▒░ ░  ░░▓  ░ ▒░▓  ░░ ▒░▓  ░     ░█▓▄▄▄▀▒░  ||
+||  ▒░▒   ░ ░ ░ ▒  ░░▒░ ░ ░  ░ ░  ░   ░▒ ░      ▒ ░░ ░ ▒  ░░ ░ ▒  ░   ░  ░ ▓░▒ ░   ||
+||   ░    ░   ░ ░   ░░░ ░ ░    ░      ░░        ▒ ░  ░ ░     ░ ░           ░ ░     ||
+||   ░          ░  ░  ░        ░  ░          +  ░      ░  ░    ░  ░      ░     ░   ||
+||   ░                                 D     3                                ░    ||
+||                                  G  C  D  .                                     ||
+||                                  N  L  I  3                                     ||
+||                                  D  K  O  V                                     ||
+||                               +---------------+                                 ||
+||                          VBAT |               | <b>+3.3V  &lt;-- [VDD]</b>                ||
+||                         PC_13 | [PWR]  [PC13] | <b>GND    &lt;-- [VSS]</b>                ||
+||                         PC_14 |               | +5V                             ||
+||                         PC_15 |               | PB_9                            ||
+||                          PA_0 |    [8 MHz]    | PB_8                            ||
+||                          PA_1 |      ▄▄       | PB_7                            ||
+||         <b>[SERIAL TxD] --&gt; PA_2</b> |    ▄█▓▓█▄     | PB_6                            ||
+||         <b>[SERIAL RxD] --&gt; PA_3</b> |  ▄█▓▓▓▓▓▓█▄   | PB_5                            ||
+||                          PA_4 | █▓▓STM32F▓▓█  | PB_4                            ||
+||             <b>[SWDCLK] --&gt; PA_5</b> |  ▀█▓▓▓▓▓▓█▀   | PB_3                            ||
+||                          PA_6 |    ▀█▓▓█▀     | PA_15                           ||
+||                          PA_7 |      ▀▀       | PA_12                           ||
+||                          PB_0 |  1 1   RESET  | PA_11                           ||
+||                          PB_1 |  +-+   +---+  | PA_10                           ||
+||                         PB_10 |  &#x2588; &#x2588;   <reset_button>| &#x2B24; |</reset_button>  | PA_9                            ||
+||                         PB_11 |  &#x2588;-&#x2588;   +---+  | PA_8                            ||
+||                         RESET |  0 0          | PB_15                           ||
+||                         +3.3V |               | <b>PB_14  &lt;-- [SWDIO]</b>              ||
+||                           GND |               | PB_13                           ||
+||                           GND |    +-----+    | PB_12                           ||
+||                               +----| USB |----+                                 ||
+||                                    +-----+                                      ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Tapping an IC ==</b>                                                         ||
+||                                                                                 ||
+||     Before we can dump the firmware on this chip we first need a way to         ||
+||     connect to it. Sometimes hardware devs will leave JTAG/SWD ports in place   ||
+||     on the PCB when it’s pushed to production. If you see ports that appear to  ||
+||     trace back to the IC pull out the good ole multimeter and a copy of the     ||
+||     pinout for the target IC and see where the traces go! If there’s no         ||
+||     JTAG/SWD ports on the board don’t fret! We can still solder wires directly  ||
+||     to the pins on the chip! It’s not as hard as it sounds however it’s a lot   ||
+||     easier with the right tools. I recommend having the following materials…    ||
+||                                                                                 ||
+||          -> Free floating microscope                                            ||
+||          -> Polyimide tape                                                      ||
+||          -> 38 AWG Enameled Copper Wire                                         ||
+||          -> 63-37 tin lead rosin core solder solder                             ||
+||          -> A good adjustable soldering iron with a chisel tip                  ||
+||                                                                                 ||
+||     *Note: If you never tapped an IC before I would recommend looking this      ||
+||     up on youtube but just in case you where wondering, this is how I did it.   ||
+||                                                                                 ||
+||          -> First orientate the chip with the pinout diagram and find the       ||
+||             pins that needed to be tapped. Below is a diagram of the nRF51822   ||
+||             and the pins you’ll need to tap.                                    ||
+||          -> Adjust your microscope to your work space so you can see what       ||
+||             you’re soldering on.                                                ||
+||          -> Heat your soldering iron to about 280C.                             ||
+||          -> Pre-tin the end of the 38 AWG  Enameled wire with a heated glob     ||
+||             of solder from your iron.                                           ||
+||          -> The heat from the solder will melt the Enamel and the tip of the    ||
+||             wire will become silver from the solder.                            ||
+||          -> Tape the wire down so the end is close to the target pin on the     ||
+||             IC.                                                                 ||
+||          -> Clean the tip of your soldering iron then get it “wet” with         ||
+||             just a little bit of solder.                                        ||
+||          -> Hold down the wire with your thumb and lightly “Kiss” the wire      ||
+||             so it welds to the pin on the IC.                                   ||
+||          -> Check the weld by poking at it with a pare of tweezers and if it    ||
+||             sticks you’re done!                                                 ||
+||                                                                                 ||
+||                 <!-- "ANSI Shadow" Font From http://patorjk.com -->                                                                ||
+||          ███╗   ██╗██████╗ ███████╗███████╗ ██╗ █████╗ ██████╗ ██████╗          ||
+||          ████╗  ██║██╔══██╗██╔════╝██╔════╝███║██╔══██╗╚════██╗╚════██╗         ||
+||          ██╔██╗ ██║██████╔╝█████╗  ███████╗╚██║╚█████╔╝ █████╔╝ █████╔╝         ||
+||          ██║╚██╗██║██╔══██╗██╔══╝  ╚════██║ ██║██╔══██╗██╔═══╝ ██╔═══╝          ||
+||          ██║ ╚████║██║  ██║██║     ███████║ ██║╚█████╔╝███████╗███████╗         ||
+||          ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═╝ ╚════╝ ╚══════╝╚══════╝         ||
+||                                                                                 ||
+||                                                                                 ||
+||                                                                                 ||
+||                             P P P P P P P P P                                   ||
+||                             0 0 0 0 0 0 0 0 0 D                                 ||
+||                             . . . . . . . . . E X X                             ||
+||                             2 2 2 2 2 2 2 2 2 C C C                             ||
+||                             9 8 7 6 5 4 3 2 1 1 2 1                             ||
+||                                                                                 ||
+||                             4 4 4 4 4 4 4 4 4 3 3 3                             ||
+||                             8 7 6 5 4 3 2 1 0 9 8 7                             ||
+||                         +-----------------------------+                         ||
+||                         | &#9679;                           |                         ||
+||          <b>(+3.3V) VDD   1| &lt;--</b>                         |36  AVDD                 ||
+||                  DCC   2|      ,╔Φ╫╬╗,   ,╥╦╟╬╗,      |35  AVDD                 ||
+||                P0.30   3|     ╣╬╫╫╫╫╫╫╫ΦÑ░░░╟╫╫╫╫     |34  VSS                  ||
+||                P0.00   4|     ░»»╠╩╬╫╫╫╫╫╫╫Ñ╬╫╫╫╫     |33  VSS                  ||
+||                P0.01   5|     »»»»»»░╙╣╬╫╫╫╫╫╫╫╫╫     |32  ANT2                 ||
+||                P0.02   6|     »»»»»»»»»░╙╙╣╫╫╫╫╫╫     |31  ANT1                 ||
+||                P0.03   7|     »»»»░╦░»»»»»»░╙╙╬╫╫     |30  VDD_PA               ||
+||                P0.04   8|     ░»»»h░░╫╦H░░»»»░░»╙     |29  DEC2                 ||
+||                P0.05   9|       "═░Ñ╨`    "═░░╨`      |28  P0.20                ||
+||                P0.06  10|                             |27  P0.19                ||
+||                P0.07  11|           nRF51822          |26  P0.18                ||
+||          (+3.3V) VDD  12|   <b>|                   | |</b>   |25  P0.17                ||
+||                         |   <b>V                   V V</b>   |                         ||
+||                         +-----------------------------+                         ||
+||                             <b>1</b> 1 1 1 1 1 1 2 2 2 <b>2 2</b>                             ||
+||                             <b>3</b> 4 5 6 7 8 9 0 1 2 <b>3 4</b>                             ||
+||                                                                                 ||
+||                             <b>V</b> P P P P P P P P P <b>S S</b>                             ||
+||                             <b>S</b> 0 0 0 0 0 0 0 0 0 <b>W W</b>                             ||
+||                             <b>S</b> . . . . . . . . . <b>D D</b>                             ||
+||                               0 0 1 1 1 1 1 1 1 <b>I C</b>                             ||
+||                               8 9 0 1 2 3 4 5 6 <b>O L</b>                             ||
+||                                                   <b>K</b>                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     If you bridge a pin with a glob of solder you can fix it by brushing the    ||
+||     pins with the hot tip of a soldering iron. If you take too much solder      ||
+||     away from the pins of the IC you can wet the iron tip and rake it over      ||
+||     the pins being careful not to bridge them. Also solder wick comes in handy  ||
+||     if there’s a lot of solder but 9 times out of 10 you can fix a problem      ||
+||     with just the iron. I would also recommend attaching each wire to a         ||
+||     breakout board and add pin headers it so you can interface it better.       ||
+||     Also, always check out work with a multimeter to make sure everything       ||
+||     stayed in place after you package your target.  The photos below shows      ||
+||     my work environment and the breakout I created after tapping the IC.        ||
+||                                                                                 ||
+||     IMG: <a href="../img/WorkSetup.jpg" target="_blank">Work Envirement</a>                                                        ||
+||     IMG: <a href="../img/BreakOut.jpg" target="_blank">Packaged Breakout</a>                                                      ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Dumping the nRF51822 ==</b>                                                  ||
+||                                                                                 ||
+||     OK!                                                                         ||
+||     I hope you didn’t burn your thumb (too badly >_<) because here comes the    ||
+||     easy apart. First connect the nRF51822 with the Blue Pill with the          ||
+||     corresponding pins listed below. I would recommend having the target        ||
+||     device powered down for this and ONLY power the chip directly from the      ||
+||     Blue Pill via the VDD and VSS. If that’s not an option be sure sure the     ||
+||     Blue Pill’s ground is connected to the target or SWD won’t work.            ||
+||                                                                                 ||
+||                             +---------------------+                             ||
+||                             |  nRF51  | Blue Pill |                             ||
+||                             +---------------------+                             ||
+||                             | VDD     -->   +3.3V |                             ||
+||                             | VSS     -->   GND   |                             ||
+||                             | SWDIO   -->   PB_14 |                             ||
+||                             | SWDCLK  -->   PA_5  |                             ||
+||                             +---------------------+                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     Below are the commands I used to connect to the nRF51822 threw gdb with     ||
+||     the Blue Pill.                                                              ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ gdb                                      // Start gdb                  |   ||
+||   |(gdb) target extended-remote /dev/ttyACM0  // Connect to Blue Pill       |   ||
+||   |(gdb) monitor swdp_scan                    // Find SWD compatible devices|   ||
+||   |(gdb) attach &lt;n&gt;                           // Attach to target no.       |   ||
+||   |(gdb) x 0x10001004                         // Check to see if CRC is     |   ||
+||   |                                           // enabled, NO == 0xFFFFFFFF, |   ||
+||   |                                           // YES == 0xFFFF00FF          |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     The flag for the Code Readout Protection (CRP) is stored within the         ||
+||     RBPCONF at 0x10001004. I got this value from the white paper listed above   ||
+||     however a quick google search for “Nordic CPR Address” got me <a href=”https://devzone.nordicsemi.com/f/nordic-q-a/27637/how-to-know-if-nrf51-is-protected-from-readback-or-not” target="_blank">this.</a>         ||
+||                                                                                 ||
+||     Because the CRP is disabled we can dump the firmware with the commands      ||
+||     below.                                                                      ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |(gdb) dump ihex memory &lt;name.hex&gt; 0x0 0x40000  // Dump firmware, 256k    |   ||
+||   |                                                                         |   ||
+||   | <b>*CTRL+D To Exit*</b>                                                        |   ||
+||   |                                                                         |   ||
+||   |$ hexdump -C &lt;name.hex&gt; | less                 // Check File             |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== CRP Bypass ==</b>                                                            ||
+||                                                                                 ||
+||     "Alright hotshot so how do we bypass the CRP if it's enabled?"              ||
+||                                                                                 ||
+||     I'm glad you asked! :D                                                      ||
+||                                                                                 ||
+||     So first off, When the CRP is enabled it prevents the debugger from         ||
+||     accessing parts of the flash. For the nRF51822 when ever you try to read    ||
+||     something protected it returns 0x00000000  however when the code is ran it  ||
+||     access the flash as needed so you’re still able to view the contents of     ||
+||     the flash. The PC register 0x12b9a has a call that loads memory from an     ||
+||     address to the r3 register. By editing the r3 register to an address in     ||
+||     flash, you can pull the contents of the firmware from this instruction and  ||
+||     read it threw the debugger! Kinda like that classic BoF CTF where you get   ||
+||     the program to read the protected text file with a little bit of magic! :D  ||
+||     The White paper above provided a ruby script that will scrape the registers ||
+||     and will build copy of the firmware by stepping threw the code in gdb.      ||
+||     However this was built for OpenOCD so the POC dose not directly apply for   ||
+||     the Blackmagic Probe. Bellow is the white paper I’ve found and a nice write ||
+||     up with a Python version of the POC from Cybergibbons.                      ||
+||                                                                                 ||
+||     <a href="https://www.pentestpartners.com/security-blog/nrf51822-code-readout-protection-bypass-a-how-to/" target="_blank">https://www.pentestpartners.com/security-blog/nrf51822-code...</a>              ||
+||                                                                                 ||
+||                                                                                 ||
+||     The TL;DR because this step wasn’t necessary for my target but I feel it’s  ||
+||     important to talk about this? Let's play around with bypassing the CRP in   ||
+||     gdb. :3                                                                     ||
+||                                                                                 ||
+||     I copied over the bin from the Chemion LED glasses and flashed it on to an  ||
+||     extra nRF5188 to see if we could play around with the CRP. Below are the    ||
+||     commands used to flash the 2nd nRF51 and went as follows…                   ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |(gdb) dump ihex memory name.hex 0x0 0x40000   // Dump target firmware    |   ||
+||   |                                                                         |   ||
+||   |<b>*Change Device*</b>                                                          |   ||
+||   |                                                                         |   ||
+||   |(gdb) target extended-remote /dev/ttyACM0     // Connect to Blue Pill    |   ||
+||   |(gdb) monitor swdp_scan                       // Find SWD compatible     |   ||
+||   |                                                 devices                 |   ||
+||   |(gdb) attach &lt;n&gt;                              // Attach to target no.    |   ||
+||   |(gdb) load name.hex                           // Load firmeware to 2nd   |   ||
+||   |                                                 nRF51                   |   ||
+||   |<b>*Restart Device*</b>                                                         |   ||
+||   |                                                                         |   ||
+||   |(gdb) x 0x10001004                            // Check CRC               |   ||
+||   |(gdb) set {int}0x10001004 = 0xffff00ff        // “Writing to flash       |   ||
+||   |                                                 memory forbidden in     |   ||
+||   |                                                 this context...”        |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     Ahh Nuts! Looks like we can’t change the firmware threw gdb and I don't     ||
+||     have a debugger that can run OpenOCD... This might have to wait for a bit.  ||
+||     Failure happends and it was worth a try but no luck this time. GDB has      ||
+||     a python API that looks like a valid option to port the available POC. It   ||
+||     would be neet to see more suport for that POC besides OpenOCD...            ||
+||     SO! TL;DR, I'll come back to this latter. ;)                                ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Conclusion ==</b>                                                            ||
+||                                                                                 ||
+||     Now that we have the firmware dumped the next logical step would be to      ||
+||     reverse it! TBH, I’ve never done that before so again like most of the      ||
+||     stuff I do…                                                                 ||
+||                                                                                 ||
+||     Just try my best to figure something out. :D                                ||
+||                                                                                 ||
+||                                                                                 ||
+||     -- NotPike                                                                  ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \     *                  
+                                                             \  ^_|_^                
+                                                              \ (888)\_______        
+                                                                (___)\        )\/\   
+                                                                 UU  ||----w |       
+                                                                     ||     ||       
+                        </pre>
+                    </div>
+                </center>   
+                
+            </body>
+
+</html>
