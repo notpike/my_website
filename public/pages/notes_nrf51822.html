@@ -139,7 +139,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     <a href="https://github.com/blacksphere/blackmagic/wiki" target="_blank">https://github.com/blacksphere/blackmagic/wiki</a>                              ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     Below is the pinout of the Blue Pill after it's been flashed with           ||
+||     Below is the pinout of the Blue Pill after its been flashed with            ||
 ||     Blackmagic.                                                                 ||
 ||                 <!-- "Bloddy" Font From http://patorjk.com -->                                                                ||
 ||                                                                  ░▓▀▀▀█▄        ||
@@ -301,7 +301,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                             +---------------------+                             ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     Below are the commands I used to connect to the nRF51822 threw gdb with     ||
+||     Below are the commands I used to connect to the nRF51822 through gdb with   ||
 ||     the Blue Pill.                                                              ||
 ||                                                                                 ||
 ||   +-------------------------------------------------------------------------+   ||
@@ -343,10 +343,10 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     the flash. The PC register 0x12b9a has a call that loads memory from an     ||
 ||     address to the r3 register. By editing the r3 register to an address in     ||
 ||     flash, you can pull the contents of the firmware from this instruction and  ||
-||     read it threw the debugger! Kinda like that classic BoF CTF where you get   ||
+||     read it through the debugger! Kinda like that classic BoF CTF where you get ||
 ||     the program to read the protected text file with a little bit of magic! :D  ||
 ||     The White paper above provided a ruby script that will scrape the registers ||
-||     and will build copy of the firmware by stepping threw the code in gdb.      ||
+||     and will build copy of the firmware by stepping through the code in gdb.    ||
 ||     However this was built for OpenOCD so the POC dose not directly apply for   ||
 ||     the Blackmagic Probe. Bellow is the white paper I’ve found and a nice write ||
 ||     up with a Python version of the POC from Cybergibbons.                      ||
@@ -381,7 +381,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||   |                                                 this context...”        |   ||
 ||   +-------------------------------------------------------------------------+   ||
 ||                                                                                 ||
-||     Ahh Nuts! Looks like we can’t change the firmware threw gdb and I don't     ||
+||     Ahh Nuts! Looks like we can’t change the firmware through gdb and I don't   ||
 ||     have a debugger that can run OpenOCD... This might have to wait for a bit.  ||
 ||     Failure happends and it was worth a try but no luck this time. GDB has      ||
 ||     a python API that looks like a valid option to port the available POC. It   ||
