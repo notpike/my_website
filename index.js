@@ -63,8 +63,8 @@ function buildReqPath(req) {
         case '/notes_chemion':
             target = "pages/notes_chemion.html";
             break;
-        case '/notes_nrf51288':
-            target = "pages/notes_nrf51288.html";
+        case '/notes_nrf51822':
+            target = "pages/notes_nrf51822.html";
             break;                       
         case '/contact':
             target = "pages/contact.html";
