@@ -63,8 +63,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     first IC we’re going to poke at is a Nordic nRF51822 System On a Chip       ||
 ||     (SoC). The tools needed for this task included a computer capable of        ||
 ||     running GNU Debugger (gdb) and a debugging preferential to interface with   ||
-||     the IC . For this write up I’ll be using Linux as my OS and a STM32         ||
-||     “Blue Pill” flashed with Blackmagic Probe to dump the bin.                  ||
+||     the IC. Be sure you have gdb-arm-none-eabi installed for this as well.      ||
+||     For this write up I’ll be using Linux as my OS and a STM32 “Blue Pill”      ||
+||     flashed with Blackmagic Probe to dump the bin.                              ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== NRF51822 ==</b>                                                              ||
@@ -303,7 +304,8 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||                                                                                 ||
 ||     Below are the commands I used to connect to the nRF51822 through gdb with   ||
-||     the Blue Pill.                                                              ||
+||     the Blue Pill. Be sure you have <b>gdb-arm-none-eabi</b> installed or gdb          ||
+||     won't be able to read ARM assembly.                                         ||
 ||                                                                                 ||
 ||   +-------------------------------------------------------------------------+   ||
 ||   |$ gdb                                      // Start gdb                  |   ||
@@ -350,6 +352,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     flash, you can pull the contents of the firmware from this instruction and  ||
 ||     read it through the debugger! Kinda like that classic BoF CTF where you get ||
 ||     the program to read the protected text file with a little bit of magic! :D  ||
+||                                                                                 ||
 ||     The White paper above provided a ruby script that will scrape the registers ||
 ||     and will build copy of the firmware by stepping through the code in gdb.    ||
 ||     However this was built for OpenOCD so the POC dose not directly apply for   ||
