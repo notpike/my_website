@@ -199,6 +199,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||          -> Polyimide tape                                                      ||
 ||          -> 38 AWG Enameled Copper Wire                                         ||
 ||          -> 63-37 tin lead rosin core solder solder                             ||
+||          -> Liquid Flux                                                         ||
 ||          -> A good adjustable soldering iron with a chisel tip                  ||
 ||                                                                                 ||
 ||     *Note: If you never tapped an IC before I would recommend looking this      ||
@@ -210,7 +211,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||          -> Adjust your microscope to your work space so you can see what       ||
 ||             you’re soldering on.                                                ||
 ||          -> Heat your soldering iron to about 280C.                             ||
-||          -> Pre-tin the end of the 38 AWG  Enameled wire with a heated glob     ||
+||          -> Pre-tin the end of the 38 AWG Enameled wire with a heated glob      ||
 ||             of solder from your iron.                                           ||
 ||          -> The heat from the solder will melt the Enamel and the tip of the    ||
 ||             wire will become silver from the solder.                            ||
@@ -218,6 +219,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||             IC.                                                                 ||
 ||          -> Clean the tip of your soldering iron then get it “wet” with         ||
 ||             just a little bit of solder.                                        ||
+||          -> Apply a drop of Liquid Flux on the soldering site.                  ||
 ||          -> Hold down the wire with your thumb and lightly “Kiss” the wire      ||
 ||             so it welds to the pin on the IC.                                   ||
 ||          -> Check the weld by poking at it with a pare of tweezers and if it    ||
@@ -276,7 +278,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     with just the iron. I would also recommend attaching each wire to a         ||
 ||     breakout board and add pin headers it so you can interface it better.       ||
 ||     Also, always check out work with a multimeter to make sure everything       ||
-||     stayed in place after you package your target.  The photos below shows      ||
+||     stayed in place after you package your target. The photos below shows       ||
 ||     my work environment and the breakout I created after tapping the IC.        ||
 ||                                                                                 ||
 ||     IMG: <a href="../img/WorkSetup.jpg" target="_blank">Work Envirement</a>                                                        ||
@@ -345,7 +347,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     So first off, When the CRP is enabled it prevents the debugger from         ||
 ||     accessing parts of the flash. For the nRF51822 when ever you try to read    ||
-||     something protected it returns 0x00000000  however when the code is ran it  ||
+||     something protected it returns 0x00000000 however when the code is ran it   ||
 ||     access the flash as needed so you’re still able to view the contents of     ||
 ||     the flash. The PC register 0x12b9a has a call that loads memory from an     ||
 ||     address to the r3 register. By editing the r3 register to an address in     ||
