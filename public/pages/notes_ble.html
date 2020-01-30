@@ -109,9 +109,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     scanning the area for Bluetooth and or BLE devices. Below are the commands ||
 ||     I used to search for the target device...                                  ||
 ||                                                                                ||
-||     > hcitool dev 		# List HCI devices                                ||
-||     > hciconfig hci0 up	# Turn on on hci0                                 ||
-||     > ./blue_hydra           # Scan                                            ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ hcitool dev 		// List HCI devices                                |  ||
+||   |$ hciconfig hci0 up	// Turn on on hci0                                 |  ||
+||   |$ ./blue_hydra        // Scan                                            |  ||
+||   +-------------------------------------------------------------------------+  ||
 ||                                                                                ||
 ||     The MAC address for this device is  88:6B:0F:9F:D1:15.                     ||
 ||                                                                                ||
@@ -132,7 +134,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     BLE’s GATT service can be found <a href='https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt' target="_blank">here.</a> Below are the commands used and      ||
 ||     the results I found enumerating the Kestrel.                               ||
 ||                                                                                ||
-||     > bleah -b "88:6B:0F:9F:D1:15" -e                                          ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ bleah -b "88:6B:0F:9F:D1:15" -e     // Enumerate GATT                  |  ||
+||   +-------------------------------------------------------------------------+  ||
 ||                                                                                ||
 //                                                                                \\
 
@@ -243,34 +247,44 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                  TIME SEC                                                      ||
 ||          100e0001   02   000100000f                                            ||
 ||                                                                                ||
-||          Value: 100e000102000100000f #2 sec                                    ||
-||          Value: 100e000105000100000f #5 sec                                    ||
-||          Value: 100e00010a000100000f #10 sec                                   ||
-||          Value: 100e00013c000100000f #1 min                                    ||
+||          Value: 100e000102000100000f   // 2 sec                                ||
+||          Value: 100e000105000100000f   // 5 sec                                ||
+||          Value: 100e00010a000100000f   // 10 sec                               ||
+||          Value: 100e00013c000100000f   // 1 min                                ||
 ||                                                                                ||
 ||     → Manage Data Logs                                                         ||
-||         Value: 100e00013c000100000f #Warp Log ON                               ||
-||         Value: 100e00013c000100000f #Warp Log Off                              ||
+||         Value: 100e00013c000100000f    // Warp Log ON                          ||
+||         Value: 100e00013c000100000f    // Warp Log Off                         ||
 ||                                                                                ||
 ||     → Data Logging Rate                                                        ||
-||         Value: 020000013c000100000f # 2sec                                     ||
-||         Value: 3c0000013c000100000f # 1min                                     ||
-||         Value: 100e00013c000100000f # 1hr                                      ||
-||         Value: 201c00013c000100000f # 2hr                                      ||
+||         Value: 020000013c000100000f    // 2sec                                 ||
+||         Value: 3c0000013c000100000f    // 1min                                 ||
+||         Value: 100e00013c000100000f    // 1hr                                  ||
+||         Value: 201c00013c000100000f    // 2hr                                  ||
 ||                                                                                ||
 ||     == Header 0x0025 (READ | WRITE) ==                                         ||
-||     Value: 000001 #RESET                                                       ||
-||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 000001  ||
+||     Value: 000001     // RESET DEVICE                                          ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 000001     |  ||
+||   +-------------------------------------------------------------------------+  ||
 ||                                                                                ||
-||     Value: 010000 #Clear Device Log                                            ||
-||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 010000  ||
+||     Value: 010000     // Clear Device Log                                      ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0025 -n 010000     |  ||
+||   +-------------------------------------------------------------------------+  ||
 ||                                                                                ||
 ||     == Header 0x0027 (READ | WRITE) ==                                         ||
-||     Set name                                                                   ||
-||          > gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0027 -n         ||
-||            $(echo -n "new_name"|xxd -ps)                                       ||
-||          > gatttool -b 88:6B:0F:9F:D1:15 --char-read -a 0x000b|                ||
-||            awk -F':' '{print $2}'|tr -d ' '|xxd -r -p;printf '\n'              ||
+||     Set Name                                                                   ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ gatttool -b 88:6B:0F:9F:D1:15 --char-write-req -a 0x0027 -n            |  ||
+||   |            $(echo -n "new_name"|xxd -ps)                                |  ||
+||   +-------------------------------------------------------------------------+  ||
+||                                                                                ||
+||     Read Name                                                                  ||
+||   +-------------------------------------------------------------------------+  ||
+||   |$ gatttool -b 88:6B:0F:9F:D1:15 --char-read -a 0x000b | awk -F           |  ||
+||   |           ':' '{print $2}'|tr -d ' '|xxd -r -p;printf '\n'              |  ||
+||   +-------------------------------------------------------------------------+  ||
 ||                                                                                ||
 ||                                                                                ||
 ||     == CONCLUSION ==                                                           ||
