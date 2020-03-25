@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  Notes_Iridium</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+    </head>
+    <body>
+            <center>
+                    <div id="mainBanner">
+                        <pre>
+                        <banner>
+                                                                      ______   *           
+                                                                      \    \\              
+                                                                       \----\\     *       
+                                                                        \----\\            
+                                                                    *    \----\\______     
+                                                                          \----\\   / \    
+                                                                         /_\----\\_/   \   
+                                                                         \   ▄█▓█▄ \    \  
+                                                                        //\ █▓▓▓▓▓█ \   /  
+                     $$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\    \| \_▀█▓█▀___\_/  *
+                     $$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\    +     \----\\     
+                     $$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|          \----\\    
+                     $$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\             \----\\   
+                     $$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\          *  \----\\  
+                     $$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |             \____\\ 
+                     $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |      *              
+                     \__|  \__| \______/   \__|   \________| \______/                   *  
+        
+--------------------------------------------------------------------------------
+<a href="/">HOME</a> | <a href="https://twitter.com/ifnotpike" target="_blank">TWITTER</a> | <a href="https://github.com/notpike" target="_blank">GITHUB</a> | <a href="/notes">NOTES</a> | <a href="/about">ABOUT</a> | <a href="/contact">CONTACT</a> | <a href="/login">LOGIN</a>
+--------------------------------------------------------------------------------
+
++--------------------+-------------+---------------------+
+| <a href="/notes">TOUCHTUNES_JUKEBOX</a> | <a href="/notes_ble">KESTREL_BLE</a> | <a href="/notes_chemion">CHEMION_LED_GLASSES</a> |
++--------------------+-------------+---------------------+
+| <a href="/notes_nrf51822">DUMPING_NRF51822_FIRMWARE</a> | <u>IRIDIUM</u> |
++---------------------------+---------+
+</banner></pre></div><div id="welcome"><pre>
+
+    
+    ██╗██████╗ ██╗██████╗ ██╗██╗   ██╗███╗   ███╗
+    ██║██╔══██╗██║██╔══██╗██║██║   ██║████╗ ████║
+    ██║██████╔╝██║██║  ██║██║██║   ██║██╔████╔██║
+    ██║██╔══██╗██║██║  ██║██║██║   ██║██║╚██╔╝██║
+    ██║██║  ██║██║██████╔╝██║╚██████╔╝██║ ╚═╝ ██║
+    ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ ╚═╝ ╚═════╝ ╚═╝     ╚═╝
+<!-- "ANSI Shadow" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2020-01-25T12:24:54+00:00 >===============================================\\
+||                                                                                 ||
+||     こんにちは! 再び! :D                                                           ||
+||                                                                                 ||
+||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Disclaimer ==</b>                                                            ||
+||                                                                                 ||
+||     Some of the practices and methods described in write up may be illegal      ||
+||     in your area. Even though Iridium transmits in plain text it still may      ||
+||     be considered a felony to record and decode. Please use your better         ||
+||     judgment while playing with this tech. If you live in the US please         ||
+||     review the “Wiretap Act” before continuing.                                 ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>18 U.S. Code § 2511. Interception and disclosure of wire, oral, or          ||
+||     electronic communications prohibited.</b>                                       ||
+||   +-------------------------------------------------------------------------+   ||
+||   | (1) Except as otherwise specifically provided in this chapter any       |   ||
+||   | person who---                                                           |   ||
+||   |                                                                         |   ||
+||   |      (a) intentionally intercepts, endeavors to intercept, or procures  |   ||
+||   |          any other person to intercept or endeavor to intercept, any    |   ||
+||   |          wire, oral, or electronic communication;                       |   ||
+||   |      (b) intentionally uses, endeavors to use, or procures any other    |   ||
+||   |          person to use or endeavor to use any electronic, mechanical,   |   ||
+||   |          or other device to intercept any oral communication when       |   ||
+||   |                                                                         |   ||
+||   |           (i) such device is affixed to, or otherwise transmits a       |   ||
+||   |               signal through, a wire, cable, or other like connection   |   ||
+||   |               used in wire communication; or                            |   ||
+||   |          (ii) such device transmits communications by radio, or         |   ||
+||   |               interferes with the transmission of such communication;   |   ||
+||   |               or                                                        |   ||
+||   |         (iii) such person knows, or has reason to know, that such       |   ||
+||   |               device or any component thereof has been sent through the |   ||
+||   |               mail or transported in interstate or foreign commerce; or |   ||
+||   |          (iv) such use or endeavor to use (A) takes place on the        |   ||
+||   |               premises of any business or other commercial              |   ||
+||   |               establishment the operations of which affect interstate   |   ||
+||   |               or foreign commerce; or (B) obtains or is for the purpose |   ||
+||   |               of obtaining information relating to the operations of    |   ||
+||   |               any business or other commercial establishment the        |   ||
+||   |               operations of which affect interstate or foreign          |   ||
+||   |               commerce; or                                              |   ||
+||   |           (v) such person acts in the District of Columbia, the         |   ||
+||   |               Commonwealth of Puerto Rico, or any territory or          |   ||
+||   |               possession of the United States;                          |   ||
+||   |                                                                         |   ||
+||   |      (c) intentionally discloses, or endeavors to disclose, to any      |   ||
+||   |          other person the contents of any wire, oral, or electronic     |   ||
+||   |          communication, knowing or having reason to know that the       |   ||
+||   |          information was obtained through the interception of a wire,   |   ||
+||   |          oral, or electronic communication in violation of this         |   ||
+||   |          subsection;                                                    |   ||
+||   |      (d) intentionally uses, or endeavors to use, the contents of any   |   ||
+||   |          wire, oral, or electronic communication, knowing or having     |   ||
+||   |          reason to know that the information was obtained through the   |   ||
+||   |          interception of a wire, oral, or electronic communication in   |   ||
+||   |          violation of this subsection; or                               |   ||
+||   |      (e) (i) intentionally discloses, or endeavors to disclose, to any  |   ||
+||   |          other person the contents of any wire, oral, or electronic     |   ||
+||   |          communication, intercepted by means authorized by sections     |   ||
+||   |          2511(2)(a)(ii), 2511(2)(b)(c), 2511(2)(e), 2516, and 2518 of   |   ||
+||   |          this chapter, (ii) knowing or having reason to know that the   |   ||
+||   |          information was obtained through the interception of such a    |   ||
+||   |          communication in connection with a criminal investigation,     |   ||
+||   |          (iii) having obtained or received the information in           |   ||
+||   |          connection with a criminal investigation, and (iv) with intent |   ||
+||   |          to improperly obstruct, impede, or interfere with a duly       |   ||
+||   |          authorized criminal investigation,                             |   ||
+||   |                                                                         |   ||
+||   | shall be punished as provided in subsection (4) or shall be subject to  |   ||
+||   | suit as provided in subsection (5).                                     |   ||
+||   +-------------------------------------------------------------------------+   ||
+||     Source: <a>https://www.law.cornell.edu/uscode/text/18/2511</a>                     ||
+
+
+
+
+
+||     -- NotPike                                                                  ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \                       
+                                                             \  ^__^                
+                                                              \ (0o)\_______        
+                                                                (__)\       )\/\    
+                                                                 U  ||----w |       
+                                                                    ||     ||       
+                </pre>
+            </div>
+        </center>   
+<pre>                
+               _ 
+              / \
+             /  /
+            /  / 
+           /  /  
+          /  /   
+     ____/__/_   
+    /  _____  \  
+    | / ;;; \ |  
+    | _______ |  
+    ||_______||  
+    ||IRIDIUM||  
+    ||_______||  
+    |'\[---]/'|  
+    |  ¨'''¨  |  
+    |  '''''  |  
+    |         |  
+    |         |  
+    \_________/  
+</pre>
+    </body>
+    
+    <footer>
+        <center>
+            © Bad Radio Solutions LLC. 2020
+        </center>
+    </footer>
+
+</html>
