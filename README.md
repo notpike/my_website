@@ -10,12 +10,14 @@ This application proxy’s a http web server on 127.0.0.1:5000 into a Nginx web 
 
 ## Dev Environment
 ```
+npm install
 nodemon index
 firefox http://localhost:5000
 ```
 
 ## Live Environment
 ```
+npm install
 pm2 index.js    // Cold Start
 pm2 restart all // After Update
 ```
