@@ -5,6 +5,87 @@ body {
     background: #222222;
 }
 
+banner {
+    font-size: 16px;
+    font-family: monospace;
+    color: greenyellow;
+}
+
+
+/* Blinking curser */
+.blink {
+    font-size: 16px;
+    letter-spacing: -1px;
+    color: greenyellow;
+}
+
+.blinkShade {
+    letter-spacing: -1px;
+    font-size: 16px;
+    color: rgb(82, 136, 0);
+}
+
+/* @media screen and (min-width: 500px) {
+    body {
+        font-size: 20px;
+        font-family: monospace;
+        color: greenyellow;
+        background: #222222;
+    }
+
+    banner {
+        font-size: 20px;
+        font-family: monospace;
+        color: greenyellow;
+    }
+  } */
+  
+/* @media screen and (min-width: 700px) {
+    body {
+        font-size: 22px;
+        font-family: monospace;
+        color: greenyellow;
+        background: #222222;
+    }
+
+    banner {
+        font-size: 22px;
+        font-family: monospace;
+        color: greenyellow;
+    }
+} */
+
+@media screen and (min-width: 900px) {
+    body {
+        font-size: 16px;
+        font-family: monospace;
+        color: greenyellow;
+        background: #222222;
+    }
+
+    banner {
+        font-size: 16px;
+        font-family: monospace;
+        color: greenyellow;
+    }
+
+    /* Blinking curser */
+    .blink {
+        font-size: 16px;
+        letter-spacing: -1px;
+        color: greenyellow;
+    }
+
+    .blinkShade {
+        font-size: 16px;
+        letter-spacing: -1px;
+        color: rgb(82, 136, 0);
+    }
+}
+
+
+
+
 mediaCenter {
     margin: auto;
     text-align: left;
@@ -13,12 +94,6 @@ mediaCenter {
 profilePic {
     font-size: 12px; 
     line-height: 13px;
-}
-
-banner {
-    font-size: 16px;
-    font-family: monospace;
-    color: greenyellow;
 }
 
 /* Blinky Lights for Krad */
@@ -60,20 +135,6 @@ input {
 
 input[type="submit"]:hover {
     background-color: #999999;
-}
-
-
-/* Blinking curser */
-.blink {
-    font-size: 16px;
-    letter-spacing: -1px;
-    color: greenyellow;
-}
-
-.blinkShade {
-    letter-spacing: -1px;
-    font-size: 16px;
-    color: rgb(82, 136, 0);
 }
 
 
