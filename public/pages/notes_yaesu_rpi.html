@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  YAESU_VX-7R_RPI</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+        <!-- I mean you're not doing it worng if you're looking in here to find the easter eggs ;) -->
+    </head>
+    <body>
+            <center>
+                    <div id="mainBanner">
+                        <pre>
+                        <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+--------------------------------------------------------------------------------
+<a href="/">HOME</a> | <a href="https://twitter.com/ifnotpike" target="_blank">TWITTER</a> | <a href="https://github.com/notpike" target="_blank">GITHUB</a> | <a href="/notes">NOTES</a> | <a href="/about">ABOUT</a> | <a href="/contact">CONTACT</a> | <a href="/login">LOGIN</a>
+--------------------------------------------------------------------------------
+
++--------------------+-------------+---------------------+
+| <a href="/notes">TOUCHTUNES_JUKEBOX</a> | <a href="/notes_ble">KESTREL_BLE</a> | <a href="/notes_chemion">CHEMION_LED_GLASSES</a> |
++--------------------+-------------+---------------------+
+| <a href="/notes_nrf51822">DUMPING_NRF51822_FIRMWARE</a> | <a href="/notes_yaesu_rpi">YAESU_VX-7R_RPi</a> | <u>IRIDIUM</u> |
++---------------------------+-----------------+---------+
+</banner>
+    </pre>                                                                                                                      
+        </div>
+        <div id="welcome"> 
+            <pre>
+██╗   ██╗ █████╗ ███████╗███████╗██╗   ██╗    ██╗   ██╗██╗  ██╗     ██████╗ ███████╗    ██████╗ ██████╗ ██╗
+╚██╗ ██╔╝██╔══██╗██╔════╝██╔════╝██║   ██║    ██║   ██║╚██╗██╔╝     ██╔══██╗╚════██║    ██╔══██╗██╔══██╗██║
+ ╚████╔╝ ███████║█████╗  ███████╗██║   ██║    ██║   ██║ ╚███╔╝█████╗██████╔╝    ██╔╝    ██████╔╝██████╔╝██║
+  ╚██╔╝  ██╔══██║██╔══╝  ╚════██║██║   ██║    ╚██╗ ██╔╝ ██╔██╗╚════╝██╔══██╗   ██╔╝     ██╔══██╗██╔═══╝ ██║
+   ██║   ██║  ██║███████╗███████║╚██████╔╝     ╚████╔╝ ██╔╝ ██╗     ██║  ██║   ██║      ██║  ██║██║     ██║
+   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝       ╚═══╝  ╚═╝  ╚═╝     ╚═╝  ╚═╝   ╚═╝      ╚═╝  ╚═╝╚═╝     ╚═╝
+<!-- "ANSI Shadow" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2020-01-25T12:24:54+00:00 >===============================================\\
+||                                                                                 ||
+||     あの時だ！ :D                                                                 ||
+||                                                                                 ||
+||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||     I want to keep this one short and straight to the point. I built a RPi      ||
+||     controller for my Yaesu VX-7R handheld so it can activate the PTT and       ||
+||     transmit audio without human interaction. This project was the result of    ||
+||     an experiment I had seeing if my handheld could work as a POCSAG            ||
+||     transmitter. It didn’t work because the VX-7R doesn't support transmitting  ||
+||     data at 9600 baud. More or less it took the 2FSK coming from the audio      ||
+||     source and modulated it as NFM so in short, no beans… :/                    ||
+||                                                                                 ||
+||     Not to throw away a mostly working product I re-purposed my failed          ||
+||     experiment so it can be a fake number station or something that can         ||
+||     transmit automated messages like the weather or time. The fun part is I     ||
+||     was able to do all of this using a bash script so there was no need to      ||
+||     over complicate this project! :D                                            ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== YAESU VX-7R 2.5MM JACK ==</b>                                                ||
+||                                                                                 ||
+||     Yaesu handhelds use a 4 point 2.5mm jack for voice, speaker and data.       ||
+||     I recycled a broken hand mic while building this so below is the wire       ||
+||     coloring correlation and diagram for this jack. Wire colors may vary so     ||
+||     always double check with a multimeter.                                      ||
+||                                                                                 ||
+||                                                                                 ||
+||                     +--+   GND       MIC      DATA    SPEAKER                   ||
+||                     |  +---------+---------+---------+                          ||
+||                     |  |         |         |         +----+	                   ||
+||                     |  |         |         |         |    |	                   ||
+||                     |  |         |         |         +----+                     ||
+||                     |  +---------+---------+---------+                          ||
+||                     +--+                                                        ||
+||                                                                                 ||
+||                             +---------------------+                             ||
+||                             | FUNCTION  |  COLOR  |                             ||
+||                             +---------------------+                             ||
+||                             | GND     -->   BRAID |                             ||
+||                             | MIC     -->   WHITE |                             ||
+||                             | DATA    -->   BLUE  |                             ||
+||                             | SPEAKER -->   RED   |                             ||
+||                             +---------------------+                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== RPi SCHEMATIC ==</b>                                                         ||
+||                                                                                 ||
+||     For this radio’s PTT to be activated Mic needs a 2.2K ohm resistance to     ||
+||     ground.  Voice is also being carried over the same line while this          ||
+||     resistance is applied so to create this a parallel circuit is needed.       ||
+||     This took some creativity to make work because the RPi audio ground and     ||
+||     RPi ground are on the same circuit and because I was using a NPN I had to   ||
+||     fudge the RPi’s audio in to keep it from shorting. IE, I flipped the RPi’s  ||
+||     audio wires so the RPi’s audio line is going into the Yaesu’s ground and    ||
+||     vise versa. Below is schematic for this circuit.                            ||
+||                                                                                 ||
+||                                                                                 ||
+||                                                     +------+                    ||
+||                            +------------------------+PI GND|                    ||
+||                            |                        +------+                    ||
+||                            |    NPN                                             ||
+||                            +---+\|       440Ω       +----------+                ||
+||                            |     +-----+/\/\/\+-----+PI GPIO 17|                ||
+||                            |   +<|                  +----------+                ||
+||                            |   |                                                ||
+||                            |   | 2.2KΩ                                          ||
+||                +-----------+   +/\/\/\+                                         ||
+||                |                      |                                         ||
+||                |  +------------+      |  +--------------------+                 ||
+||                |  |PI AUDIO OUT+------+--+VX-7R GND BRAID WIRE|                 ||
+||                |  +------------+         +-------------- -----+                 ||
+||                |                                                                ||
+||                |  +------------+         +--------------------+                 ||
+||                |  |PI AUDIO GND+--+------+VX-7R MIC WHITE WIRE|                 ||
+||                |  +------------+  |      +--------------------+                 ||
+||                |                  |                                             ||
+||                +------------------+                                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== BASH SCRIPT ==</b>                                                           ||
+||                                                                                 ||
+||     Here’s the bash script I used to control the Yaesu VX-7R. Included are      ||
+||     a few examples such as using CW to broadcast your call sign, espeak to      ||
+||     read words out loud, and how play a wav audio file.                         ||
+||                                                                                 ||
+||                                                                                 ||
+||     tx.sh                                                                       ||
+|| +-----------------------------------------------------------------------------+ ||
+|| |  #!/bin/bash                                                                | ||
+|| |                                                                             | ||
+|| |  #######################################################                    | ||
+|| |  # FILE:     TX.SH                                     #                    | ||
+|| |  # AUTHOR:   NOTPIKE WU7ANG                            #                    | ||
+|| |  # LICENSE:  MIT                                       #                    | ||
+|| |  # FUNCTION: RPI TX SCRIPT FOR YAESU VX-7R             #                    | ||
+|| |  #                                                     #                    | ||
+|| |  # ==REQUIRED SOFTWARE==                               #                    | ||
+|| |  # ~:$ sudo apt update                                 #                    | ||
+|| |  # ~:$ sudo apt install cw espeak-ng                   #                    | ||
+|| |  #######################################################                    | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ############ VARIABLES ############                                        | ||
+|| |                                                                             | ||
+|| |  CALLSIGN="AB7CDE"                                                          | ||
+|| |  PHO_CALLSIGN="Alpha Brovo 7 Charlie Delta Echo"                            | ||
+|| |  TEST_SENTENCE="The Quck Brown Fox"                                         | ||
+|| |  GPIO=17                                                                    | ||
+|| |                                                                             | ||
+|| |  trap ctrl_c INT                                                            | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ############ FUNCTIONS ############                                        | ||
+|| |                                                                             | ||
+|| |  ## Trap function for ctrl_c, kills PTT                                     | ||
+|| |  function ctrl_c() {                                                        | ||
+|| |       printf "\n\n##STOPING##\n\n"                                          | ||
+|| |       tx_off                                                                | ||
+|| |       exit                                                                  | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |  ## TX ON                                                                   | ||
+|| |  function tx_on() {                                                         | ||
+|| |       ## Set GPIO to high                                                   | ||
+|| |       echo "1" > /sys/class/gpio/gpio$GPIO/value                            | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |  ## TX OFF                                                                  | ||
+|| |  function tx_off() {                                                        | ||
+|| |       ## Set GPIO to low                                                    | ||
+|| |       echo "0" > /sys/class/gpio/gpio$GPIO/value                            | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |  ## Numbers Station                                                         | ||
+|| |  function numbers() {                                                       | ||
+|| |       MAX_COUNT=10                                                          | ||
+|| |       COUNT=1                                                               | ||
+|| |                                                                             | ||
+|| |       espeak-ng -g 40 "NUMBERS" 2> /dev/null                                | ||
+|| |                                                                             | ||
+|| |       while [ "$COUNT" -le $MAX_COUNT ]                                     | ||
+|| |       do                                                                    | ||
+|| |            NUMBER=$(( 1 + RANDOM %100 ))                                    | ||
+|| |            echo $NUMBER | espeak-ng -g 40 2> /dev/null                      | ||
+|| |            let "COUNT += 1"                                                 | ||
+|| |       done                                                                  | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |  ## Date Time                                                               | ||
+|| |  function date_time() {                                                     | ||
+|| |       NOW=$(date "+%A, %B %d, %Y, Time %H %M")                              | ||
+|| |       echo "Today is $NOW" | espeak-ng -g 40 2> /dev/null                   | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |  ## WAV File                                                                | ||
+|| |  function play_wav() {                                                      | ||
+|| |       aplay /home/pi/piano2.wav                                             | ||
+|| |  }                                                                          | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ############ INIT ############                                             | ||
+|| |                                                                             | ||
+|| |  ## Set GPIO17 to out                                                       | ||
+|| |  if [ ! -d "/sys/class/gpio/gpio$GPIO" ]; then                              | ||
+|| |       echo "$GPIO" > /sys/class/gpio/export                                 | ||
+|| |       echo "out" >  /sys/class/gpio/gpio$GPIO/direction                     | ||
+|| |  fi                                                                         | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ############ MAIN ############                                             | ||
+|| |                                                                             | ||
+|| |  ## TX ON                                                                   | ||
+|| |  tx_on                                                                      | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ## Callsign                                                                | ||
+|| |  #echo $PHO_CALLSIGN | espeak-ng -g 20 2> /dev/null                         | ||
+|| |  echo $CALLSIGN | cw -w 25 -t 1200 2> /dev/null                             | ||
+|| |                                                                             | ||
+|| |  ## Voice Example                                                           | ||
+|| |  echo $TEST_SENTENCE | espeak-ng -g 4 2> /dev/null                          | ||
+|| |                                                                             | ||
+|| |  ## Date Time Example                                                       | ||
+|| |  date_time                                                                  | ||
+|| |                                                                             | ||
+|| |  ## Numbers Station Example                                                 | ||
+|| |  numbers                                                                    | ||
+|| |                                                                             | ||
+|| |  ## WAV Example                                                             | ||
+|| |  play_wav                                                                   | ||
+|| |                                                                             | ||
+|| |  ## Close                                                                   | ||
+|| |  espeak-ng -g 4 -p 25  "END OF LINE" 2> /dev/null                           | ||
+|| |                                                                             | ||
+|| |                                                                             | ||
+|| |  ## TX OFF                                                                  | ||
+|| |  tx_off                                                                     | ||
+|| +-----------------------------------------------------------------------------+ ||
+||                                                                                 ||
+||     <b>DOWNLOAD:</b> <a href="../files/tx.sh" target="_blank">tx.sh</a>                                                             ||
+||     <b>IMG:</b> <a href="../img/rpi_yaesu.jpg" target="_blank">rpi_yaesu.jpg</a>                                                          ||
+||     <b>VIDEO:</b> <a href="../img/yaesu_rpi_example.mp4" target="_blank">yaesu_rpi_example.mp4</a>                                                ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Conclusion ==</b>                                                            ||
+||                                                                                 ||
+||     Can’t wait to keep adding onto this project. I hope to be able to pipe      ||
+||     the RX audio into the Rpi and do more advanced stuff such as remote         ||
+||     control via DTMF for example. Hopefully you found this write up to be       ||
+||     useful and happy hacking! :D                                                ||
+||                                                                                 ||
+||     -- NotPike                                                                  ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \     *                  
+                                                             \  ^_|_^                
+                                                              \ (888)\_______        
+                                                                (___)\        )\/\   
+                                                                 UU  ||----w |       
+                                                                     ||     ||       
+                </pre>
+            </div>
+        </center>   
+        
+    </body>
+
+    <footer>
+        <center>
+            © Bad Radio Solutions 2020
+        </center>
+    </footer>
+
+</html>
