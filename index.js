@@ -68,7 +68,10 @@ function buildReqPath(req) {
             break;
         case '/notes_iridium':
             target = "pages/notes_iridium.html";
-            break;                         
+            break;
+        case '/notes_yaesu_rpi':
+            target = "pages/notes_yaesu_rpi.html";
+            break;                                          
         case '/contact':
             target = "pages/contact.html";
             break;
