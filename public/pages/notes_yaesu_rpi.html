@@ -109,26 +109,36 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     vise versa. Below is schematic for this circuit.                            ||
 ||                                                                                 ||
 ||                                                                                 ||
-||                                                     +------+                    ||
-||                            +------------------------+PI GND|                    ||
-||                            |                        +------+                    ||
-||                            |    NPN                                             ||
-||                            +---+\|       440Ω       +----------+                ||
-||                            |     +-----+/\/\/\+-----+PI GPIO 17|                ||
-||                            |   +<|                  +----------+                ||
-||                            |   |                                                ||
-||                            |   | 2.2KΩ                                          ||
-||                +-----------+   +/\/\/\+                                         ||
-||                |                      |                                         ||
-||                |  +------------+      |  +--------------------+                 ||
-||                |  |PI AUDIO OUT+------+--+VX-7R GND BRAID WIRE|                 ||
-||                |  +------------+         +-------------- -----+                 ||
-||                |                                                                ||
-||                |  +------------+         +--------------------+                 ||
-||                |  |PI AUDIO GND+--+------+VX-7R MIC WHITE WIRE|                 ||
-||                |  +------------+  |      +--------------------+                 ||
-||                |                  |                                             ||
-||                +------------------+                                             ||
+||           RPi -> Yaesu VX-7r                                                    ||
+||       +-----------------------------------------------------------------+       ||
+||       |                                      +------+                   |       ||
+||       |     +----------------+---------------+PI GND|                   |       ||
+||       |     |                |               +------+                   |       ||
+||       |     |                |                                          |       ||
+||       |     |                ++\|    440Ω    +----------+               |       ||
+||       |     |                   +--+/\/\/\+--+PI GPIO 17|               |       ||
+||       |     |                + <|            +----------+               |       ||
+||       |     |                |                                          |       ||
+||       |     |                |  2.2KΩ                                   |       ||
+||       |     |                + /\/\/\+                                  |       ||
+||       |     | +------------+         |       +--------------------+     |       ||
+||       |     | |PI AUDIO OUT+---------+-------+VX|7R MIC WHITE WIRE|     |       ||
+||       |     | +------------+                 +--------------------+     |       ||
+||       |     |                                                           |       ||
+||       |     +-----------------------------+                             |       ||
+||       |                                   |                             |       ||
+||       |     +------------+                |  +--------------------+     |       ||
+||       |     |PI AUDIO GND+-------------------+VX|7R GND BRAID WIRE|     |       ||
+||       |     +------------+                |  +--------------------+     |       ||
+||       |                                   |                             |       ||
+||       |     +----------+                  |                             |       ||
+||       |     |PI MIC GND+------------------+                             |       ||
+||       |     +----------+                                                |       ||
+||       |                                                                 |       ||
+||       |     +---------+                      +--------------------+     |       ||
+||       |     |PI MIC IN+----------------------+VX|7R AUDIO RED WIRE|     |       ||
+||       |     +---------+                      +--------------------+     |       ||
+||       +-----------------------------------------------------------------+       ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== BASH SCRIPT ==</b>                                                           ||
@@ -143,7 +153,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 || |  #!/bin/bash                                                                | ||
 || |                                                                             | ||
 || |  #######################################################                    | ||
-|| |  # FILE:     TX.SH                                     #                    | ||
+|| |  # FILE:     tx.sh                                     #                    | ||
 || |  # AUTHOR:   NOTPIKE WU7ANG                            #                    | ||
 || |  # LICENSE:  MIT                                       #                    | ||
 || |  # FUNCTION: RPI TX SCRIPT FOR YAESU VX-7R             #                    | ||
@@ -252,17 +262,30 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 || +-----------------------------------------------------------------------------+ ||
 ||                                                                                 ||
 ||     <b>DOWNLOAD:</b> <a href="../files/tx.sh" target="_blank">tx.sh</a>                                                             ||
+||     <b>IMG:</b> <a href="../img/rpi_yaesu_proto.jpg" target="_blank">rpi_yaesu_proto.jpg</a>                                                    ||
 ||     <b>IMG:</b> <a href="../img/rpi_yaesu.jpg" target="_blank">rpi_yaesu.jpg</a>                                                          ||
-||     <b>IMG:</b> <a href="../img/rpi_yaesu2.jpg" target="_blank">rpi_yaesu2.jpg</a>                                                         ||
 ||     <b>VIDEO:</b> <a href="../img/yaesu_rpi_example.mp4" target="_blank">yaesu_rpi_example.mp4</a>                                                ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     <b>== Conclusion ==</b>                                                            ||
+||     <s><b>== Conclusion ==</b></s>                                                            ||
 ||                                                                                 ||
-||     Can’t wait to keep adding onto this project. I hope to be able to pipe      ||
-||     the RX audio into the Rpi and do more advanced stuff such as remote         ||
-||     control via DTMF for example. Hopefully you found this write up to be       ||
-||     useful and happy hacking! :D                                                ||
+||     <s>Can’t wait to keep adding onto this project. I hope to be able to pipe</s>      ||
+||     <s>the RX audio into the Rpi and do more advanced stuff such as remote</s>         ||
+||     <s>control via DTMF for example. Hopefully you found this write up to be</s>       ||
+||     <s>useful and happy hacking! :D</s>                                                ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Update ==</b>                                                                ||
+||     There’s now a Python port available available on my Github! :D              ||
+||     <a href="https://github.com/notpike/Hambone" target="_blank">https://github.com/notpike/Hambone</a>                                          ||
+||                                                                                 ||
+||     Expanding from where I left off, I added RX capability as well as porting   ||
+||     over a DTMF decoder that was origionaly written by <a href="https://github.com/alijamaliz/DTMF-detector" target="_blank">Alijamaliz</a>.              ||
+||     Right now it’s capable of listening for DTMF commands and will preform      ||
+||     actions such as reading the Weather, Time, and Date with Google’s Text      ||
+||     To Speech API and can preform an Echo Test by recording what it can hear    ||
+||     then playing it back. My most resent work can be found in the <a href="https://github.com/notpike/Hambone/tree/dev" target="_blank">dev branch</a>    ||
+||     in the repo.                                                                ||
 ||                                                                                 ||
 ||     -- NotPike                                                                  ||
 ||                                                                                 ||
