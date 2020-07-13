@@ -8,6 +8,9 @@
 /* ------------ REQUIREMENTS ------------ */
 const Logger = require('./apps/logger');
 const Krad = require('./apps/krad');
+const Route = require('./apps/route');
+const Type = require('./apps/type');
+
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -18,6 +21,7 @@ const { parse } = require('querystring');
 const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
+
 
 /* ------------- KRAD PAGE -------------- */
 const kr = new Krad();
@@ -42,88 +46,13 @@ function postRX(req) {
 
 }
 
+
 /* ------------ ROUTER FUNCTION ----------- */
-function buildReqPath(req) {
+const route = new Route();
 
-    var target = "";
-
-    switch(req.url) {
-        case '/':
-            target = "index.html"
-            break;
-        case '/about':
-            target = "pages/about.html";
-            break;
-        case '/notes':
-            target = "pages/notes.html";
-            break;
-        case '/notes_ble':
-            target = "pages/notes_ble.html";
-            break; 
-        case '/notes_chemion':
-            target = "pages/notes_chemion.html";
-            break;
-        case '/notes_nrf51822':
-            target = "pages/notes_nrf51822.html";
-            break;
-        case '/notes_iridium':
-            target = "pages/notes_iridium.html";
-            break;
-        case '/notes_yaesu_rpi':
-            target = "pages/notes_yaesu_rpi.html";
-            break;                                          
-        case '/contact':
-            target = "pages/contact.html";
-            break;
-        case '/login':
-            target = "pages/login.html";
-            break;
-        case '/krad':
-            target = "pages/krad.html";
-            break;
-        default:
-            target = req.url;
-            break;
-    }
-    return path.join(__dirname, 'public', target); // Nothing goes behind public
-}
 
 /* -------- CONTENT TYPE FUNCTION ------- */
-function findContentType(extname) {
-    
-    let contentType;            
-    //contentType = 'text/html';
-    switch(extname) {                         // Check extname and set contentType
-        case '.html':
-            contentType = 'text/html';
-            break;
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.css': 
-            contentType = 'text/css';
-            break;
-        case '.json':
-            contentType = 'application/json';
-            break;
-        case '.png':
-            contentType = 'image/png';
-            break;
-        case '.jpg':
-            contentType = 'image/jpg';
-            break;
-        case '.zip':                         // Download
-            contentType = 'application/zip';
-            break;
-        case '.pdf':                         // Download
-            contentType = 'application/pdf';  
-            break; 
-        default:                             // Download everything else
-            contentType = 'text/plain';
-            break;          
-    }
-    return contentType;
-}
+const type = new Type();
 
 
 /* ---------- MAIN SERVER LOOP ---------- */
@@ -135,13 +64,13 @@ const server = http.createServer((req,res) => {
     }
 
     // Build the file path
-    let filePath = buildReqPath(req);
+    let filePath = route.buildReqPath(req);
  
     // Extension of file
     let extname = path.extname(filePath); 
     
     // Find Content Type (ex. 'text/html')
-    let contentType = findContentType(extname);
+    let contentType = type.findContentType(extname);
 
     // Read file
     fs.readFile(filePath, (err, content) => {
@@ -156,16 +85,14 @@ const server = http.createServer((req,res) => {
         } else {
             // Sucess!
 
-            // Hacky hack hack hack! :D
-            // Lets load a list of links and update krad.html!
+            // Load dynamic list
             if(req.url === '/krad') {
                 content = content.toString();
                 content = kr.buildContent(content)
             }
 
-            // if(extname === '.pdf' || extname === '.zip' || contentType === 'text/plain') { // DOWNLOAD
-            if(extname === '.pdf' || extname === '.zip') { // DOWNLOAD
-
+            // Downloads
+            if(extname === '.pdf' || extname === '.zip') {
                 res.writeHead(200, {
                     "Content-Type": contentType,
                     "Content-disposition": "attachment; filename=" + path.basename(req.url)
@@ -173,7 +100,26 @@ const server = http.createServer((req,res) => {
 
                 const inputStream = fs.createReadStream(filePath);
                 inputStream.pipe(res);
-            } else {                                                                      // WEB PAGE
+            } 
+            
+            // Load Webpage
+            else {
+                // Header Bar
+                let headerBarPath = path.join(__dirname, '/public/pages/parts/headerBar.html');
+                let headerBar = fs.readFileSync(headerBarPath);
+                content = content.toString().replace('@linkBar', headerBar);
+
+                // Note Bar
+                let noteBarPath = path.join(__dirname, '/public/pages/parts/noteBar.html');
+                let noteBar = fs.readFileSync(noteBarPath);
+                content = content.toString().replace('@noteBar', noteBar);
+
+                // Footer
+                let footerPath = path.join(__dirname, '/public/pages/parts/footer.html');
+                let footer = fs.readFileSync(footerPath);
+                content = content.toString().replace('@footer', footer);
+
+                // Return Webpage
                 res.writeHead(200, { 'Content-Type': contentType});
                 res.end(content, 'utf8');
             }
