@@ -4,7 +4,6 @@
  * Licence: MIT
  */
 
- /* ------------ REQUIREMENTS ------------ */
 const path = require('path');
 
 class Route {
