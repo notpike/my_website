@@ -8,9 +8,6 @@ const fs = require ('fs');
 
 /* Known bugs, 2nd level *EMPTY* missing root |, large branches have miss placed | as well */
 
-
-// YOU SEE WHAT HAPPENDS WHEN YOU DON'T DESIGN YOUR SYSTEM WELL?
-// YOU HAVE TO DO HACKY THINGS LIKE THIS TO MAKE IT WORK! :D
 class Krad {
    
     listDir(path) {
@@ -152,7 +149,7 @@ class Krad {
         links += this.buildTree(path, level, last);
         links += "<br/><br/>     user@dev:~/krad$ <span class=\"blink\">&#x2588;</span><br/><br/>"
        
-        return content.replace('ThisIsSomeHackyCode', links);
+        return content.replace('@krad', links);
     }
 }
 
