@@ -26,6 +26,13 @@ pm2 restart all // After Update
 ```
 my_website
  ├── apps/             // Node.JS Backend
+ │    ├── krad.js      // Cursed Recursive DIR walk
+ │    ├── logger.js    // Logging
+ │    ├── login.js     // TODO
+ │    ├── pageGen.js   // Page Builder
+ │    ├── route.js     // Web Routes
+ │    └── type.js      // File Content Type
+ │
  ├── log/              // Log for application
  ├── node_modules/     // Libs for application
  ├── public/           // Public facing content
@@ -40,6 +47,7 @@ my_website
  │    │
  │    ├── krad/        // Shhhh, secret hacker stash  ;)
  │    ├── pages/       // Web pages for site
+ │    │   ├── parts/   // Header, Footer, Parts that repeat 
  │    │   ├── 404.html
  │    │   ├── about.html
  │    │   ├── contact.html
