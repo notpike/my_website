@@ -2,6 +2,7 @@
  * Name: NotPike
  * File: type.js
  * Licence: MIT
+ * Function: Returns content type
  */
 
 class Type {

@@ -2,6 +2,7 @@
  * Name: NotPike
  * File: index.js
  * Licence: MIT
+ * Function: Main
  */
 
 
@@ -10,6 +11,7 @@ const Logger = require('./apps/logger');
 const Krad = require('./apps/krad');
 const Route = require('./apps/route');
 const Type = require('./apps/type');
+const PageGen = require('./apps/pageGen');
 
 const http = require('http');
 const path = require('path');
@@ -21,6 +23,18 @@ const { parse } = require('querystring');
 const logger = new Logger();
 logger.on('message', (data) => console.log("Called Listener: ", data));
 logger.log("Server Startup");
+
+
+/* ------------ ROUTER ----------- */
+const route = new Route();
+
+
+/* -------- CONTENT TYPE ------- */
+const type = new Type();
+
+
+/* -------- PAGE GENERATION------- */
+const pageGen = new PageGen();
 
 
 /* ------------- KRAD PAGE -------------- */
@@ -45,14 +59,6 @@ function postRX(req) {
     });
 
 }
-
-
-/* ------------ ROUTER FUNCTION ----------- */
-const route = new Route();
-
-
-/* -------- CONTENT TYPE FUNCTION ------- */
-const type = new Type();
 
 
 /* ---------- MAIN SERVER LOOP ---------- */
@@ -104,20 +110,8 @@ const server = http.createServer((req,res) => {
             
             // Load Webpage
             else {
-                // Header Bar
-                let headerBarPath = path.join(__dirname, '/public/pages/parts/headerBar.html');
-                let headerBar = fs.readFileSync(headerBarPath);
-                content = content.toString().replace('@linkBar', headerBar);
-
-                // Note Bar
-                let noteBarPath = path.join(__dirname, '/public/pages/parts/noteBar.html');
-                let noteBar = fs.readFileSync(noteBarPath);
-                content = content.toString().replace('@noteBar', noteBar);
-
-                // Footer
-                let footerPath = path.join(__dirname, '/public/pages/parts/footer.html');
-                let footer = fs.readFileSync(footerPath);
-                content = content.toString().replace('@footer', footer);
+                // Page Generator
+                content = pageGen.buildPage(content);
 
                 // Return Webpage
                 res.writeHead(200, { 'Content-Type': contentType});
@@ -131,5 +125,3 @@ const server = http.createServer((req,res) => {
 /* ---------- MAIN SERVER START ---------- */
 const PORT = process.env.PORT || 5000; // envirement var or 5000
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
