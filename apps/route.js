@@ -2,9 +2,9 @@
  * Name: NotPike
  * File: route.js
  * Licence: MIT
+ * Function: Routing tables
  */
 
- /* ------------ REQUIREMENTS ------------ */
 const path = require('path');
 
 class Route {
