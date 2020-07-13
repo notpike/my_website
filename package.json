@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/notpike/my_website#readme",
   "dependencies": {
-    "uuid": "^3.3.3"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.0"
+    "nodemon": "^2.0.4"
   }
 }
