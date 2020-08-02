@@ -111,7 +111,9 @@ const server = http.createServer((req,res) => {
             // Load Webpage
             else {
                 // Page Generator
-                content = pageGen.buildPage(content);
+                if(contentType == 'text/html') {
+                    content = pageGen.buildPage(content);
+                }
 
                 // Return Webpage
                 res.writeHead(200, { 'Content-Type': contentType});

@@ -37,7 +37,10 @@ class Route {
                 break;
             case '/notes_yaesu_rpi':
                 target = "pages/notes_yaesu_rpi.html";
-                break;                                          
+                break;    
+            case '/notes_unipager_gm300':
+                target = "pages/notes_unipager_gm300.html";
+                break;                                      
             case '/contact':
                 target = "pages/contact.html";
                 break;

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="How to buildp a POCSAG pagger transmitter using a motorola GM300 and UniPager">
+        <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, DAPNET, ham, radio, hacking, unipager, pocsag, pagger">
+        <meta name="author" content="NotPike">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  UNIPAGER_GM300</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+    </head>
+    <body>
+        <div id="mainBanner">
+            <pre>
+            <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+@linkBar
+
+@noteBar
+            </banner>
+            </pre>                                                                                                                      
+        </div>
+        <div id="welcome"> 
+            <pre>
+  ███╗   ███╗ ██████╗ ████████╗ ██████╗ ██████╗  ██████╗ ██╗      █████╗      ██████╗ ███╗   ███╗ ██████╗  ██████╗  ██████╗   
+  ████╗ ████║██╔═══██╗╚══██╔══╝██╔═══██╗██╔══██╗██╔═══██╗██║     ██╔══██╗    ██╔════╝ ████╗ ████║ ╚════██╗██╔═████╗██╔═████╗  
+  ██╔████╔██║██║   ██║   ██║   ██║   ██║██████╔╝██║   ██║██║     ███████║    ██║  ███╗██╔████╔██║  █████╔╝██║██╔██║██║██╔██║  
+  ██║╚██╔╝██║██║   ██║   ██║   ██║   ██║██╔══██╗██║   ██║██║     ██╔══██║    ██║   ██║██║╚██╔╝██║  ╚═══██╗████╔╝██║████╔╝██║  
+  ██║ ╚═╝ ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║╚██████╔╝███████╗██║  ██║    ╚██████╔╝██║ ╚═╝ ██║ ██████╔╝╚██████╔╝╚██████╔╝  
+  ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═╝     ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝   
+                                                                                                                                
+██████╗  ██████╗  ██████╗███████╗ █████╗  ██████╗         ██╗    ██╗   ██╗███╗   ██╗██╗██████╗  █████╗  ██████╗ ███████╗██████╗ 
+██╔══██╗██╔═══██╗██╔════╝██╔════╝██╔══██╗██╔════╝        ██╔╝    ██║   ██║████╗  ██║██║██╔══██╗██╔══██╗██╔════╝ ██╔════╝██╔══██╗
+██████╔╝██║   ██║██║     ███████╗███████║██║  ███╗      ██╔╝     ██║   ██║██╔██╗ ██║██║██████╔╝███████║██║  ███╗█████╗  ██████╔╝
+██╔═══╝ ██║   ██║██║     ╚════██║██╔══██║██║   ██║     ██╔╝      ██║   ██║██║╚██╗██║██║██╔═══╝ ██╔══██║██║   ██║██╔══╝  ██╔══██╗
+██║     ╚██████╔╝╚██████╗███████║██║  ██║╚██████╔╝    ██╔╝       ╚██████╔╝██║ ╚████║██║██║     ██║  ██║╚██████╔╝███████╗██║  ██║
+╚═╝      ╚═════╝  ╚═════╝╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚═╝         ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+<!-- "ANSI Shadow" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2020-08-02T22:02:36+00:00 >===============================================\\
+||                                                                                 ||
+||     Was geht ab? :3                                                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||     I have a soft spot for tech that went out of style, especially tech I       ||
+||     never had the privilege to use outside of work. POCSAG pagers, love them    ||
+||     or hate themcan still be found used by medical and emergency responders.    ||
+||     Cellphones may have made the use case of Pagers not as appealing to the     ||
+||     general public however there is growing popularity with POCSAG Pagers in    ||
+||     the Ham community.                                                          ||
+||                                                                                 ||
+||     <a href="https://hampager.de" target="_blank">DAPNET</a> (Decentralized Amateur Paging Network) is a network operated by      ||
+||     amateur radio nerds out of Germany. It consists of a decentralized server   ||
+||     cluster feeding paging data to distributed transmitters (The thing we are   ||
+||     building today). The most used frequency is 439.9875MHz however you can     ||
+||     (legally) do this on other frequencies if you chose. It’s preferred to      ||
+||     keep this all on the same frequency because it benefits other DAPNET users  ||
+||     so they don’t need to reprogram their pagers when changing locations.       ||
+||     <b>HOWEVER</b>, it’s more important to not walk on other transmitters so           ||
+||     you’ll need to see what frequencies are free first before blasting other    ||
+||     people off the net.                                                         ||
+||                                                                                 ||
+||     I first started using DAPNET with my Pi-Star (MMDVM) however being a 0.01w  ||
+||     transmitter I wanted a little more range. DAPNET has transmitter controller ||
+||     called UniPager which you can use with a RPi to control a 9k6 capable radio ||
+||     (Motorola GM300 for this write up). This application ties the RPi’s GPIO    ||
+||     with your target radio’s PTT and you can pipe the data to the radio using   ||
+||     the RPi’s audio jack. Below are the guides I used to complete this build    ||
+||     however there where some differences when I tried this with the Motorola    ||
+||     GM300.                                                                      ||
+||                                                                                 ||
+||     <a href="https://hampager.de/dokuwiki/doku.php?id=9k6" target="_blank">>>> Transmitter with 9600 Baud Data Transceiver</a>                             ||
+||     <a href="https://hampager.de/dokuwiki/doku.php?id=unipagerenglish" target="_blank">>>> UniPager Installation</a>                                                   ||
+||                                                                                 ||
+||     You’ll need to register with DAPNET before you can use their service which  ||
+||     requires a amateur license. To register you’ll have to submit a ticket via  ||
+||     their support page. More information about how to register can be found on  ||
+||     their Wiki page which can be found in the link below.                       ||
+||                                                                                 ||
+||     <a href="https://hampager.de/dokuwiki/doku.php" target="_blank">>>> DAPNET Wiki</a>                                                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== UNIPAGER ==</b>                                                              ||
+||                                                                                 ||
+||     The link above has a more complete guide on installing UniPager however     ||
+||     here’s what I did to install it on my Rpi.                                  ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ sudo nano /etc/apt/sources.list.d/unipager.list                        |   ||
+||   |                                                                         |   ||
+||   |       // Add these to unipager.list                                     |   ||
+||   |       deb http://db0sda.ampr.org/debian unipager main                   |   ||
+||   |       deb-src http://db0sda.ampr.org/debian unipager main               |   ||
+||   |                                                                         |   ||
+||   |$ wget -O - http://db0sda.ampr.org/debian/rwth-afu.key |                 |   ||
+||   |  sudo apt-key add -                                                     |   ||
+||   |                                                                         |   ||
+||   |$ sudo apt-get update                                                    |   ||
+||   |                                                                         |   ||
+||   |$ sudo apt-get install unipager                                          |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     After installing UniPager you’ll need to configure the RPi’s audio level    ||
+||     so it’s at 100%. Use can use alsamixer via the terminal to accomplish       ||
+||     this.                                                                       ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ alsamixer                // Increase Audio Out to 100%, hit Esc key    |   ||
+||   |                           // to exit                                    |   ||
+||   |                                                                         |   ||
+||   |$ sudo alsactl store       // Save Audio Settings                        |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     After installing UniPager it should automatically be running in the         ||
+||     background as a service. It comes with a Web UI (RPi’s port 8073) which     ||
+||     you can use to configure your transmitter. Open up your favorite web        ||
+||     browser and enter in the RPI’s IP address and port 8073                     ||
+||     (Ex. 192.168.1.20:8073). Below is the settings I used for the Motorola      ||
+||     GM300                                                                       ||
+||                                                                                 ||
+||     -> Configuration                                                            ||
+||          * Transmitter: Audio                                                   ||
+||          * Master IP: dapnet.afu.rwth-aachen.de                                 ||
+||          * Port: 43434                                                          ||
+||          * Callsign: (Your Callsign)                                            ||
+||          * Auth Key: (Your Auth Key)                                            ||
+||     -> Audio Config                                                             ||
+||          * ALSA device: default                                                 ||
+||          * Audio Level: 79                                                      ||
+||          * Inverted: (Unselected)                                               ||
+||          * TX Delay (ms): 5                                                     ||
+||     -> PTT Config                                                               ||
+||          * PTT Method: GPIO                                                     ||
+||          * GPIO Pin: 0                                                          ||
+||          * Inverted: (Unselected)                                               ||
+||                                                                                 ||
+||     IMG: <a href="../img/unipager.png" target="_blank">UniPager Web UI Config</a>                                                 ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 CONFIG ==</b>                                                 ||
+||                                                                                 ||
+||     I’m not going to lie, this next step is going to be a huge pain in the ass. ||
+||     Yes, the GM300 is a solid sub $100 25w UHF mobile radio however it was      ||
+||     built during the 90’s and the programming software requires MS-DOS.         ||
+||     To make matters more complicated the serial timing used to send and         ||
+||     receive data from radio to computer is CPU based. In short, if your         ||
+||     computer is too fast you’re out of luck and you’ll be out of sync with the  ||
+||     radio. The good news is that you can use DOSBox to run the software and     ||
+||     slow down the CPU’s cycle rate to make it work. Below is the guide I used   ||
+||     to make this work. Just a heads up it’s still finicky and may not be        ||
+||     consistent.                                                                 ||
+||                                                                                 ||
+||     <a href="https://kk6jyt.com/motorola-radius-gm300-programming/" target="_blank">Motorola Radius GM300 Programming</a>                                           ||
+||                                                                                 ||
+||     Not all USB to serial cables are built the same and you have have limited   ||
+||     success with what you have. I had to build my own programming cable using   ||
+||     a FT232 and Cat5 Cable. Below is the schematic I used to accomplish this.   ||
+||                                                                                 ||
+||           FT232 -> Motorola GM300 (RJ-45)                                       ||
+||       +-----------------------------------------------------------------+       ||
+||       |                                                                 |       ||
+||       |           <b>FT232</b>                              <b>RJ45</b>               |       ||
+||       |           +---+  1N4148                   1 +-----+             |       ||
+||       |           |TXD|----|<---+       +-------- 2 |     |             |       ||
+||       |           +---+         |       |         3 |     |---+         |       ||
+||       |           +---+         |       |         4 |         |         |       ||
+||       |           |RXD|---------+-------+   +---- 5 |         |         |       ||
+||       |           +---+                     |     6 |     *---*         |       ||
+||       |           +---+                     |     7 |     |             |       ||
+||       |           |GND|---------------------+     8 +-----*             |       ||
+||       |           +---+                                                 |       ||
+||       |                                                                 |       ||
+||       +-----------------------------------------------------------------+       ||
+||                                                                                 ||
+||     Nothing special is needed when you program your GM300, just create a        ||
+||     channel for NFM at the desired frequency. The link Below is a copy of the   ||
+||     programming software I used. And again, this step is kinda a pain but with  ||
+||     a little trial and error you should be fine. :3                             ||
+||                                                                                 ||
+||     <a href="../files/gm300v5.zip" target="_blank">Motorola Radius GM300 V5</a>                                                    ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 PINOUT ==</b>                                                 ||
+||                                                                                 ||
+||     Bellow is the pinout for the Motorola GM300 which is found in the back of   ||
+||     the radio. The pins needed for this application will be the number 3 PTT,   ||
+||     5 Flat Audio TX, and 7 Ground.                                              ||
+||                                                                                 ||
+||                                    RADIO TOP                                    ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                        | 2 | 4 | 6 | 8 | 10| 12| 14| 16|                        ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                        | 1 | <span style="background-color:currentColor"><span style="color:black">3</span></span> | <span style="background-color:currentColor"><span style="color:black">5</span></span> | <span style="background-color:currentColor"><span style="color:black">7</span></span> | 9 | 11| 13| 15|                        ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                                   RADIO BOTTOM                                  ||
+||                                 AS SEEN FROM BACK                               ||
+||                                                                                 ||
+||                     1 EXT SPKR             9 EMERGENCY ALARM                    ||
+||                     2 MIC AUDIO IN        10 IGNITION CONTROL                   ||
+||                     3 PTT                 11 RX AUDIO OUT                       ||
+||                     4 EXTERNAL ALARM      12 PROG I/O 12                        ||
+||                     5 FLAT TX AUDIO       13 SW A+ SENSE                        ||
+||                     6 PROG I/P 6          14 PROG I/O 14                        ||
+||                     7 GROUND              15 INT SPKR +                         ||
+||                     8 COS (PROG)          16 EXT SPKR +                         ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== RPi TO GM300 SCHEMATIC ==</b>                                                ||
+||                                                                                 ||
+||      With UniPager installed and your radio programmed it’s time to connect     ||
+||      everything together! Below is the schematic I used to make this work.      ||
+||      Images of this can be found below the schematic.                           ||
+||                                                                                 ||
+||           RPi -> Motorola GM300                                                 ||
+||       +-----------------------------------------------------------------+       ||
+||       |                                                                 |       ||
+||       |                                                 +------+        |       ||
+||       |                             +-------------------|PI GND|        |       ||
+||       |                             |                   +------+        |       ||
+||       |                             | NPN                               |       ||
+||       |                             +-<|      440Ω     +----------+     |       ||
+||       |                                |-----/\/\/\----|PI GPIO 17|     |       ||
+||       |                             +-/|               +----------+     |       ||
+||       |                             |                                   |       ||
+||       |     +-----------------+     |                                   |       ||
+||       |     |GM300 PTT (PIN 3)|-----+                                   |       ||
+||       |     +-----------------+                                         |       ||
+||       |                                                                 |       ||
+||       |                                                                 |       ||
+||       |     +---------------------------+    22µF    +------------+     |       ||
+||       |     |GM300 FLAT TX AUDIO (PIN 5)|----+||-----|PI AUDIO OUT|     |       ||
+||       |     +---------------------------+            +------------+     |       ||
+||       |                                                                 |       ||
+||       |     +-----------------+                      +------------+     |       ||
+||       |     |GM300 GND (PIN 7)|----------------------|PI AUDIO GND|     |       ||
+||       |     +-----------------+                      +------------+     |       ||
+||       |                                                                 |       ||
+||       +-----------------------------------------------------------------+       ||
+||                                                                                 ||
+||     IMG: <a href="../img/gm300_2.jpg" target="_blank">RPi Bread Board</a>                                                        ||
+||     IMG: <a href="../img/gm300_1.jpg" target="_blank">GM300 Pinout</a>                                                           ||
+||                                                                                 ||
+||     If you’re having any trouble sending messages you may have to adjust the    ||
+||     volume from the Web UI to make this work with your setup.                   ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== CONCLUSION ==</b>                                                            ||
+||                                                                                 ||
+||     OK!                                                                         ||
+||     We just built our self’s a POCSAG transmitter and expanded the coverage of  ||
+||     DAPNET! Go a head and pat yourself on the back because you’re doing God’s   ||
+||     work by making old tech fun again. :3                                       ||
+||                                                                                 ||
+||     -- NotPike                                                                  ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \                        
+                                                             \  ^__^                 
+                                                              \ (^^)\_______         
+                                                                (__)\        )\/\    
+                                                                 U  ||----w |        
+                                                                    ||     ||        
+            </pre>
+        </div>        
+    </body>
+
+@footer
