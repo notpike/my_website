@@ -133,14 +133,25 @@ login {
 input {
     background-color: #585858;
     color: greenyellow;
-    border: 1px black;
-    padding: 4px 2px;
-    margin: 4px 0;
+    /* border: 1px black; */
+    /* padding: 4px 2px;
+    margin: 4px 0; */
     box-sizing: border-box;    
 }
 
 input[type="submit"]:hover {
     background-color: #999999;
+}
+
+select {
+    background-color: #585858;
+    color: greenyellow;
+    border: 1px;
+
+}
+
+::placeholder {
+    color:greenyellow;
 }
 
 
