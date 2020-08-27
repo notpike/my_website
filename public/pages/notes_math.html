@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="How to build a DAPNET Pagger transmitter using a Motorola GM300 and UniPager">
+        <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, DAPNET, ham, radio, hacking, unipager, pocsag, pagger">
+        <meta name="author" content="NotPike">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  UNIPAGER_GM300</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+        <!-- Fav Icon -->
+        <link rel="apple-touch-icon" sizes="57x57" href="/img/fav/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/img/fav/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/img/fav/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/img/fav/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/img/fav/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/img/fav/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/img/fav/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/img/fav/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/fav/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/img/fav/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/img/fav/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/img/fav/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/img/fav/favicon-16x16.png">
+        <link rel="manifest" href="/img/fav/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/img/fav/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">        
+    </head>
+    <body>
+        <div id="mainBanner">
+            <pre>
+            <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+@linkBar
+
+@noteBar
+            </banner>
+            </pre>                                                                                                                      
+        </div>
+        <div id="welcome"> 
+            <pre>
+  ▄▄▄▄███▄▄▄▄      ▄████████     ███        ▄█    █▄   
+▄██▀▀▀███▀▀▀██▄   ███    ███ ▀█████████▄   ███    ███  
+███   ███   ███   ███    ███    ▀███▀▀██   ███    ███  
+███   ███   ███   ███    ███     ███   ▀  ▄███▄▄▄▄███▄▄
+███   ███   ███ ▀███████████     ███     ▀▀███▀▀▀▀███▀ 
+███   ███   ███   ███    ███     ███       ███    ███  
+███   ███   ███   ███    ███     ███       ███    ███  
+ ▀█   ███   █▀    ███    █▀     ▄████▀     ███    █▀   
+<!-- "Delta Corps Priest 1" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2020-08-02T22:02:36+00:00 >===============================================\\
+||                                                                                 ||
+||     <b>== Ohm's Law ==</b>                                                             ||
+||                                                                                 ||
+||          <b>V = IR</b>                                                                 ||
+||        +----------------+                                                       ||
+||        | V = Voltage    |                                                       ||
+||        | I = Current    |                                                       ||
+||        | R = Resistance |                                                       ||
+||        +----------------+                                                       ||
+||        <input type="text" size=4 placeholder="V" id="ohm_v"> = <input type="text" size=4 placeholder="I" id="ohm_i"> * <input type="text" placeholder="R" size=4 id="ohm_r">  <input type="button" onclick="ohm_clear()" value="C"> <input type="button" onclick="ohm()" value="Caculate">                                    ||
+||                  <select id="i_select"><option value="i_a">A</option><option value="i_ma">mA</option></select>    <select name="r_select" id="r_select"><option value="r_o">Ω</option><option value="r_ko">kΩ</option><option value="r_mo">mΩ</option></select>                                                  ||
+||                                                                                 ||
+||                                                                                 ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \                        
+                                                             \  ^__^                 
+                                                              \ (--)\_______         
+                                                                (__)\        )\/\    
+                                                                    ||----w |        
+                                                                    ||     ||        
+            </pre>
+        </div>        
+    </body>
+
+    <script>
+        function ohm_clear() {
+            document.getElementById("ohm_v").value = "";
+            document.getElementById("ohm_i").value = "";
+            document.getElementById("ohm_r").value = "";   
+            document.getElementById("i_select").selectedIndex = 0;
+            document.getElementById("r_select").selectedIndex = 0;   
+        }
+
+        function ohm() {
+            var v = document.getElementById("ohm_v");
+            var i = document.getElementById("ohm_i");
+            var r = document.getElementById("ohm_r");
+
+            var amp = document.getElementById("i_select");
+            var ohm = document.getElementById("r_select");
+
+            if((i && i.value) && (r && r.value)) {        // If I and R is given
+                if(!isNaN(i.value)) {                     // Is I a number?
+                    if(!isNaN(r.value)) {                 // Is R a number?
+                        if(amp.value == "i_a") {          // Must be in (A)
+                            ;
+                        } else if(amp.value == "i_ma") {
+                            i.value *= 0.001;
+                        } 
+
+                        if(ohm.value == "r_o") {          // Must be in (Ω)
+                            ;
+                        } else if(ohm.value == "r_ko") {
+                            r.value *= 1000;
+                        } else if(ohm.value == "r_mo") {
+                            r.value *= 1000000;
+                        }
+
+                        v = i.value * r.value;
+                        document.getElementById("ohm_v").value = v;
+                    } else {                          
+                        alert("I is not a valid entry")   // R isn't valid
+                    }
+                } else {
+                    alert("I is not a valid entry")       // I isn't valid
+                }
+            }
+        
+            else if((v && v.value) && (i && i.value)) {   // If V and I is given
+                if(!isNaN(v.value)) {                     // Is V a number?
+                    if(!isNaN(i.value)) {                 // Is I a number?
+                        if(amp.value == "i_a") {          // Must be in (A)
+                            ;
+                        } else if(amp.value == "i_ma") {
+                            i.value *= 1000;
+                        } 
+
+                        if(ohm.value == "r_o") {          // (Ω)
+                            r = v.value / i.value;
+                        } else if(ohm.value == "r_ko") {  // (kΩ)
+                            r = v.value / i.value;
+                            r *= 1000
+                        } else if(ohm.value == "r_mo") {  // (mΩ)
+                            r = v.value / i.value;
+                            r *= 1000000
+                        } 
+                        document.getElementById("ohm_r").value = r;
+                    } else {                          
+                        aleit("I is not a valid entry")   // I isn't valid
+                    }
+                } else {
+                    alert("V is not a valid entry")       // V isn't valid
+                }
+            } 
+
+            else if((v && v.value) && (r && r.value)) {   // If V and R is given
+                if(!isNaN(v.value)) {                     // Is V a number?
+                    if(!isNaN(r.value)) {                 // Is R a number?
+                        if(ohm.value == "r_o") {          // Must be in (Ω)
+                            ;
+                        } else if(ohm.value == "r_ko") {
+                            r.value *= 1000;
+                        } else if(ohm.value == "r_mo") {
+                            r.value *= 1000000;
+                        }
+
+                        if(amp.value == "i_a") {          // (A)
+                            i = v.value / r.value;
+                        } else if(amp.value == "i_ma") {  // (mA)
+                            i = v.value / r.value;
+                            i *= 1000;
+                        }
+                        document.getElementById("ohm_i").value = i;
+                    } else {                          
+                        alert("R is not a valid entry")   // R isn't valid
+                    }
+                } else {
+                    alert("V is not a valid entry")       // V isn't valid
+                }
+            }  
+            
+            else {
+                alert("Please enter in some numbers");    // No values where given
+            }
+
+            // Reset Unit Type
+            ohm.selectedIndex = 0;
+            amp.selectedIndex = 0;
+        }
+
+
+
+
+        
+    </script>
+
+@footer

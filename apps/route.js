@@ -40,7 +40,10 @@ class Route {
                 break;    
             case '/notes_unipager_gm300':
                 target = "pages/notes_unipager_gm300.html";
-                break;                                      
+                break;   
+            case '/notes_math':
+                target = "pages/notes_math.html";
+                break;                                   
             case '/contact':
                 target = "pages/contact.html";
                 break;
