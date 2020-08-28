@@ -16,5 +16,3 @@ function blink(delay) {
     }
     setTimeout('blink(' + delay + ')', delay);
 }
-
-
