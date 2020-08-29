@@ -67,14 +67,26 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     <b>== Ohm's Law ==</b>                                                             ||
 ||                                                                                 ||
-||          <b>V = IR</b>                                                                 ||
+||          <b>V = I * R</b>                                                              ||
 ||        +----------------+                                                       ||
 ||        | V = Voltage    |                                                       ||
 ||        | I = Current    |                                                       ||
 ||        | R = Resistance |                                                       ||
 ||        +----------------+                                                       ||
-||        <input type="text" size=4 placeholder="V" id="ohm_v"> = <input type="text" size=4 placeholder="I" id="ohm_i"> * <input type="text" placeholder="R" size=4 id="ohm_r">  <input type="button" onclick="ohm_clear()" value="C"> <input type="button" onclick="ohm()" value="Caculate">                                    ||
+||        <input type="text" size=4 placeholder="V" id="ohm_v"> = <input type="text" size=4 placeholder="I" id="ohm_i"> * <input type="text" placeholder="R" size=4 id="ohm_r">  <input type="button" onclick="ohm_clear()" value="C"> <input type="button" onclick="ohm()" value="Calculate">                                    ||
 ||                  <select id="i_select"><option value="i_a">A</option><option value="i_ma">mA</option></select>    <select name="r_select" id="r_select"><option value="r_o">Ω</option><option value="r_ko">kΩ</option><option value="r_mo">mΩ</option></select>                                                  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Wavelength ==</b>                                                            ||
+||                                                                                 ||
+||          <b>λ = c / f</b>                                                              ||
+||        +--------------------------------------+                                 ||
+||        | λ = Wavelength                       |                                 ||
+||        | c = Speed of Light (299,792,458 m/s) |                                 ||
+||        | f = Frequency (Hz)                   |                                 ||
+||        +--------------------------------------+                                 ||
+||        <input type="text" size=4 placeholder="λ" id="wl_wl"> = <input type="text" size=8 value="299792458" id="wl_c"> / <input type="text" placeholder="f" size=4 id="wl_f">  <input type="button" onclick="wl_clear()" value="C"> <input type="button" onclick="wl()" value="Calculate">                                 ||
+||         <select id="wl_select_wl"><option value="wl_m">m</option><option value="wl_cm">cm</option></select>                 <select name="wl_select_freq" id="wl_select_freq"><option value="wl_ghz">GHz</option><option selected="selected" value="wl_mhz">MHz</option><option value="wl_khz">KHz</option><option value="wl_hz">Hz</option></select>                                              ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||                                                                                 ||
@@ -89,116 +101,6 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
         </div>        
     </body>
 
-    <script>
-        function ohm_clear() {
-            document.getElementById("ohm_v").value = "";
-            document.getElementById("ohm_i").value = "";
-            document.getElementById("ohm_r").value = "";   
-            document.getElementById("i_select").selectedIndex = 0;
-            document.getElementById("r_select").selectedIndex = 0;   
-        }
-
-        function ohm() {
-            var v = document.getElementById("ohm_v");
-            var i = document.getElementById("ohm_i");
-            var r = document.getElementById("ohm_r");
-
-            var amp = document.getElementById("i_select");
-            var ohm = document.getElementById("r_select");
-
-            if((i && i.value) && (r && r.value)) {        // If I and R is given
-                if(!isNaN(i.value)) {                     // Is I a number?
-                    if(!isNaN(r.value)) {                 // Is R a number?
-                        if(amp.value == "i_a") {          // Must be in (A)
-                            ;
-                        } else if(amp.value == "i_ma") {
-                            i.value *= 0.001;
-                        } 
-
-                        if(ohm.value == "r_o") {          // Must be in (Ω)
-                            ;
-                        } else if(ohm.value == "r_ko") {
-                            r.value *= 1000;
-                        } else if(ohm.value == "r_mo") {
-                            r.value *= 1000000;
-                        }
-
-                        v = i.value * r.value;
-                        document.getElementById("ohm_v").value = v;
-                    } else {                          
-                        alert("I is not a valid entry")   // R isn't valid
-                    }
-                } else {
-                    alert("I is not a valid entry")       // I isn't valid
-                }
-            }
+    <script type="text/javascript" src="js/math.js"></script>
         
-            else if((v && v.value) && (i && i.value)) {   // If V and I is given
-                if(!isNaN(v.value)) {                     // Is V a number?
-                    if(!isNaN(i.value)) {                 // Is I a number?
-                        if(amp.value == "i_a") {          // Must be in (A)
-                            ;
-                        } else if(amp.value == "i_ma") {
-                            i.value *= 1000;
-                        } 
-
-                        if(ohm.value == "r_o") {          // (Ω)
-                            r = v.value / i.value;
-                        } else if(ohm.value == "r_ko") {  // (kΩ)
-                            r = v.value / i.value;
-                            r *= 1000
-                        } else if(ohm.value == "r_mo") {  // (mΩ)
-                            r = v.value / i.value;
-                            r *= 1000000
-                        } 
-                        document.getElementById("ohm_r").value = r;
-                    } else {                          
-                        aleit("I is not a valid entry")   // I isn't valid
-                    }
-                } else {
-                    alert("V is not a valid entry")       // V isn't valid
-                }
-            } 
-
-            else if((v && v.value) && (r && r.value)) {   // If V and R is given
-                if(!isNaN(v.value)) {                     // Is V a number?
-                    if(!isNaN(r.value)) {                 // Is R a number?
-                        if(ohm.value == "r_o") {          // Must be in (Ω)
-                            ;
-                        } else if(ohm.value == "r_ko") {
-                            r.value *= 1000;
-                        } else if(ohm.value == "r_mo") {
-                            r.value *= 1000000;
-                        }
-
-                        if(amp.value == "i_a") {          // (A)
-                            i = v.value / r.value;
-                        } else if(amp.value == "i_ma") {  // (mA)
-                            i = v.value / r.value;
-                            i *= 1000;
-                        }
-                        document.getElementById("ohm_i").value = i;
-                    } else {                          
-                        alert("R is not a valid entry")   // R isn't valid
-                    }
-                } else {
-                    alert("V is not a valid entry")       // V isn't valid
-                }
-            }  
-            
-            else {
-                alert("Please enter in some numbers");    // No values where given
-            }
-
-            // Reset Unit Type
-            ohm.selectedIndex = 0;
-            amp.selectedIndex = 0;
-        }
-
-
-
-
-        
-    </script>
-
 @footer
