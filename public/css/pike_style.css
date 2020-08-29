@@ -133,7 +133,7 @@ login {
 input {
     background-color: #585858;
     color: greenyellow;
-    /* border: 1px black; */
+    border: 1px black;
     /* padding: 4px 2px;
     margin: 4px 0; */
     box-sizing: border-box;    
