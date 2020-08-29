@@ -12,10 +12,12 @@ const Krad = require('./apps/krad');
 const Route = require('./apps/route');
 const Type = require('./apps/type');
 const PageGen = require('./apps/pageGen');
+const RequestType = require('./apps/requestType');
 
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+const cookie = require('cookie');
 const { parse } = require('querystring');
 
 
@@ -42,23 +44,7 @@ const kr = new Krad();
 
 
 /* ------------ POST FUNCTION ----------- */
-function postRX(req) {
-
-    let pData ='';
-    req.on('data', chunk => {
-        pData += chunk.toString(); // Buf 2 Str
-    });
-
-    // After being gathered check to see who made the request
-    req.on('end', () => {
-        switch(req.url) { // Where did this POST come from?
-            case '/login':
-                logger.log(pData);
-                break;
-        }
-    });
-
-}
+const request = new RequestType();
 
 
 /* ---------- MAIN SERVER LOOP ---------- */
@@ -66,7 +52,24 @@ const server = http.createServer((req,res) => {
     
     // Handle Post Requests
     if (req.method === 'POST') {
-        postRX(req);
+        request.postRX(req, logger);
+    }
+
+    // Cookie
+    var cookies = cookie.parse(req.headers.cookie || '');
+    var name = cookies.name;
+    
+    if(name != 'bad-radio.solutions') {
+        //Cookie test
+        res.setHeader('Set-Cookie', cookie.serialize('name', 'bad-radio.solutions', {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24 * 7 // 1 week
+        }));
+
+        res.statusCode = 302;
+        res.setHeader('Location', req.headers.referer || '/')
+        res.end();
+        return;
     }
 
     // Build the file path
@@ -116,7 +119,7 @@ const server = http.createServer((req,res) => {
                 }
 
                 // Return Webpage
-                res.writeHead(200, { 'Content-Type': contentType});
+                res.writeHead(200, {'Content-Type': contentType});
                 res.end(content, 'utf8');
             }
         }
