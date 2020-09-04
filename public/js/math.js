@@ -5,6 +5,132 @@
  */
 
 
+/* ====================== FREQ STABILITY ====================== */
+
+
+function fs_clear() {
+    document.getElementById("fs_vf").value = "";
+    document.getElementById("fs_f").value = "";
+    document.getElementById("fs_ppm").value = "";   
+    document.getElementById("fs_select_freq_vf").selectedIndex = 3;
+    document.getElementById("fs_select_freq_f").selectedIndex = 1;   
+}
+
+function fs() {
+    var vf = document.getElementById("fs_vf");
+    var f = document.getElementById("fs_f");
+    var ppm = document.getElementById("fs_ppm");
+    //console.log("f: " + f.value + " ppm: " + ppm.value);
+
+    var vf_select = document.getElementById("fs_select_freq_vf");
+    var freq_select = document.getElementById("fs_select_freq_f");
+
+    if((f && f.value) && (ppm && ppm.value)) {         // If f and ppm is given
+        if(!isNaN(f.value)) {                         // Is f a number?
+            if(!isNaN(ppm.value)) {                   // Is ppm a number?
+
+                if(freq_select.value == "fs_mhz_f") {        // MHz to Hz
+                    f = f.value * 1e6;
+                } else if(freq_select.value == "fs_khz_f") { // KHz to Hz
+                    f = f.value * 1e3;
+                } else if(freq_select.value == "fs_hz_f") {  // Hz
+                    f = f.value;
+                } else if(freq_select.value == "fs_ghz_f") { // GHz to Hz
+                    f = f.value * 1e9;
+                } 
+
+                //console.log("f: " + f);
+
+                vf = f * ppm.value / 1e6;
+                console.log("vf hz: " + vf);
+
+
+                if(vf_select.value == "fs_ghz_vf") {   
+                    vf *= 0.000000001;
+                } else if(vf_select.value == "fs_mhz_vf") {
+                    vf *= 0.000001;
+                } else if(vf_select.value == "fs_khz_vf") {
+                    vf *= 0.001;
+                } else if(vf_select.value == "fs_hz_vf") {
+                    ;
+                } 
+
+                document.getElementById("fs_vf").value = vf;
+            } else {                          
+                alert("ppm is not a valid entry")   // ppm isn't valid
+            }
+        } else {
+            alert("f is not a valid entry")       // f isn't valid
+        }
+    }
+
+    // else if((λ && λ.value) && (c && c.value)) {       // If λ and c is given
+    //     if(!isNaN(λ.value)) {                         // Is λ a number?
+    //         if(!isNaN(c.value)) {                     // Is c a number?
+
+    //             if(length_select.value == "wl_m") {         // meters
+    //                 λ = λ.value;
+    //             } else if(length_select.value == "wl_cm") { // cm to m
+    //                 λ = λ.value  * 0.01;
+    //             } 
+
+    //             f = λ * c.value;
+
+    //             if(freq_select.value == "wl_mhz") {        // MHz to Hz
+    //                 f *= 0.000001;
+    //             } else if(freq_select.value == "wl_khz") { // KHz to Hz
+    //                 f *= 0.001;
+    //             } else if(freq_select.value == "wl_hz") {  // Hz
+    //                 ;
+    //             } else if(freq_select.value == "wl_ghz") { // GHz to Hz
+    //                 f *= 0.000000001;
+    //             }
+
+    //             document.getElementById("wl_f").value = f;
+    //         } else {                          
+    //             alert("c is not a valid entry")   // c isn't valid
+    //         }
+    //     } else {
+    //         alert("f is not a valid entry")       // f isn't valid
+    //     }
+    // }
+
+    // else if((λ && λ.value) && (f && f.value)) {       // If λ and f is given
+    //     if(!isNaN(λ.value)) {                         // Is λ a number?
+    //         if(!isNaN(f.value)) {                     // Is f a number?
+
+    //             if(length_select.value == "wl_m") {         // meters
+    //                 λ = λ.value;
+    //             } else if(length_select.value == "wl_cm") { // cm to m
+    //                 λ = λ.value  * 0.01;
+    //             } 
+
+
+    //             if(freq_select.value == "wl_mhz") {        // MHz to Hz
+    //                 f = f.value * 0.000001;
+    //             } else if(freq_select.value == "wl_khz") { // KHz to Hz
+    //                 f = f.value * 0.001;
+    //             } else if(freq_select.value == "wl_hz") {  // Hz
+    //                 f = f.value;
+    //             } else if(freq_select.value == "wl_ghz") { // GHz to Hz
+    //                 f = f.value * 0.000000001;
+    //             }
+
+    //             c = λ * f;
+
+    //             document.getElementById("wl_c").value = c;
+    //         } else {                          
+    //             alert("c is not a valid entry")   // c isn't valid
+    //         }
+    //     } else {
+    //         alert("f is not a valid entry")       // f isn't valid
+    //     }
+    // }            
+    // else {
+    //     alert("Please enter in some numbers (Wavelength)");    // No values where given
+    // }
+}
+
 /* ====================== WAVELENGTH ====================== */
 
 function wl_clear() {

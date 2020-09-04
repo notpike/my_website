@@ -89,6 +89,17 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||         <select id="wl_select_wl"><option value="wl_m">m</option><option value="wl_cm">cm</option></select>                 <select name="wl_select_freq" id="wl_select_freq"><option value="wl_ghz">GHz</option><option selected="selected" value="wl_mhz">MHz</option><option value="wl_khz">KHz</option><option value="wl_hz">Hz</option></select>                                              ||
 ||                                                                                 ||
 ||                                                                                 ||
+||     <b>== Frequency Stability ==</b>                                                   ||
+||                                                                                 ||
+||          <b>+/- fv = f * ppm / 1e6</b>                                                ||
+||        +--------------------------------------+                                 ||
+||        | vf = Frequency Variation (Hz)        |                                 ||
+||        | f = Frequency (Hz)                   |                                 ||
+||        | ppm = Frequency Tolerance            |                                 ||
+||        +--------------------------------------+                                 ||
+||        +/- <input type="text" size=4 placeholder="vf" id="fs_vf"> = <input type="text" placeholder="f" size=8 id="fs_f"> * <input type="text" placeholder="ppm" size=4 id="fs_ppm"> / 10e6 <input type="button" onclick="fs_clear()" value="C"> <input type="button" onclick="fs()" value="Calculate">                       ||
+||            <select name="fs_select_freq_vf" id="fs_select_freq_vf"><option value="fs_ghz_vf">GHz</option><option value="fs_mhz_vf">MHz</option><option value="fs_khz_vf">KHz</option><option selected="selected" value="fs_hz_vf">Hz</option></select>      <select name="fs_select_freq_f" id="fs_select_freq_f"><option value="fs_ghz_f">GHz</option><option selected="selected" value="fs_mhz_f">MHz</option><option value="fs_khz_f">KHz</option><option value="fs_hz_f">Hz</option></select>                                                    ||
+||                                                                                 ||
 ||                                                                                 ||
 \\=================================================================================//
                                                             \                        
