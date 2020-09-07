@@ -270,6 +270,119 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||       |                                                                 |       ||
 ||       +-----------------------------------------------------------------+       ||
 ||                                                                                 ||
+||                                                                                 ||
+||     <b>== NEXTION TOUCH DISPLAY ==</b>                                                 ||
+||                                                                                 ||
+||     There’s also a Nextion touch display add on built for the UniPager!         ||
+||                                                                                 ||
+||     This is my first exposure to the Nextion display and I’m impressed          ||
+||     on what they have to offer. These things work by sending and receiving      ||
+||     UART messages to and from the Rpi and gives you full control of your        ||
+||     transmitter.                                                                ||
+||                                                                                 ||
+||     Just a heads up, you’ll have to flash the display with the software         ||
+||     found in the UniPagerNextion repo to make this work. These displays         ||
+||     have an ARM chip built in and are capable of running independently          ||
+||     from the rest of the system. Bellow is a flow graph on how messages         ||
+||     are sent to and from the UniPager application and Nextion display.          ||
+||                                                                                 ||
+||     <b>UniPager</b> <-[WebSocket]-> <b>unipagernextion.py</b> <-[UART]-> <b>Nextion Display</b>      ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== NEXTION HARDWARE ==</b>                                                      ||
+||                                                                                 ||
+||     Bellow is the pinout needed to interface the Nextion display with the       ||
+||     RPi's UART.                                                                 ||
+||                                                                                 ||
+||                    +--------------------------------------+                     ||
+||                    |      NEXTION      |       RPi        |                     ||
+||                    +--------------------------------------+                     ||
+||                    | VCC +5V (RED)    -->  PIN 02 VCC +5V |                     ||
+||                    | GND     (BLACK)  -->  PIN 06 GND     |                     ||
+||                    | UART_TX (GREEN)  -->  PIN 10 UART_RX |                     ||
+||                    | UART_RX (YELLOW) -->  PIN 08 UART_TX |                     ||
+||                    +--------------------------------------+                     ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== NEXTION SOFTWARE ==</b>                                                      ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ sudo apt install git python3 python3-websocket python3-serial          |   ||
+||   |  python-websocket python-serial                                         |   ||
+||   |                                                                         |   ||
+||   |$ git clone https://github.com/rwth-afu/UniPagerNextion.git              |   ||
+||   |                                                                         |   ||
+||   |$ cd UniPagerNextion/src                                                 |   ||
+||   |                                                                         |   ||
+||   |$ sudo bash ./install.sh                                                 |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     The config file for UniPagerNextion can be found in                         ||
+||     etc/unipagernextionconfig.py. If you plan on controlling the display with   ||
+||     the RPi’s UART you’ll need to update it so serialport = “/dev/ttyAMA0”.     ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ sudo nano /etc/unipagernextionconfig.py  // serialport = "/dev/ttyAMA0"|   ||
+||   |                                           // ctl-o to save              |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     You’ll need to do some extra steps to configure the Rpi to make the         ||
+||     display work. Bellow outlines what needs to be done.                        ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ sudo -s  // Do the following as root                                   |   ||
+||   |                                                                         |   ||
+||   |$ echo “dtoverlay=pi3-disable-bt” >> /boot/config.txt  // Disable BT     |   ||
+||   |                                                                         |   ||
+||   |$ systemctl disable hciuart                                              |   ||
+||   |                                                                         |   ||
+||   |$ nano /boot/cmdline.txt   // Remove “console=serial0,115200”            |   ||
+||   |                                                                         |   ||
+||   |$ echo “enable_uart=1” >> /boot/config.txt  // Enable UART               |   ||
+||   |                                                                         |   ||
+||   |$ exit  // Exit root                                                     |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     <b>HACKS!!1</b>                                                                    ||
+||                                                                                 ||
+||     To get the unipagernextion.py application to work I need to change it       ||
+||     python3 to python2...                                                       ||
+||                                                                                 ||
+||     TL;DR serial.Serial didn't work for me in python3 so I compromised...       ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ nano /usr/local/bin/unipagernextion.py // Change #!/usr/bin/python3    |   ||
+||   |                                         //     to #!/usr/bin/python     |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== FLASH NEXTION DISPLAY ==</b>                                                 ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ nano Nextion/nextion.py                // Change PORT = "/dev/ttyUSB0" |   ||
+||   |                                         //     to PORT = "/dev/ttyAMA0" |   ||
+||   |                                                                         |   ||
+||   |$ sudo bash src/update_display.sh        // Flash display firmware       |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== NEXTION SERVICE ==</b>                                                       ||
+||                                                                                 ||
+||     To start the Nextion display service use the commands bellow.               ||
+||                                                                                 ||
+||   +-------------------------------------------------------------------------+   ||
+||   |$ systemctl enable unipagernextion     // Start at boot                  |   ||
+||   |                                                                         |   ||
+||   |$ systemctl status unipagernextion     // Status check                   |   ||
+||   +-------------------------------------------------------------------------+   ||
+||                                                                                 ||
+||     More detailed instructions  on how to install the software to control the   ||
+||     Nextion display and the GitHub repo can be found here.                      ||
+||                                                                                 ||
+||     <a href="https://hampager.de/dokuwiki/doku.php?id=unipagernextion" target="_blank">>>> UniPagerNextion Wiki</a>                                                    ||
+||     <a href="https://github.com/rwth-afu/UniPagerNextion" target="_blank">>>> UniPagerNextion GitHub</a>                                                  ||
+||                                                                                 ||
+||                                                                                 ||
 ||     <b>== Phase 1: POC ==</b>                                                          ||
 ||                                                                                 ||
 ||     IMG: <a href="../img/gm300_2.jpg" target="_blank">RPi Bread Board</a>                                                        ||
@@ -291,9 +404,17 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     IMG: <a href="../img/inside.jpg" target="_blank">Inside</a>                                                                 ||
 ||                                                                                 ||
 ||                                                                                 ||
+||     <b>== Phase 4: Added Touch Screen ==</b>                                           ||
+||                                                                                 ||
+||     IMG: <a href="../img/unipager_display.jpg" target="_blank">Nextion Touch Display</a>                                                  ||
+||                                                                                 ||
+||                                                                                 ||
 ||     <b>== Transmitter Status ==</b>                                                    ||
+||                                                                                 ||
 ||     <a href="https://hampager.de/#/transmitters/map/wu7ang1" target="_blank">>>> Map</a>                                                                     ||
 ||                                                                                 ||
+||                                                                                 ||
+||     <b>== Trouble Shooting ==</b>                                                      ||
 ||                                                                                 ||
 ||     If you’re having any trouble sending messages you may have to adjust the    ||
 ||     volume from the Web UI to make this work with your setup. :3                ||
