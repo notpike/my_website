@@ -2,12 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="description" content="How to build a DAPNET Pagger transmitter using a Motorola GM300 and UniPager">
+        <meta name="description" content="How to build a MMDVM repeater using a Motorola GM300 and PI-STAR">
         <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, DAPNET, ham, radio, hacking, unipager, pocsag, pagger">
         <meta name="author" content="NotPike">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>NotPike |  UNIPAGER_GM300</title>
+        <title>NotPike |  MMDVM_GM300</title>
 
         <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
 
@@ -53,24 +53,24 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
         </div>
         <div id="welcome"> 
             <pre>
-  ███╗   ███╗ ██████╗ ████████╗ ██████╗ ██████╗  ██████╗ ██╗      █████╗      ██████╗ ███╗   ███╗ ██████╗  ██████╗  ██████╗     
-  ████╗ ████║██╔═══██╗╚══██╔══╝██╔═══██╗██╔══██╗██╔═══██╗██║     ██╔══██╗    ██╔════╝ ████╗ ████║ ╚════██╗██╔═████╗██╔═████╗    
-  ██╔████╔██║██║   ██║   ██║   ██║   ██║██████╔╝██║   ██║██║     ███████║    ██║  ███╗██╔████╔██║  █████╔╝██║██╔██║██║██╔██║    
-  ██║╚██╔╝██║██║   ██║   ██║   ██║   ██║██╔══██╗██║   ██║██║     ██╔══██║    ██║   ██║██║╚██╔╝██║  ╚═══██╗████╔╝██║████╔╝██║    
-  ██║ ╚═╝ ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║╚██████╔╝███████╗██║  ██║    ╚██████╔╝██║ ╚═╝ ██║ ██████╔╝╚██████╔╝╚██████╔╝    
-  ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═╝     ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝     
-                                                                                                                                
-██████╗  ██████╗  ██████╗███████╗ █████╗  ██████╗         ██╗    ██╗   ██╗███╗   ██╗██╗██████╗  █████╗  ██████╗ ███████╗██████╗ 
-██╔══██╗██╔═══██╗██╔════╝██╔════╝██╔══██╗██╔════╝        ██╔╝    ██║   ██║████╗  ██║██║██╔══██╗██╔══██╗██╔════╝ ██╔════╝██╔══██╗
-██████╔╝██║   ██║██║     ███████╗███████║██║  ███╗      ██╔╝     ██║   ██║██╔██╗ ██║██║██████╔╝███████║██║  ███╗█████╗  ██████╔╝
-██╔═══╝ ██║   ██║██║     ╚════██║██╔══██║██║   ██║     ██╔╝      ██║   ██║██║╚██╗██║██║██╔═══╝ ██╔══██║██║   ██║██╔══╝  ██╔══██╗
-██║     ╚██████╔╝╚██████╗███████║██║  ██║╚██████╔╝    ██╔╝       ╚██████╔╝██║ ╚████║██║██║     ██║  ██║╚██████╔╝███████╗██║  ██║
-╚═╝      ╚═════╝  ╚═════╝╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚═╝         ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+  ███╗   ███╗ ██████╗ ████████╗ ██████╗ ██████╗  ██████╗ ██╗      █████╗      ██████╗ ███╗   ███╗ ██████╗  ██████╗  ██████╗ 
+  ████╗ ████║██╔═══██╗╚══██╔══╝██╔═══██╗██╔══██╗██╔═══██╗██║     ██╔══██╗    ██╔════╝ ████╗ ████║ ╚════██╗██╔═████╗██╔═████╗
+  ██╔████╔██║██║   ██║   ██║   ██║   ██║██████╔╝██║   ██║██║     ███████║    ██║  ███╗██╔████╔██║  █████╔╝██║██╔██║██║██╔██║
+  ██║╚██╔╝██║██║   ██║   ██║   ██║   ██║██╔══██╗██║   ██║██║     ██╔══██║    ██║   ██║██║╚██╔╝██║  ╚═══██╗████╔╝██║████╔╝██║
+  ██║ ╚═╝ ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║╚██████╔╝███████╗██║  ██║    ╚██████╔╝██║ ╚═╝ ██║ ██████╔╝╚██████╔╝╚██████╔╝
+  ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═╝     ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝ 
+                                                                                                                            
+   ███╗   ███╗███╗   ███╗██████╗ ██╗   ██╗███╗   ███╗     ██████╗ ███████╗██████╗ ███████╗ █████╗ ████████╗███████╗██████╗  
+   ████╗ ████║████╗ ████║██╔══██╗██║   ██║████╗ ████║     ██╔══██╗██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗ 
+   ██╔████╔██║██╔████╔██║██║  ██║██║   ██║██╔████╔██║     ██████╔╝█████╗  ██████╔╝█████╗  ███████║   ██║   █████╗  ██████╔╝ 
+   ██║╚██╔╝██║██║╚██╔╝██║██║  ██║╚██╗ ██╔╝██║╚██╔╝██║     ██╔══██╗██╔══╝  ██╔═══╝ ██╔══╝  ██╔══██║   ██║   ██╔══╝  ██╔══██╗ 
+   ██║ ╚═╝ ██║██║ ╚═╝ ██║██████╔╝ ╚████╔╝ ██║ ╚═╝ ██║     ██║  ██║███████╗██║     ███████╗██║  ██║   ██║   ███████╗██║  ██║ 
+   ╚═╝     ╚═╝╚═╝     ╚═╝╚═════╝   ╚═══╝  ╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ 
 <!-- "ANSI Shadow" Font From http://patorjk.com --> 
 <!-- RFC 3339  Time Stamp -->                                                        
 //=====< 2020-09-07T01:33:49+00:00 >===============================================\\
 ||                                                                                 ||
-||     Was geht ab? :3                                                             ||
+||     你好!                                                                        ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== INTRO ==</b>                                                                 ||
@@ -113,66 +113,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     <a href="https://hampager.de/dokuwiki/doku.php" target="_blank">>>> DAPNET Wiki</a>                                                             ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     <b>== UNIPAGER ==</b>                                                              ||
-||                                                                                 ||
-||     The link above has a more complete guide on installing UniPager however     ||
-||     here’s what I did to install it on my Rpi.                                  ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ sudo nano /etc/apt/sources.list.d/unipager.list                        |   ||
-||   |                                                                         |   ||
-||   |       // Add these to unipager.list                                     |   ||
-||   |       deb http://db0sda.ampr.org/debian unipager main                   |   ||
-||   |       deb-src http://db0sda.ampr.org/debian unipager main               |   ||
-||   |                                                                         |   ||
-||   |$ wget -O - http://db0sda.ampr.org/debian/rwth-afu.key |                 |   ||
-||   |  sudo apt-key add -                                                     |   ||
-||   |                                                                         |   ||
-||   |$ sudo apt-get update                                                    |   ||
-||   |                                                                         |   ||
-||   |$ sudo apt-get install unipager                                          |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     After installing UniPager you’ll need to configure the RPi’s audio level    ||
-||     so it’s at 100%. Use can use alsamixer via the terminal to accomplish       ||
-||     this.                                                                       ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ alsamixer                // Increase Audio Out to 100%, hit Esc key    |   ||
-||   |                           // to exit                                    |   ||
-||   |                                                                         |   ||
-||   |$ sudo alsactl store       // Save Audio Settings                        |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     After installing UniPager it should automatically be running in the         ||
-||     background as a service. It comes with a Web UI (RPi’s port 8073) which     ||
-||     you can use to configure your transmitter. Open up your favorite web        ||
-||     browser and enter in the RPI’s IP address and port 8073                     ||
-||     (Ex. 192.168.1.20:8073). Below is the settings I used for the Motorola      ||
-||     GM300                                                                       ||
-||                                                                                 ||
-||     -> Configuration                                                            ||
-||          * Transmitter: Audio                                                   ||
-||          * Master IP: dapnet.afu.rwth-aachen.de                                 ||
-||          * Port: 43434                                                          ||
-||          * Callsign: (Your Callsign)                                            ||
-||          * Auth Key: (Your Auth Key)                                            ||
-||     -> Audio Config                                                             ||
-||          * ALSA device: default                                                 ||
-||          * Audio Level: 79                                                      ||
-||          * Inverted: (Unselected)                                               ||
-||          * TX Delay (ms): 5                                                     ||
-||     -> PTT Config                                                               ||
-||          * PTT Method: GPIO                                                     ||
-||          * GPIO Pin: 0                                                          ||
-||          * Inverted: (Unselected)                                               ||
-||                                                                                 ||
-||     IMG: <a href="../img/unipager.png" target="_blank">UniPager Web UI Config</a>                                                 ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM300 CONFIG ==</b>                                                 ||
 ||                                                                                 ||
-||     I’m not going to lie, this next step is going to be a huge pain in the ass. ||
+||     I’m not going to lie, this step is going to be a huge pain in the ass.      ||
 ||     Yes, the GM300 is a solid sub $100 25w UHF mobile radio however it was      ||
 ||     built during the 90’s and the programming software requires MS-DOS.         ||
 ||     To make matters more complicated the serial timing used to send and         ||
@@ -206,9 +151,10 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||       +-----------------------------------------------------------------+       ||
 ||                                                                                 ||
 ||     Nothing special is needed when you program your GM300, just create an       ||
-||     analog channel for 25KHz FM at the desired frequency. The link Below is     ||
-||     a copy of the programming software I used. And again, this step is kinda    ||
-||     a pain but with a little trial and error you should be fine. :3             ||
+||     analog channel for 25KHz FM at the desired frequency. Also be sure to set   ||
+||     the squelch to <b>CSQ</b> (Carrier Squelch) so it RXs everything The link          ||
+||     Below is a copy of the programming software I used. And again, this step    ||
+||     is kinda a pain but with a little trial and error you should be fine. :3    ||
 ||                                                                                 ||
 ||     Download: <a href="../files/gm300v5.zip" target="_blank">Motorola Radius GM300 V5</a>                                          ||
 ||                                                                                 ||
@@ -216,29 +162,45 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     <b>== MOTOROLA GM300 PINOUT ==</b>                                                 ||
 ||                                                                                 ||
 ||     Bellow is the pinout for the Motorola GM300 which is found in the back of   ||
-||     the radio. The pins needed for this application will be the number 3 PTT,   ||
-||     5 Flat Audio TX, and 7 Ground.                                              ||
+||     the radio.                                                                  ||
 ||                                                                                 ||
 ||                                    RADIO TOP                                    ||
 ||                        +---+---+---+---+---+---+---+---+                        ||
 ||                        | 2 | 4 | 6 | 8 | 10| 12| 14| 16|                        ||
 ||                        +---+---+---+---+---+---+---+---+                        ||
-||                        | 1 | <span style="background-color:currentColor"><span style="color:black">3</span></span> | <span style="background-color:currentColor"><span style="color:black">5</span></span> | <span style="background-color:currentColor"><span style="color:black">7</span></span> | 9 | 11| 13| 15|                        ||
+||                        | 1 | 3 | 5 | 7 | 9 | 11| 13| 15|                        ||
 ||                        +---+---+---+---+---+---+---+---+                        ||
 ||                                   RADIO BOTTOM                                  ||
 ||                                 AS SEEN FROM BACK                               ||
 ||                                                                                 ||
 ||                     1 EXT SPKR             9 EMERGENCY ALARM                    ||
 ||                     2 MIC AUDIO IN        10 IGNITION CONTROL                   ||
-||                 --> 3 PTT                 11 RX AUDIO OUT                       ||
+||                     3 PTT                 11 RX AUDIO OUT                       ||
 ||                     4 EXTERNAL ALARM      12 PROG I/O 12                        ||
-||                 --> 5 FLAT TX AUDIO       13 SW A+ SENSE                        ||
+||                     5 FLAT TX AUDIO       13 SW A+ SENSE                        ||
 ||                     6 PROG I/P 6          14 PROG I/O 14                        ||
-||                 --> 7 GROUND              15 INT SPKR +                         ||
+||                     7 GROUND              15 INT SPKR +                         ||
 ||                     8 COS (PROG)          16 EXT SPKR +                         ||
+||                                                                                 ||  
 ||                                                                                 ||
+||     <b>== RB MMDVM PINOUT ==</b>                                                       ||
 ||                                                                                 ||
-||     <b>== RPi TO GM300 SCHEMATIC ==</b>                                                ||
+||     Bellow is the pinout for the Repeater Builder MMDVM Pi Hat.                 ||
+||                                                                                 ||
+||                             +---+---+---+---+---+                               ||
+||                             | 5 | 4 | 3 | 4 | 1 |                               ||
+||                             +---+---+---+---+---+                               ||
+||                               | 9 | 8 | 7 | 6 |                                 ||
+||                               +---+---+---+---+                                 ||
+||                                                                                 ||
+||                          1 (NONE)           6 RXA_R                             ||
+||                          2 TXA_R            7 (NONE)                            ||
+||                          3 INHIBIT_R        8 GND                               ||
+||                          4 RSSI_R           9 VIN (Optional)                    ||
+||                          5 PTT_R                                                ||
+
+
+||     <b>== MMDVM TO GM300 SCHEMATIC ==</b>                                                ||
 ||                                                                                 ||
 ||     With UniPager installed and your radio programmed it’s time to connect      ||
 ||     everything together! Below is the schematic I used to make this work.       ||
@@ -247,29 +209,27 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||           RPi -> Motorola GM300                                                 ||
 ||       +-----------------------------------------------------------------+       ||
 ||       |                                                                 |       ||
-||       |                                                 +------+        |       ||
-||       |                             +-------------------|PI GND|        |       ||
-||       |                             |                   +------+        |       ||
-||       |                             | NPN                               |       ||
-||       |                             +-<|      440Ω     +----------+     |       ||
-||       |                                |-----/\/\/\----|PI GPIO 17|     |       ||
-||       |                             +-/|               +----------+     |       ||
-||       |                             |                                   |       ||
-||       |     +-----------------+     |                                   |       ||
-||       |     |GM300 PTT (PIN 3)|-----+                                   |       ||
-||       |     +-----------------+                                         |       ||
-||       |                                                                 |       ||
-||       |                                                                 |       ||
-||       |     +---------------------------+    22µF    +------------+     |       ||
-||       |     |GM300 FLAT TX AUDIO (PIN 5)|----+||-----|PI AUDIO OUT|     |       ||
-||       |     +---------------------------+            +------------+     |       ||
-||       |                                                                 |       ||
-||       |     +-----------------+                      +------------+     |       ||
-||       |     |GM300 GND (PIN 7)|----------------------|PI AUDIO GND|     |       ||
-||       |     +-----------------+                      +------------+     |       ||
+||       |
+||       |                             RB MMDVM
+||       |                      +---+---+---+---+---+ 
+||       |                      | 5 | 4 | 3 | 4 | 1 |
+||       |                      +---+---+---+---+---+ 
+||       |                        | 9 | 8 | 7 | 6 |
+||       |                        +---+---+---+---+
+
+
+
+||       |
+||       |             TX RADIO                     RX Radio               |       ||
+||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
+||       |    | 2| 4| 6| 8|10|12|14|16|      | 2| 4| 6| 8|10|12|14|16|     |       ||
+||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
+||       |    | 1| 3| 5| 7| 9|11|13|15|      | 1| 3| 5| 7| 9|11|13|15|     |       ||
+||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
 ||       |                                                                 |       ||
 ||       +-----------------------------------------------------------------+       ||
 ||                                                                                 ||
+||     <b>== PI-STAR INSTALL ==</b>                                                              ||
 ||                                                                                 ||
 ||     <b>== NEXTION TOUCH DISPLAY ==</b>                                                 ||
 ||                                                                                 ||

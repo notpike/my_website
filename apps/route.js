@@ -40,6 +40,9 @@ class Route {
                 break;    
             case '/notes_unipager_gm300':
                 target = "pages/notes_unipager_gm300.html";
+                break;
+            case '/notes_mmdvm_gm300':
+                target = "pages/notes_mmdvm_gm300.html";
                 break;   
             case '/notes_math':
                 target = "pages/notes_math.html";
