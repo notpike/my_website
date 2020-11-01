@@ -36,6 +36,9 @@ class Type {
             case '.pdf':                         // Download
                 contentType = 'application/pdf';  
                 break; 
+            case '.wav':
+                contentType = 'audio/wav';       // Download
+                break;
             default:                             // Download everything else
                 contentType = 'text/plain';
                 break;          
