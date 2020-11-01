@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="description" content="How to build a MMDVM repeater using a Motorola GM300 and PI-STAR">
-        <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, DAPNET, ham, radio, hacking, unipager, pocsag, pagger">
+        <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, MMDVM, ham, radio, hacking, DMR, PI-STAR, pocsag">
         <meta name="author" content="NotPike">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -75,54 +75,71 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     <b>== INTRO ==</b>                                                                 ||
 ||                                                                                 ||
-||     I have a soft spot for tech that went out of style, especially tech I       ||
-||     never had the privilege to use outside of work. POCSAG pagers, love them    ||
-||     or hate themcan still be found used by medical and emergency responders.    ||
-||     Cellphones may have made the use case of Pagers not as appealing to the     ||
-||     general public however there is growing popularity with POCSAG Pagers in    ||
-||     the Ham community.                                                          ||
+
+||     <b>== h i g h   l e v e l ==</b>                                                   ||
 ||                                                                                 ||
-||     <a href="https://hampager.de" target="_blank">DAPNET</a> (Decentralized Amateur Paging Network) is a network operated by      ||
-||     amateur radio nerds out of Germany. It consists of a decentralized server   ||
-||     cluster feeding paging data to distributed transmitters (The thing we are   ||
-||     building today). The most used frequency is 439.9875MHz however you can     ||
-||     (legally) do this on other frequencies if you chose. It’s preferred to      ||
-||     keep this all on the same frequency because it benefits other DAPNET users  ||
-||     so they don’t need to reprogram their pagers when changing locations.       ||
-||     <b>HOWEVER</b>, it’s more important to not walk on other transmitters so           ||
-||     you’ll need to see what frequencies are free first before blasting other    ||
-||     people off the net.                                                         ||
+||     Here’s a high level view of what we’re going to build here. :3              ||
 ||                                                                                 ||
-||     I first started using DAPNET with my Pi-Star (MMDVM) however being a 0.01w  ||
-||     transmitter I wanted a little more range. DAPNET has transmitter controller ||
-||     called UniPager which you can use with a RPi to control a 9k6 capable radio ||
-||     (Motorola GM300 for this write up). This application ties the RPi’s GPIO    ||
-||     with your target radio’s PTT and you can pipe the data to the radio using   ||
-||     the RPi’s audio jack. Below are the guides I used to complete this build    ||
-||     however there where some differences when I tried this with the Motorola    ||
-||     GM300.                                                                      ||
-||                                                                                 ||
-||     <a href="https://hampager.de/dokuwiki/doku.php?id=9k6" target="_blank">>>> Transmitter with 9600 Baud Data Transceiver</a>                             ||
-||     <a href="https://hampager.de/dokuwiki/doku.php?id=unipagerenglish" target="_blank">>>> UniPager Installation</a>                                                   ||
-||                                                                                 ||
-||     You’ll need to register with DAPNET before you can use their service which  ||
-||     requires a amateur license. To register you’ll have to submit a ticket via  ||
-||     their support page. More information about how to register can be found on  ||
-||     their Wiki page which can be found in the link below.                       ||
-||                                                                                 ||
-||     <a href="https://hampager.de/dokuwiki/doku.php" target="_blank">>>> DAPNET Wiki</a>                                                             ||
-||                                                                                 ||
-||                                                                                 ||
+||<!-- $ sox dmr.wav -t wav -c 1 - | dsd -pe -i - -w test.wav  -->                                                                                 ||
+||                                   ╓▄        ▄╓                                  ||
+||                                  ▄█└,▄      ▄ ▀▄                                ||
+||                                ▄▀ █▀ ▄    ▄ ▀█ ▀▄                               ||
+||                                █ ║▌ █  <a class="hiddenLink" onclick="play()">▄▄</a>  █ ╙█ █                               ||
+||                                █ ║▌ █p <a class="hiddenLink" onclick="play()">██</a> ,█ ╓█ █                               ||
+||                                ▀▄ ▀▄ ╙╓▀╙▌▀ ▄█ ▄▀                               ||
+||                                 ╙█▄ ▀,▌}Φ▀▄▀└,▓▀                                ||
+||                                   └▀ █▀  ╙█ ╙└                                  ||
+||                                     █ ,▀▀▄ █                                    ||
+||                                    ▄▌└    `▀▌                                   ||
+||                                   ╓▌  "▄φ"  ╙▄                                  ||
+||                                   █=⌐" || "ⁿw█⌐                                 ||
+||                                  █     ||     █                                 ||
+||                                        ||                                       ||
+||                                        ||                                       ||
+||                                        ##================================##     ||
+||                                                                          ||     ||
+||                     TX RADIO                                             ||     ||
+||            //======================\\                DUPLEXER            ||     ||
+||            || ██ | 01 |            ||          //=================\\     ||     ||
+||     ##=====||[  ]+----+      GM300 ||==##    +-||  TX             ||     ||     ||
+||     ||     \\======================//  ##====| || 444.400MHz      ||     ||     ||
+||     ||                                       +-||                 ||-+   ||     ||
+||     ||                                         ||             ANT || |===##     ||
+||     ||              RX RADIO                 +-||  RX             ||-+          ||
+||     ||     //======================\\  ##====| || 449.400MHz      ||            ||
+||     ||  ##=|| ██ | 02 |            ||==##    +-||                 ||            ||
+||     ||  || ||[  ]+----+      GM300 ||          \\=================//            ||
+||     ||  || \\======================//                                           ||
+||     ||  ||                                                                      ||
+||     ||  ##===============================##                                     ||
+||     ||                                   ||                                     ||
+||     ##===============================##  ||                                     ||
+||                                      ||  ||                                     ||
+||                                      ||  ||                                     ||
+||                                      ||  ||                                     ||
+||                ███▄ ▄███▓ ███▄ ▄███▓▓█████▄  ██▒   █▓ ███▄ ▄███▓                ||
+||                ▓██▒▀█▀ ██▒▓██▒▀█▀ ██▒▒██▀ ██▌▓██░   █▒▓██▒▀█▀ ██▒               ||
+||                ▓██    ▓██░▓██    ▓██░░██   █▌ ▓██  █▒░▓██    ▓██░               ||
+||                ▒██    ▒██ ▒██    ▒██ ░▓█▄   ▌  ▒██ █░░▒██    ▒██                ||
+||                ▒██▒   ░██▒▒██▒   ░██▒░▒████▓    ▒▀█░  ▒██▒   ░██▒               ||
+||                ░ ▒░   ░  ░░ ▒░   ░  ░ ▒▒▓  ▒    ░ ▐░  ░ ▒░   ░  ░               ||
+||                ░  ░      ░░  ░      ░ ░ ▒  ▒    ░ ░░  ░  ░      ░               ||
+||                ░      ░   ░      ░    ░ ░  ░      ░░  ░      ░                  ||
+||                       ░          ░      ░          ░         ░                  ||
+||                                       ░           ░                             ||
+
+
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM300 CONFIG ==</b>                                                 ||
 ||                                                                                 ||
-||     I’m not going to lie, this step is going to be a huge pain in the ass.      ||
-||     Yes, the GM300 is a solid sub $100 25w UHF mobile radio however it was      ||
+||     I’m not going to lie, this part is going to be a pain in the ass...         ||
+||                                                                                 ||
+||     Yes, the GM300 is a solid sub $100 VHF/UHF mobile radio however it was      ||
 ||     built during the 90’s and the programming software requires MS-DOS.         ||
 ||     To make matters more complicated the serial timing used to send and         ||
 ||     receive data from radio to computer is CPU based. In short, if your         ||
-||     computer is too fast you’re out of luck and you’ll be out of sync with the  ||
+||     computer is too fast you’re out of luck and will be out of sync with your   ||
 ||     radio. The good news is that you can use DOSBox to run the software and     ||
 ||     slow down the CPU’s cycle rate to make it work. Below is the guide I used   ||
 ||     to make this work. Just a heads up it’s still finicky and may not be        ||
@@ -159,6 +176,19 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     Download: <a href="../files/gm300v5.zip" target="_blank">Motorola Radius GM300 V5</a>                                          ||
 ||                                                                                 ||
 ||                                                                                 ||
+||     <b>== MOTOROLA GM300 JUMPERS ==</b>                                                ||
+
+
+
+
+
+
+
+
+
+
+||                                                                                 ||
+||                                                                                 ||
 ||     <b>== MOTOROLA GM300 PINOUT ==</b>                                                 ||
 ||                                                                                 ||
 ||     Bellow is the pinout for the Motorola GM300 which is found in the back of   ||
@@ -181,72 +211,62 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                     6 PROG I/P 6          14 PROG I/O 14                        ||
 ||                     7 GROUND              15 INT SPKR +                         ||
 ||                     8 COS (PROG)          16 EXT SPKR +                         ||
-||                                                                                 ||  
+||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== RB MMDVM PINOUT ==</b>                                                       ||
 ||                                                                                 ||
-||     Bellow is the pinout for the Repeater Builder MMDVM Pi Hat.                 ||
+||     Bellow is the pinout for the Repeater Builder's MMDVM Pi Hat.               ||
 ||                                                                                 ||
+||                                     FRONT                                       ||
 ||                             +---+---+---+---+---+                               ||
 ||                             | 5 | 4 | 3 | 4 | 1 |                               ||
 ||                             +---+---+---+---+---+                               ||
-||                               | 9 | 8 | 7 | 6 |                                 ||
+||                              \| 9 | 8 | 7 | 6 |/                                ||
 ||                               +---+---+---+---+                                 ||
 ||                                                                                 ||
 ||                          1 (NONE)           6 RXA_R                             ||
 ||                          2 TXA_R            7 (NONE)                            ||
 ||                          3 INHIBIT_R        8 GND                               ||
-||                          4 RSSI_R           9 VIN (Optional)                    ||
+||                          4 RSSI_R           9 *VIN                              ||
 ||                          5 PTT_R                                                ||
-
-
-||     <b>== MMDVM TO GM300 SCHEMATIC ==</b>                                                ||
 ||                                                                                 ||
-||     With UniPager installed and your radio programmed it’s time to connect      ||
-||     everything together! Below is the schematic I used to make this work.       ||
-||     Images of this can be found below the schematic.                            ||
+||                  *OPTIONAL, REQUIRES 24V --> 5V DC-DC MODULE.                   ||
+||                   NOTE: IF DC-DC MODULE IS INSTALLED DON'T POWER                ||
+||                         RPi THREW 5V GPIO OR USB.                               ||
 ||                                                                                 ||
-||           RPi -> Motorola GM300                                                 ||
-||       +-----------------------------------------------------------------+       ||
-||       |                                                                 |       ||
-||       |
-||       |                             RB MMDVM
-||       |                      +---+---+---+---+---+ 
-||       |                      | 5 | 4 | 3 | 4 | 1 |
-||       |                      +---+---+---+---+---+ 
-||       |                        | 9 | 8 | 7 | 6 |
-||       |                        +---+---+---+---+
-
-
-
-||       |
-||       |             TX RADIO                     RX Radio               |       ||
-||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
-||       |    | 2| 4| 6| 8|10|12|14|16|      | 2| 4| 6| 8|10|12|14|16|     |       ||
-||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
-||       |    | 1| 3| 5| 7| 9|11|13|15|      | 1| 3| 5| 7| 9|11|13|15|     |       ||
-||       |    +--+--+--+--+--+--+--+--+      +--+--+--+--+--+--+--+--+     |       ||
-||       |                                                                 |       ||
-||       +-----------------------------------------------------------------+       ||
 ||                                                                                 ||
-||     <b>== PI-STAR INSTALL ==</b>                                                              ||
+||     <b>== MMDVM TO GM300 SCHEMATIC ==</b>                                              ||
+||                                                                                 ||
+||           MMDVM -> TX/RX Motorola GM300                                         ||
+||   +------------------------------------------------------------------------+    ||
+||   |                                                                        |    ||
+||   |   +-----------------------------------+                                |    ||
+||   |   |                             <b>MMDVM</b> |           <b>╔═╗╦═╗╔═╗╔╗╔╔╦╗</b>      |    ||
+||   |   |                     +---+---+---+---+---+     <b>╠╣ ╠╦╝║ ║║║║ ║ </b>      |    ||
+||   |   |  +------------------| <span style="background-color:currentColor"><span style="color:black">5</span></span> | 4 | 3 | <span style="background-color:currentColor"><span style="color:black">2</span></span> | 1 |     <b>╚  ╩╚═╚═╝╝╚╝ ╩ </b>      |    ||
+||   |   |  |                  +---+---+---+---+---+                          |    ||
+||   |   |  |                   \| <span style="background-color:currentColor"><span style="color:black">9</span></span> | <span style="background-color:currentColor"><span style="color:black">8</span></span> | 7 | <span style="background-color:currentColor"><span style="color:black">6</span></span> |/                           |    ||
+||   |   |  |                    +---+---+---+---+                            |    ||
+||   |   |  |                      |   |       |                              |    ||
+||   |   |  |                      |   +-+     +-------------------------+    |    ||
+||   |   |  |                      +-----|----------------------------+  |    |    ||
+||   |   |  |                            |                            |  |    |    ||
+||   |   |  |         <b>TX GM300</b>           |          <b>RX GM300</b>          |  |    |    ||
+||   |   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    |    ||
+||   |   |  | | 2| 4| 6| 8|10|12|14|16|  |  | 2| 4| 6| 8|10|12|14|16| |  |    |    ||
+||   |   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    |    ||
+||   |   |  | | 1| <span style="background-color:currentColor"><span style="color:black">3</span></span>| <span style="background-color:currentColor"><span style="color:black">5</span></span>| <span style="background-color:currentColor"><span style="color:black">7</span></span>| 9|11|13|15|  |  | 1| 3| 5| <span style="background-color:currentColor"><span style="color:black">7</span></span>| 9|<span style="background-color:currentColor"><span style="color:black">11</span></span>|<span style="background-color:currentColor"><span style="color:black">13</span></span>|15| |  |    |    ||
+||   |   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    |    ||
+||   |   |  |      |  |  |               |             |     |  |     |  |    |    ||
+||   |   |  +------+  |  +---------------+-------------+     |  +-----+  |    |    ||
+||   |   +------------+                                      +-----------+    |    ||
+||   |                                                                        |    ||
+||   +------------------------------------------------------------------------+    ||
+||                                                                                 ||
+||     <b>== PI-STAR INSTALL ==</b>                                                       ||
 ||                                                                                 ||
 ||     <b>== NEXTION TOUCH DISPLAY ==</b>                                                 ||
 ||                                                                                 ||
-||     There’s also a Nextion touch display add on built for the UniPager!         ||
-||                                                                                 ||
-||     This is my first exposure to the Nextion display and I’m impressed          ||
-||     on what they have to offer. These things work by sending and receiving      ||
-||     UART messages to and from the Rpi and gives you full control of your        ||
-||     transmitter.                                                                ||
-||                                                                                 ||
-||     Just a heads up, you’ll have to flash the display with the software         ||
-||     found in the UniPagerNextion repo to make this work. These displays         ||
-||     have an ARM chip built in and are capable of running independently          ||
-||     from the rest of the system. Bellow is a flow graph on how messages         ||
-||     are sent to and from the UniPager application and Nextion display.          ||
-||                                                                                 ||
-||     <b>UniPager</b> <-[WebSocket]-> <b>unipagernextion.py</b> <-[UART]-> <b>Nextion Display</b>      ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== NEXTION HARDWARE ==</b>                                                      ||
@@ -264,90 +284,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                    +--------------------------------------+                     ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     <b>== NEXTION SOFTWARE ==</b>                                                      ||
 ||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ sudo apt install git python3 python3-websocket python3-serial          |   ||
-||   |  python-websocket python-serial                                         |   ||
-||   |                                                                         |   ||
-||   |$ git clone https://github.com/rwth-afu/UniPagerNextion.git              |   ||
-||   |                                                                         |   ||
-||   |$ cd UniPagerNextion/src                                                 |   ||
-||   |                                                                         |   ||
-||   |$ sudo bash ./install.sh                                                 |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     The config file for UniPagerNextion can be found in                         ||
-||     etc/unipagernextionconfig.py. If you plan on controlling the display with   ||
-||     the RPi’s UART you’ll need to update it so serialport = “/dev/ttyAMA0”.     ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ sudo nano /etc/unipagernextionconfig.py  // serialport = "/dev/ttyAMA0"|   ||
-||   |                                           // ctl-o to save              |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     You’ll need to do some extra steps to configure the Rpi to make the         ||
-||     display work. Bellow outlines what needs to be done.                        ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ sudo -s  // Do the following as root                                   |   ||
-||   |                                                                         |   ||
-||   |$ echo “dtoverlay=pi3-disable-bt” >> /boot/config.txt  // Disable BT     |   ||
-||   |                                                                         |   ||
-||   |$ systemctl disable hciuart                                              |   ||
-||   |                                                                         |   ||
-||   |$ nano /boot/cmdline.txt   // Remove “console=serial0,115200”            |   ||
-||   |                                                                         |   ||
-||   |$ echo “enable_uart=1” >> /boot/config.txt  // Enable UART               |   ||
-||   |                                                                         |   ||
-||   |$ exit  // Exit root                                                     |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     <b>HACKS!!1</b>                                                                    ||
-||                                                                                 ||
-||     To get the unipagernextion.py application to work I need to change it       ||
-||     python3 to python2...                                                       ||
-||                                                                                 ||
-||     TL;DR serial.Serial didn't work for me in python3 so I compromised...       ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ nano /usr/local/bin/unipagernextion.py // Change #!/usr/bin/python3    |   ||
-||   |                                         //     to #!/usr/bin/python     |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||                                                                                 ||
-||     <b>== FLASH NEXTION DISPLAY ==</b>                                                 ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ nano Nextion/nextion.py                // Change PORT = "/dev/ttyUSB0" |   ||
-||   |                                         //     to PORT = "/dev/ttyAMA0" |   ||
-||   |                                                                         |   ||
-||   |$ sudo bash src/update_display.sh        // Flash display firmware       |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||                                                                                 ||
-||     <b>== NEXTION SERVICE ==</b>                                                       ||
-||                                                                                 ||
-||     To start the Nextion display service use the commands bellow.               ||
-||                                                                                 ||
-||   +-------------------------------------------------------------------------+   ||
-||   |$ systemctl enable unipagernextion     // Start at boot                  |   ||
-||   |                                                                         |   ||
-||   |$ systemctl status unipagernextion     // Status check                   |   ||
-||   +-------------------------------------------------------------------------+   ||
-||                                                                                 ||
-||     More detailed instructions  on how to install the software to control the   ||
-||     Nextion display and the GitHub repo can be found here.                      ||
-||                                                                                 ||
-||     <a href="https://hampager.de/dokuwiki/doku.php?id=unipagernextion" target="_blank">>>> UniPagerNextion Wiki</a>                                                    ||
-||     <a href="https://github.com/rwth-afu/UniPagerNextion" target="_blank">>>> UniPagerNextion GitHub</a>                                                  ||
-||                                                                                 ||
-||                                                                                 ||
-||     <b>== Trouble Shooting ==</b>                                                      ||
-||                                                                                 ||
-||     If you’re having any trouble sending messages you may have to adjust the    ||
-||     volume from the Web UI to make this work with your setup. Inverting the     ||
-||     signal may be needed as well. :3                                            ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== PROJECT GALLERY ==</b>                                                       ||
@@ -372,21 +309,27 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     OK!                                                                         ||
 ||                                                                                 ||
-||     We just built our self’s a POCSAG transmitter and expanded the coverage of  ||
-||     DAPNET! Go a head and pat yourself on the back because you’re doing God’s   ||
-||     work by making old tech fun again!                                          ||
+||     We just built our self’s a MMDVM Repeater! :D                               ||
+||     Go a head and pat yourself on the back!                                     ||
 ||                                                                                 ||
 ||     -- NotPike                                                                  ||
 ||                                                                                 ||
 \\=================================================================================//
                                                             \                        
                                                              \  ^__^                 
-                                                              \ (^^)\_______         
+                                                              \ (VV)\_______         
                                                                 (__)\        )\/\    
                                                                  U  ||----w |        
                                                                     ||     ||        
             </pre>
         </div>        
     </body>
+
+    <script>
+        function play() {
+            var audio = new Audio('/audio/dmr.wav');
+            audio.play();
+        }
+    </script>
 
 @footer
