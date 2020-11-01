@@ -101,7 +101,7 @@ const server = http.createServer((req,res) => {
             }
 
             // Downloads
-            if(extname === '.pdf' || extname === '.zip') {
+            if(extname === '.pdf' || extname === '.zip' || extname === '.wav') {
                 res.writeHead(200, {
                     "Content-Type": contentType,
                     "Content-disposition": "attachment; filename=" + path.basename(req.url)
