@@ -350,6 +350,70 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== PI-STAR / MMDVM INSTALL ==</b>                                               ||
+||                                                                                 ||
+||     First download and flash SD card with Pi-Star OS. Because I use Linux       ||
+||     for my daily driver the process I used bellow will different if your        ||
+||     using Mac or Windows. Also At the time of this write up I used Pi-Star      ||
+||     version 4.1.2_20. Pi-Star can be downloaded with the link bellow.           ||
+||                                                                                 ||
+||     <a href="https://www.pistar.uk/downloads/" target="_blank">https://www.pistar.uk/downloads/</a>                                            ||
+||                                                                                 ||
+||     Bellow are the commands I used to flash the SD card.                        ||
+||                                                                                 ||
+||    ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄      ||
+||    █                                                                     █░░    ||
+||    █ $ unzip Pi-Star_Rpi_V4.1.2_20-May-2020.zip                          █░░    ||
+||    █ $ cd Pi-Star_Rpi_V4.1.2_20-May-2020                                 █░░    ||
+||    █ $ dd if=Pi-Star_Rpi_V4.1.2_20-May-2020.img of=/dev/{YOUR SSD} bs=4M █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     If you want this device to connect to your WiFi you can add a               ||
+||     wpa_supplicant.conf file to the Boot partition of the newly flashed SD      ||
+||     card. Below is an example wpa_supplicant.conf. If the device fails to       ||
+||     connect to a network or becomes disconnected it will become an AP with      ||
+||     the SSID of “Pi Star”.                                                      ||
+||                                                                                 ||
+||         <b>wpa_supplicant.conf</b>                                                     ||
+||    ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄      ||
+||    █                                                                     █░░    ||
+||    █ ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev             █░░    ||
+||    █ update_config=1                                                     █░░    ||
+||    █ ap_scan=1                                                           █░░    ||
+||    █ fast_reauth=1                                                       █░░    ||
+||    █ country=US                                                          █░░    ||
+||    █                                                                     █░░    ||
+||    █ network={                                                           █░░    ||
+||    █      ssid=”YOUR WIFI”                                               █░░    ||
+||    █      psk="YOUR PASSWORD"                                            █░░    ||
+||    █      id_str="0"                                                     █░░    ||
+||    █      priority=100                                                   █░░    ||
+||    █ }                                                                   █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Pi-Star uses a Web UI so you’ll need to fire up your favorit web browser    ||
+||     and enter in the RPi’s local IP. address If you have access to your local   ||
+||     router the hostname for this device should come up as “Pi-Star”.            ||
+||     The default login is...                                                     ||
+||                                                                                 ||
+||                         ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄                         ||
+||                         █                             █░░                       ||
+||                         █ <b>User:</b> pi-star               █░░                       ||
+||                         █ <b>Password:</b> raspberry         █░░                       ||
+||                         █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                       ||
+||                          ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░                       ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Rpi / MMDVM Config ==</b>                                                    ||
+||                                                                                 ||
+||     Below are the following settings I used to make the Repeater Builder        ||
+||     MMDVM work with Pi-Star.                                                    ||
+||                                                                                 ||
+
+
+
+
 
 
 
@@ -404,14 +468,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░  ||
 ||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ||
 ||                                                                                 ||
-||     <b>== NEXTION TOUCH DISPLAY ==</b>                                                 ||
 ||                                                                                 ||
-||                                                                                 ||
-||                                                                                 ||
-||     <b>== NEXTION HARDWARE ==</b>                                                      ||
+||     <b>== NEXTION TOUCH DISPLAY (OPTIONAL) ==</b>                                      ||
 ||                                                                                 ||
 ||     Below is the pinout needed to interface the Nextion display with the        ||
-||     RPi's UART.                                                                 ||
+||     MMDVM's UART.                                                               ||
 ||                                                                                 ||
 ||                    +--------------------------------------+                     ||
 ||                    |      NEXTION      |       RPi        |                     ||
@@ -422,7 +483,29 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                    | UART_RX (YELLOW) -->  PIN 08 UART_TX |                     ||
 ||                    +--------------------------------------+                     ||
 ||                                                                                 ||
+||     You’ll need to flash the Nextion display with the firmware provided in      ||
+||     the MMDVM repo. You can either flash the firmware via the display’s UART    ||
+||     or the easier option of putting the firmware on a microSD Card (FAT32)      ||
+||     and booting the device with the card loaded. Firmware for the Nextion       ||
+||     displays can be found here…                                                 ||
 ||                                                                                 ||
+||     <a href="https://github.com/g4klx/MMDVMHost" target="_blank">>>> https://github.com/g4klx/MMDVMHost</a>                                      ||
+||                                                                                 ||
+||     You have multiple options available depending on the size or layout style   ||
+||     you desire. The per-compiled firmware has a “.tft” extension.               ||
+||                                                                                 ||
+||     Here are the settings you need adjust from the Pi-Star Web UI to make       ||
+||     this display work.                                                          ||
+||                                                                                 ||
+||     <a href="../img/nextion_config.jpg" target="_blank">>>> PI-STAR NEXTION CONFIG</a>                                                  ||
+
+
+||                                                                                 ||
+
+
+
+
+
 ||                                                                                 ||
 ||                                                                                 ||
 ||                                                                                 ||
@@ -464,6 +547,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
         </div>        
     </body>
 
+    <!--Easter Eggs ;) -->
     <script>
         // Antenna
         function play() {
@@ -485,14 +569,5 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
             }
         }
     </script>
-
-
-
-
-<div id="r1">This is the first paragraph</div>
-<div id="r2">This is the second paragraph</div>
-    <a class="hiddenLink" name="r1" onClick="radioPower(this)">██</a>
-    <a class="hiddenLink" name="r2" onClick="radioPower(this)">██</a>
-
 
 @footer
