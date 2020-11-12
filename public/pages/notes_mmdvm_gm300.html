@@ -272,15 +272,16 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     can be found on the bottom side of the radio. You’ll need to pop open the   ||
 ||     radio to access them.                                                       ||
 ||                                                                                 ||
-||                             +-------------------+                               ||
-||                             | JUMPER | POSITION |                               ||
-||                             +-------------------+                               ||
-||                             | P701   -->   B    |                               ||
-||                             | P651   -->   A    |                               ||
-||                             | P551   -->   A    |                               ||
-||                             | P808   -->   A    |                               ||
-||                             | P601   -->   B    |                               ||
-||                             +-------------------+                               ||
+||                             ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄                               ||
+||                             █ JUMPER █ POSITION █░░                             ||
+||                             █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░                             ||
+||                             █ P701   -->   B    █░░                             ||
+||                             █ P651   -->   A    █░░                             ||
+||                             █ P551   -->   A    █░░                             ||
+||                             █ P808   -->   A    █░░                             ||
+||                             █ P601   -->   B    █░░                             ||
+||                             █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                             ||
+||                              ░░░░░░░░░░░░░░░░░░░░░░                             ||
 ||                                                                                 ||
 ||                                  ╔╗ ╔═╗╔═╗╦╔═                                   ||
 ||                                  ╠╩╗╠═╣║  ╠╩╗                                   ||
@@ -441,6 +442,9 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     <b>== MMDVM TO GM300 SCHEMATIC ==</b>                                              ||
 ||                                                                                 ||
+||     If you didn’t buy the Repeater Builder’s MMDVM cable here’s the schematic   ||
+||     on how everything is wired.                                                 ||
+||                                                                                 ||
 ||           MMDVM -> TX/RX Motorola GM300                                         ||
 ||   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄    ||
 ||   █                                                                        █░░  ||
@@ -474,14 +478,15 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     Below is the pinout needed to interface the Nextion display with the        ||
 ||     MMDVM's UART.                                                               ||
 ||                                                                                 ||
-||                    +--------------------------------------+                     ||
-||                    |      NEXTION      |       RPi        |                     ||
-||                    +--------------------------------------+                     ||
-||                    | VCC +5V (RED)    -->  PIN 02 VCC +5V |                     ||
-||                    | GND     (BLACK)  -->  PIN 06 GND     |                     ||
-||                    | UART_TX (GREEN)  -->  PIN 10 UART_RX |                     ||
-||                    | UART_RX (YELLOW) -->  PIN 08 UART_TX |                     ||
-||                    +--------------------------------------+                     ||
+||                    ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄                     ||
+||                    █      NEXTION      █       MMDVM      █░░                   ||
+||                    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░                   ||
+||                    █ VCC +5V (RED)    -->       +5V       █░░                   ||
+||                    █ GND     (BLACK)  -->       GND       █░░                   ||
+||                    █ UART_TX (GREEN)  -->      SR_RX      █░░                   ||
+||                    █ UART_RX (YELLOW) -->      SR_TX      █░░                   ||
+||                    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                   ||
+||                     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░                   ||
 ||                                                                                 ||
 ||     You’ll need to flash the Nextion display with the firmware provided in      ||
 ||     the MMDVM repo. You can either flash the firmware via the display’s UART    ||
@@ -500,16 +505,70 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     <a href="../img/nextion_config.jpg" target="_blank">>>> PI-STAR NEXTION CONFIG</a>                                                  ||
 ||                                                                                 ||
 ||                                                                                 ||
-||     <b>== NEXTION TOUCH DISPLAY (OPTIONAL) ==</b>                                      ||
-
-
+||     <b>== TX / RX Tunning ==</b>                                                       ||
 ||                                                                                 ||
-
-
-
-
-
+||     The following procedure is from the Repeater Builder’s FAQ on how they      ||
+||     recommend you tune the MMDVM for your TX and RX radio.                      ||
 ||                                                                                 ||
+||   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄   ||
+||   █                                                                         █░░ ||
+||   █ The tuning process can be separated into TWO parts: RX and TX (from the █░░ ||
+||   █ node's point of view) For each there are TWO things to be concerned     █░░ ||
+||   █ with:                                                                   █░░ ||
+||   █                                                                         █░░ ||
+||   █      -> Level and Audio Inversion.                                      █░░ ||
+||   █      -> Inversion is mostly by trial and error.                         █░░ ||
+||   █      -> Rx Audio level into the board is easily set by using the "CLIP" █░░ ||
+||   █         indicator. Just set it and forget it for now. The TX audio      █░░ ||
+||   █         level going to the radio, not so much.                          █░░ ||
+||   █                                                                         █░░ ||
+||   █                                                                         █░░ ||
+||   █               <b>----------------------RX----------------------</b>            █░░ ||
+||   █                                                                         █░░ ||
+||   █ The correct method to adjust the RX audio chain is to turn the          █░░ ||
+||   █ Multi-turn gain pot (RX_G) down the whole way. (CCW until it starts     █░░ ||
+||   █ clicking - no more than 25 turns) With the gain set to unity (gain pot  █░░ ||
+||   █ at minimum) turn the single turn pot (RX_IN) up until the CLIP light    █░░ ||
+||   █ comes on, then back it off slightly until the CLIP LED just goes out.   █░░ ||
+||   █ If you can't get the CLIP light to come on with the RX_IN pot at full   █░░ ||
+||   █ CW, then leave the RX_IN pot wide open and start turning the multi-turn █░░ ||
+||   █ gain pot (RX_G) CW until the CLIP light comes on, then back if off      █░░ ||
+||   █ slightly.                                                               █░░ ||
+||   █                                                                         █░░ ||
+||   █ Once you have done the above, the DVM *should* respond to incoming      █░░ ||
+||   █ digital signals of the protocols that are enabled in the software.      █░░ ||
+||   █ If not, you may need to flip the RX invert setting.                     █░░ ||
+||   █ (PiStar: Config>Expert>MMDVMHost)                                       █░░ ||
+||   █                                                                         █░░ ||
+||   █ If you can't get the clip light to come on with BOTH pots fully CW,     █░░ ||
+||   █ there is something wrong with the discriminator input to the board!!    █░░ ||
+||   █                                                                         █░░ ||
+||   █                                                                         █░░ ||
+||   █               <b>----------------------TX----------------------</b>            █░░ ||
+||   █                                                                         █░░ ||
+||   █ The BEST way to adjust the TX level is by using a service monitor or    █░░ ||
+||   █ deviation meter. (~2.8Khz on DMR) Barring that, the EASIEST way is to   █░░ ||
+||   █ do it via the adjust and test method. First connect to an active        █░░ ||
+||   █ reflector that has lots of traffic. While the node is transmitting,     █░░ ||
+||   █ adjust the TX pot until the subscriber radio (HT) begins to decode.     █░░ ||
+||   █ Keep turning, counting turns as you go, until the radio quits decoding. █░░ ||
+||   █ From that point turn the pot CCW half that number of turns to "center"  █░░ ||
+||   █ the level. If you can't get the radio to decode at all, change the      █░░ ||
+||   █ invert setting and try again.                                           █░░ ||
+||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░ ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ||
+||            <a href="http://www.repeater-builder.com/products/stm32-dvm-faq.html" target="_blank">http://www.repeater-builder.com/products/stm32-dvm-faq.html</a>          ||
+||                                                                                 ||
+||     There’s also these YouTube videos created by W1MSG that demonstrate the     ||
+||     above tuning procedure.                                                     ||
+||                                                                                 ||
+||     <b>RX:</b> <a href= "https://youtu.be/dYBRPLysazg" target="_blank">https://youtu.be/dYBRPLysazg</a>                                            ||
+||     <b>TX:</b> <a href= "https://youtu.be/tHummBrS0C4" target="_blank">https://youtu.be/tHummBrS0C4</a>                                            ||
+
+
+
+
+
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== PROJECT GALLERY ==</b>                                                       ||
