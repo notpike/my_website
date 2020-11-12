@@ -299,12 +299,12 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     █ |   ░░░░░   ░░░░░░░░░         |                          |         █░░    ||
 ||     █ |                             |                          |≡░░░░░░░ █░░    ||
 ||     █ |  ░░░░░░░░░░░░  ░░░░░░░░░░   |                          |≡░░░░░░░ █░░    ||
-||     █ |  ░░▄██████▄░░  ░░░░░░░░░░   |        P808              |         █░░    ||
-||     █ |  ▄███ ██ ███▄  ░░░░░░░░░░   |        ■■■+              |         █░░    ||
-||     █ |  ███ ,▐▌, ███  ░░░░░░░░░░   |        A  B              |≡░░░░░░░ █░░    ||
-||     █ |  ▀█ ██▄▄██ █▀  ░░░░░░░░░░   |    P601                  |≡░░░░░░░ █░░    ||
-||     █ |  ░░▀██████▀░░               |    ■■■+                  |≡░░░░░░░ █░░    ||
-||     █ |  ░░░░░░░░░░░░               |    B  A                  |≡░░░░░░░ █░░    ||
+||     █ |  ░░▄██████▄░░  ░░░░░░░░░░   |    P808                  |         █░░    ||
+||     █ |  ▄███ ██ ███▄  ░░░░░░░░░░   |    ■■■+                  |         █░░    ||
+||     █ |  ███ ,▐▌, ███  ░░░░░░░░░░   |    A  B                  |≡░░░░░░░ █░░    ||
+||     █ |  ▀█ ██▄▄██ █▀  ░░░░░░░░░░   |     P601                 |≡░░░░░░░ █░░    ||
+||     █ |  ░░▀██████▀░░               |     ■■■+                 |≡░░░░░░░ █░░    ||
+||     █ |  ░░░░░░░░░░░░               |     B  A                 |≡░░░░░░░ █░░    ||
 ||     █ |                             |                          |≡░░░░░░░ █░░    ||
 ||     █ +-----------------------------+                          |         █░░    ||
 ||     █                    |||||||||||||||||||||||||||||||       |         █░░    ||
@@ -564,29 +564,50 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     <b>RX:</b> <a href= "https://youtu.be/dYBRPLysazg" target="_blank">https://youtu.be/dYBRPLysazg</a>                                            ||
 ||     <b>TX:</b> <a href= "https://youtu.be/tHummBrS0C4" target="_blank">https://youtu.be/tHummBrS0C4</a>                                            ||
-
-
-
-
-
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== TROUBLESHOOTING ==</b>                                                       ||
+||                                                                                 ||
+||     Pi-Star comes with calibration tool for the MMDVM which you can use to      ||
+||     test the TX and RX functions of your setup. To use this program you’ll      ||
+||     need to access to the command line which you can gain threw ssh or the      ||
+||     Web UI’s virtual terminal. The virtual terminal  be found by going to…      ||
+||                                                                                 ||
+||          <b>Admin --> Configuration --> Expert --> SSH Access</b>                      ||
+||                                                                                 ||
+||     Bellow are the commands I used for pistar-mmdvmcal. When this program       ||
+||     runs it actively listens for key press events. Pressing the “h” key will    ||
+||     give you a list of options you can chose from.  This calibration tool       ||
+||     supports a wide range of digital modes however I only tested my repeater    ||
+||     for DMR. It would be a good idea to pull out a spectrum analizer or a       ||
+||     RTL-SDR to see what the wave form looks like when you TX.                   ||
+||                                                                                 ||
+||    ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄      ||
+||    █                                                                     █░░    ||
+||    █ $ sudo pistar-mmdvmcal   // HELP: "h"                               █░░    ||
+||    █                          // TX: "SHIFT + D" (DMR DEVIATION MODE)    █░░    ||
+||    █                          // TX: TOGGLE "SPACEBAR" TO TURN ON AND    █░░    ||
+||    █                          //     OFF TX, MONITOR WITH SPECAN         █░░    ||
+||    █                          // RX: "b" (DMR BIT ERROR RATE "BER" MODE) █░░    ||
+||    █                          // RX: TEST RECEIVER WITH A 2ND RADIO,     █░░    ||
+||    █                          //     ADJUST RX GAIN POT SO BER IS AT     █░░    ||
+||    █                          //     ITS LOWEST.                         █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== PROJECT GALLERY ==</b>                                                       ||
 ||                                                                                 ||
-||          <b>== Phase 1: POC ==</b>             <b>== Phase 2: Init Build & QA ==</b>          ||
+||          <b>== Phase 1: POC ==</b>             <b>== Phase 2: Added Touch Screen ==</b>       ||
 ||                                                                                 ||
-||          IMG: <a href="../img/gm300_2.jpg" target="_blank">RPi Bread Board</a>           IMG: <a href="../img/ProtoPi.jpg" target="_blank">RPi Proto Board</a>                    ||
-||          IMG: <a href="../img/gm300_1.jpg" target="_blank">GM300 Pinout</a>              IMG: <a href="../img/DAPNET_QA.jpg" target="_blank">Testing Before Installation</a>        ||
-||          IMG: <a href="../img/test_page.jpg" target="_blank">Test Page</a>                                                         ||
-||                                                                                 ||
+||          IMG: <a href="../img/mmdvm_poc_1.jpg" target="_blank">Testing and Config</a>        VIDEO: <a href="../img/mmdmv_screen_video.mp4" target="_blank">Touch Screen Test</a>                ||
+||          VIDEO: <a href="../img/mmdvm_poc_video.mp4" target="_blank">Function Test</a>                                                   ||
 ||                                                                                 ||
 ||                                                                                 ||
-||          <b>== Phase 3: Final Build ==</b>     <b>== Phase 4: Added Touch Screen ==</b>       ||
+||          <b>== Phase 3: Paint ==</b>           <b>== Phase 4: Final Build ==</b>              ||
 ||                                                                                 ||
-||          IMG: <a href="../img/sMoon1.jpg" target="_blank">Outside 1</a>                 IMG: <a href="../img/unipager_display.jpg" target="_blank">Nextion Touch Display</a>              ||
-||          IMG: <a href="../img/sMoon2.jpg" target="_blank">Outside 2</a>                                                         ||
-||          IMG: <a href="../img/back.jpg" target="_blank">Back</a>                                                              ||
-||          IMG: <a href="../img/inside.jpg" target="_blank">Inside</a>                                                            ||
+||          IMG: <a href="../img/mmdvm_poc_screen_2.jpg" target="_blank">3D Printed Display</a>        IMG: <a href="../img/mmdvm_final.jpg" target="_blank">Finshed MMDVM Repeater</a>             ||
+||          IMG: <a href="../img/mmdvm_screen_3.jpg" target="_blank">Paint</a>                                                             ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== CONCLUSION ==</b>                                                            ||
