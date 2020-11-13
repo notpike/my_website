@@ -20,9 +20,10 @@
   "homepage": "https://github.com/notpike/my_website#readme",
   "dependencies": {
     "cookie": "^0.4.1",
+    "dotenv": "^8.2.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.6"
   }
 }
