@@ -30,7 +30,7 @@ const { exec } = require('child_process');
                     console.error(`stderr: ${stderr}`);
                 });
 
-                exec('pm2 restart all');
+                //exec('pm2 restart all');
             }
         });
     }
