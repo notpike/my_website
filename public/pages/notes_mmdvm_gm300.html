@@ -410,13 +410,53 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     Below are the following settings I used to make the Repeater Builder        ||
 ||     MMDVM work with Pi-Star.                                                    ||
 ||                                                                                 ||
-
-
-
-
-
-
-
+||     >>> Configuration                                                           ||
+||                                                                                 ||
+||       >> Control Software                                                       ||
+||          -> Controller Software: MMDVMHost                                      ||
+||          -> MMDVMHost: Duplex Repeater                                          ||
+||                                                                                 ||
+||       >> MMDVMHost Configuration                                                ||
+||          -> DMR Mode: ON, RF/Net Hangtime 20Sec                                 ||
+||          -> P25 Mode: ON, RF/Net Hangtime 20Sec                                 ||
+||          -> MMDVM Display Type: Nextion, Port: Modem, Layout:G4KLX              ||
+||                                                                                 ||
+||       >> General Configuration                                                  ||
+||          -> Hostname: pi-star                                                   ||
+||          -> Node Callsign: {YOUR CALLSIGN}                                      ||
+||          -> CCS7/DMR ID: {YOUR ID}                                              ||
+||          -> Radio Frequency RX: 449.4000MHz                                     ||
+||          -> Radio Frequency TX: 444.4000MHz                                     ||
+||          -> Latitude: {YOUR LATITUDE}                                           ||
+||          -> Longitude: {YOUR Longitude}                                         ||
+||          -> Town: {YOUR TOWN}                                                   ||
+||          -> Country: {YOUR COUNTRY}                                             ||
+||          -> URL: http://www.mw0mwz.co.uk/pi-star/                               ||
+||          -> Radio/Modem Type: STM320DVM/MMDVM_HS-RASPBERRY PI HAT (GPIO)        ||
+||          -> Node Type: Public                                                   ||
+||          -> APRS Host: vancouver.aprs2.net                                      ||
+||          -> System Time Zone: {YOUR TIMEZONE}                                   ||
+||          -> Dashboard Language: {YOUR LANGUAGE}                                 ||
+||                                                                                 ||
+||       >> DMR Configuration                                                      ||
+||          -> DMR Master: BM_UnitedStates_3102                                    ||
+||          -> Hotspot Security: {YOUR PASSWORD}                                   ||
+||          -> DMR ESSID: {DEVICE ID}                                              ||
+||          -> DMR Color Code: 1                                                   ||
+||          -> DMR EmbeddedLConly: OFF                                             ||
+||          -> DMR DumpTAData: ON                                                  ||
+||                                                                                 ||
+||       >> P25 Configuration                                                      ||
+||          -> P25 Startup Host: 10-Parrot                                         ||
+||          -> P25 NAC: 293                                                        ||
+||                                                                                 ||
+||     >>> Configuration --> Expert --> MMDVMHOST                                  ||
+||                                                                                 ||
+||       >> CW ID         // Repeater ID Function                                  ||
+||          -> Enable: 1  // ON                                                    ||
+||          -> Time: 10   // Time in Min                                           ||
+||                                                                                 ||
+||                                                                                 ||
 ||     <b>== RB MMDVM PINOUT ==</b>                                                       ||
 ||                                                                                 ||
 ||     Bellow is the pinout for the Repeater Builder's MMDVM Pi Hat.               ||
