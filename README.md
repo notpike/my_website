@@ -44,8 +44,11 @@ my_website
  │    │   └── pike_style.css
  │    │ 
  │    ├── img/
+ │    ├── files/
+ │    ├── audio/
  │    ├── js/          // Front end JS
  │    │   ├── 404.js
+ │    │   ├── math.js
  │    │   └── logic.js 
  │    │
  │    ├── krad/        // Shhhh, secret hacker stash  ;)
