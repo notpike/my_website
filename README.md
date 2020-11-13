@@ -10,6 +10,7 @@ This application proxy’s a http web server on 127.0.0.1:5000 into a Nginx web 
 
 ## Dev Environment
 ```
+cp .env-example .env
 npm install
 nodemon index
 firefox http://localhost:5000
@@ -17,6 +18,7 @@ firefox http://localhost:5000
 
 ## Live Environment
 ```
+cp .env-example .env
 npm install
 pm2 index.js    // Cold Start
 pm2 restart all // After Update
@@ -30,6 +32,7 @@ my_website
  │    ├── logger.js    // Logging
  │    ├── login.js     // TODO
  │    ├── pageGen.js   // Page Builder
+ │    ├── webHook.js   // Webhook Handler for GitHub events
  │    ├── route.js     // Web Routes
  │    └── type.js      // File Content Type
  │
@@ -58,6 +61,7 @@ my_website
  │    ├── robots.txt
  │    └── index.html   // Index 
  │
+ ├── .env-example      // Example .env File 
  ├── index.js          // Node.JS Main 
  └── README.md
  ```
