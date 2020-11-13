@@ -13,6 +13,7 @@ const Route = require('./apps/route');
 const Type = require('./apps/type');
 const PageGen = require('./apps/pageGen');
 const RequestType = require('./apps/requestType');
+const WebHook = require('./apps/webHook');
 
 const http = require('http');
 const path = require('path');
@@ -46,10 +47,16 @@ const kr = new Krad();
 /* ------------ POST FUNCTION ----------- */
 const request = new RequestType();
 
+/* ------------ WEBHOOK FUNCTION ----------- */
+const webHook = new WebHook();
+
 
 /* ---------- MAIN SERVER LOOP ---------- */
 const server = http.createServer((req,res) => {
     
+    // Check for WebHook
+    webHook.webHook(req);
+
     // Handle Post Requests
     if (req.method === 'POST') {
         request.postRX(req, logger);
