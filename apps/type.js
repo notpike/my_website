@@ -39,6 +39,9 @@ class Type {
             case '.wav':
                 contentType = 'audio/wav';       // Download
                 break;
+            case '.mp4':
+                contentType = 'video/mp4';       // Play Video
+                break;
             default:                             // Download everything else
                 contentType = 'text/plain';
                 break;          
