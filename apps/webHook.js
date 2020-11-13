@@ -17,7 +17,7 @@ const exec = require('child_process').exec;
         
         req.on('data', function (chunk) {
             let sig = "sha1=" + crypto.createHmac('sha1', secret).update(chunk.toString()).digest('hex');
-
+            logger.log("Sig: " + sig);
             if (req.headers['x-hub-signature'] == sig) {
                 logger.log("Git Pull")
                 exec('cd ' + repo + ' && git pull');
