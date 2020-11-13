@@ -8,8 +8,7 @@
 /* ------------ REQUIREMENTS ------------ */
 require('dotenv').config()
 const crypto = require('crypto');
-//const exec = require('child_process').exec;
-const { exec } = require('child_process');
+const exec = require('child_process').exec;
 
  class WebHook {
 
