@@ -21,7 +21,7 @@ const { exec } = require('child_process');
         req.on('data', function (chunk) {
             let sig = "sha1=" + crypto.createHmac('sha1', secret).update(chunk.toString()).digest('hex');
             if (req.headers['x-hub-signature'] == sig) {
-                exec('cd ' + repo + ' && git pull', (error, stdout, stderr) => {
+                exec('cd ' + repo + ' && git pull && pm2 restart all', (error, stdout, stderr) => {
                     if (error) {
                         console.error(`exec error: ${error}`);
                         return;
@@ -29,8 +29,6 @@ const { exec } = require('child_process');
                     console.log(`stdout: ${stdout}`);
                     console.error(`stderr: ${stderr}`);
                 });
-
-                //exec('pm2 restart all');
             }
         });
     }
