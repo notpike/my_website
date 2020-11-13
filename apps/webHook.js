@@ -7,16 +7,13 @@
 
 /* ------------ REQUIREMENTS ------------ */
 require('dotenv').config()
-const Logger = require('./apps/logger');
 const crypto = require('crypto');
-const exec = require('child_process').exec;
+//const exec = require('child_process').exec;
+const { exec } = require('child_process');
 
  class WebHook {
 
     webHook(req) {
-
-        const logger = new Logger();
-        logger.on('message', (data) => console.log("Called Listener: ", data));
 
         const repo = "/var/www/my_website";
         const secret = process.env.WEBHOOK_PASS;
@@ -32,7 +29,7 @@ const exec = require('child_process').exec;
                     console.log(`stdout: ${stdout}`);
                     console.error(`stderr: ${stderr}`);
                 });
-                
+
                 exec('pm2 restart all');
             }
         });
