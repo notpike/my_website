@@ -18,9 +18,12 @@ const exec = require('child_process').exec;
         const secret = process.env.WEBHOOK_PASS;
         
         req.on('data', function (chunk) {
+            
+            // Generate hash of expected password
             let sig = "sha1=" + crypto.createHmac('sha1', secret).update(chunk.toString()).digest('hex');
+
             if (req.headers['x-hub-signature'] == sig) {
-                exec('cd ' + repo + ' && git pull && pm2 restart all', (error, stdout, stderr) => {
+                exec('cd ' + repo + ' && git pull && pm2 restart all', (error, stdout, stderr) => { // CD, Pull, Restart
                     if (error) {
                         console.error(`exec error: ${error}`);
                         return;
