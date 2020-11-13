@@ -7,6 +7,7 @@
 
 
 /* ------------ REQUIREMENTS ------------ */
+require('dotenv').config()
 const Logger = require('./apps/logger');
 const Krad = require('./apps/krad');
 const Route = require('./apps/route');
