@@ -20,6 +20,9 @@ class RequestType {
                 case '/login':
                     logger.log(pData);
                     break;
+                case '/hack':
+                    logger.log(pData);
+                    break;
             }
         });
 

@@ -21,6 +21,7 @@ const path = require('path');
 const fs = require('fs');
 const cookie = require('cookie');
 const { parse } = require('querystring');
+const url = require('url');
 
 
 /* ---------- LOGGING FUNCTION ---------- */
@@ -89,6 +90,16 @@ const server = http.createServer((req,res) => {
     // Find Content Type (ex. 'text/html')
     let contentType = type.findContentType(extname);
 
+    // Record Get Requests to /hack
+    if (req.url.startsWith('/hack')) {
+        const queryObject = url.parse(req.url, true).query;
+
+        //console.log(queryObject);
+        if(queryObject != null) {
+            logger.log(req.connection.remoteAddress + ': ' + queryObject.a);
+        }
+    }
+
     // Read file
     fs.readFile(filePath, (err, content) => {
     
@@ -107,6 +118,7 @@ const server = http.createServer((req,res) => {
                 content = content.toString();
                 content = kr.buildContent(content)
             }
+
 
             // Downloads
             if(extname === '.pdf' || extname === '.zip' || extname === '.wav') {
