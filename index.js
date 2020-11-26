@@ -60,6 +60,8 @@ const server = http.createServer((req,res) => {
     webHook.webHook(req);
 
     // Handle Post Requests
+    // /login 
+    // /hack
     if (req.method === 'POST') {
         request.postRX(req, logger);
     }
@@ -91,12 +93,13 @@ const server = http.createServer((req,res) => {
     let contentType = type.findContentType(extname);
 
     // Record Get Requests to /hack
+    // http://localhost:5000/hack?a=value1
     if (req.url.startsWith('/hack')) {
         const queryObject = url.parse(req.url, true).query;
 
-        //console.log(queryObject);
+        // If GET request has content record IP address and info
         if(queryObject != null) {
-            logger.log(req.connection.remoteAddress + ': ' + queryObject.a);
+            logger.log(req.connection.address + ': ' + queryObject.a);
         }
     }
 
