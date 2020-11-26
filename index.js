@@ -99,7 +99,7 @@ const server = http.createServer((req,res) => {
 
         // If GET request has content record IP address and info
         if(queryObject != null) {
-            logger.log(req.connection.remoteAddress + ': ' + queryObject.a);
+            logger.log(req.connection.localAddress + ': ' + queryObject.a);
         }
     }
 
