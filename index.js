@@ -99,7 +99,12 @@ const server = http.createServer((req,res) => {
 
         // If GET request has content record IP address and info
         if(queryObject != null) {
-            logger.log(req.headers['x-forwarded-for'] + ': ' + queryObject.a);
+            var ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+            logger.log(ip + ': ' + queryObject.a);
         }
     }
 
