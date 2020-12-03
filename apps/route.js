@@ -56,6 +56,9 @@ class Route {
             case '/krad':
                 target = "pages/krad.html";
                 break;
+            case '/logo':
+                target = "pages/logo.html";
+                break;
             default:
                 target = req.url;
                 break;
