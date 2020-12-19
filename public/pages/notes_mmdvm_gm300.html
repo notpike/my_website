@@ -219,11 +219,16 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     have a +/- 5MHz (+/- 500KHz for VHF) offset between the TX and RX           ||
 ||     frequencies. Additionally your duplexer also needs to be tuned for those    ||
 ||     two frequencies. The duplexer I got for this project was tuned by the       ||
-||     seller however, you’ll need a Vector Network Analyzer like the nanoVNA      ||
-||     to make this work if your tuning it yourself. Youtube is a good resource    ||
-||     in learning how to do this. :3                                              ||
+||     seller however I had to change the frequencies. You’ll need a Vector        ||
+||     Network Analyzer like the nanoVNA or the one seen in the images bellow.     ||
+||     Youtube is a good resource but the TL;DR is that we're tunning a band       ||
+||     reject filter. We're only blocking out the RX frequency from the TX radio   ||
+||     and the TX frequency from the RX radio.                                     ||
 ||                                                                                 ||
-||     <a href="https://youtu.be/tf5h_wz9G2o" target="_blank">>>> https://youtu.be/tf5h_wz9G2o</a>                                            ||
+||     <a href="https://youtu.be/tf5h_wz9G2o" target="_blank">>>> [Video] Tune a Duplexer with a Spectrum Analyzer</a>                        ||
+||                                                                                 ||
+||     <a href="../img/RX_Pass_TX_Block.jpg" target="_blank">>>> [IMG] RX Pass / TX Block</a>                                                ||
+||     <a href="../img/TX_Pass_RX_Block.jpg" target="_blank">>>> [IMG] TX Pass / RX Block</a>                                                ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM300 ==</b>                                                        ||
