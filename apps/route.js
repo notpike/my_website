@@ -38,8 +38,11 @@ class Route {
             case '/notes_yaesu_rpi':
                 target = "pages/notes_yaesu_rpi.html";
                 break;    
-            case '/notes_unipager_gm300':
-                target = "pages/notes_unipager_gm300.html";
+            case '/notes_unipager_gm300':              //LEGACY URI
+                target = "pages/notes_unipager.html";
+                break;
+            case '/notes_unipager':
+                target = "pages/notes_unipager.html";
                 break;
             case '/notes_mmdvm_gm300':
                 target = "pages/notes_mmdvm_gm300.html";
