@@ -170,7 +170,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     IMG: <a href="../img/unipager.png" target="_blank">UniPager Web UI Config</a>                                                 ||
 ||                                                                                 ||
-||     <b>NOTE:</b> Settings for the GM340 are the same except <b>Inverted</b> is selected.    ||
+||     <b>NOTE:</b> Settings for the GM340 are the same except <b>Inverted</b> is selected.      ||
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM300 CONFIG ==</b>                                                 ||
 ||                                                                                 ||
@@ -228,6 +228,20 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     need to re install commsbepx64_setup.exe. This can be found in the CPS      ||
 ||     system folder. Be sure to restart your computer after the installation      ||
 ||     is complete.                                                                ||
+||                                                                                 ||
+||     Be sure your codeplug is configured as follows.                             ||
+||                                                                                 ||
+||     -> Per Channel-1 of X                                                       ||
+||          * TX Frequency (MHz): 439.98750                                        ||
+||          * ... Refrence Frequency: Automatic                                    ||
+||          * RX Frequency (MHz): 439.98750                                        ||
+||          * ... Refrence Frequency: Automatic                                    ||
+||          * Channel Spacing: 12.5KHz                                             ||
+||          * Power Level: High                                                    ||
+||     -> Per Radio GP I/O Lines                                                   ||
+||          * Pin # 3: Voice & Data PTT, Active Level Low, Debounce enabled        ||
+||     -> Per Radio Misscellaneous                                                 ||
+||          * RxAudio (Accessory Connector): Flat Unsquelched                      ||
 ||                                                                                 ||
 ||     Download: <a href="../krad/software/R03.11.16_CPS.zip" target="_blank">Motorola R03.11.16</a>                                                ||
 ||                                                                                 ||
