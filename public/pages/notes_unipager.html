@@ -150,7 +150,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     you can use to configure your transmitter. Open up your favorite web        ||
 ||     browser and enter in the RPI’s IP address and port 8073                     ||
 ||     (Ex. 192.168.1.20:8073). Below is the settings I used for the Motorola      ||
-||     GM300                                                                       ||
+||     GM300/GM340                                                                 ||
 ||                                                                                 ||
 ||     -> Configuration                                                            ||
 ||          * Transmitter: Audio                                                   ||
@@ -161,7 +161,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     -> Audio Config                                                             ||
 ||          * ALSA device: default                                                 ||
 ||          * Audio Level: 79                                                      ||
-||          * Inverted: (Unselected)                                               ||
+||          * Inverted: (GM300 => Unselected) (GM340 => Selected)                  ||
 ||          * TX Delay (ms): 5                                                     ||
 ||     -> PTT Config                                                               ||
 ||          * PTT Method: GPIO                                                     ||
@@ -170,6 +170,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     IMG: <a href="../img/unipager.png" target="_blank">UniPager Web UI Config</a>                                                 ||
 ||                                                                                 ||
+||     <b>NOTE:</b> Settings for the GM340 are the same except <b>Inverted</b> is selected.    ||
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM300 CONFIG ==</b>                                                 ||
 ||                                                                                 ||
@@ -190,7 +191,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     success with what you have. I had to build my own programming cable using   ||
 ||     a FT232 and Cat5 Cable. Below is the schematic I used to accomplish this.   ||
 ||                                                                                 ||
-||           FT232 -> Motorola GM300 (RJ-45)                                       ||
+||           FT232 -> Motorola GM300/GM340 (RJ-45)                                 ||
 ||       █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█       ||
 ||       █                                                                 █░░     ||
 ||       █           <b>FT232</b>                              <b>RJ45</b>               █░░     ||
@@ -207,6 +208,8 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||       █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░     ||
 ||        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░     ||
 ||                                                                                 ||
+||     <b>Note:</b> This cable will also work with the GM340                              ||
+||                                                                                 ||
 ||     Nothing special is needed when you program your GM300, just create an       ||
 ||     analog channel for 25KHz FM at the desired frequency. The link Below is     ||
 ||     a copy of the programming software I used. And again, this step is kinda    ||
@@ -217,7 +220,15 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                 ||
 ||     <b>== MOTOROLA GM340 CONFIG ==</b>                                                 ||
 ||                                                                                 ||
-||     //TODO                                                                      ||
+||     The CPS for the GM340 is not as tricky as the one for the GM300 however     ||
+||     there are some gotchas. You can get this to work on a Windows 10 Box if     ||
+||     you run this application under Windows 7 compatibility mode.                ||
+||                                                                                 ||
+||     If you get the error, <b>“Can not create unknown radio component”</b> you may      ||
+||     need to re install commsbepx64_setup.exe. This can be found in the CPS      ||
+||     system folder. Be sure to restart your computer after the installation      ||
+||     is complete.                                                                ||
+||                                                                                 ||
 ||     Download: <a href="../krad/software/R03.11.16_CPS.zip" target="_blank">Motorola R03.11.16</a>                                                ||
 ||                                                                                 ||
 ||                                                                                 ||
@@ -279,7 +290,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     everything together! Below is the schematic I used to make this work.       ||
 ||     Images of this can be found below the schematic.                            ||
 ||                                                                                 ||
-||           RPi -> Motorola GM300                                                 ||
+||           RPi -> Motorola GM300/GM340                                           ||
 ||       █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█       ||
 ||       █                                                                 █░░     ||
 ||       █                                                 +------+        █░░     ||
@@ -291,16 +302,16 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||       █                             +-/|               +----------+     █░░     ||
 ||       █                             |                                   █░░     ||
 ||       █     +-----------------+     |                                   █░░     ||
-||       █     |GM300 PTT (PIN 3)|-----+                                   █░░     ||
+||       █     |GM3X0 PTT (PIN 3)|-----+                                   █░░     ||
 ||       █     +-----------------+                                         █░░     ||
 ||       █                                                                 █░░     ||
 ||       █                                                                 █░░     ||
 ||       █     +---------------------------+    22µF    +------------+     █░░     ||
-||       █     |GM300 FLAT TX AUDIO (PIN 5)|----+||-----|PI AUDIO OUT|     █░░     ||
+||       █     |GM3X0 FLAT TX AUDIO (PIN 5)|----+||-----|PI AUDIO OUT|     █░░     ||
 ||       █     +---------------------------+            +------------+     █░░     ||
 ||       █                                                                 █░░     ||
 ||       █     +-----------------+                      +------------+     █░░     ||
-||       █     |GM300 GND (PIN 7)|----------------------|PI AUDIO GND|     █░░     ||
+||       █     |GM3X0 GND (PIN 7)|----------------------|PI AUDIO GND|     █░░     ||
 ||       █     +-----------------+                      +------------+     █░░     ||
 ||       █                                                                 █░░     ||
 ||       █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░     ||
