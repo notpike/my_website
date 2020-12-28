@@ -31,6 +31,11 @@ const exec = require('child_process').exec;
                     console.log(`stdout: ${stdout}`);
                     console.error(`stderr: ${stderr}`);
                 });
+                return true;  // UPDATE 
+            } 
+
+            else {
+                return false; // NO UPDATE
             }
         });
     }
