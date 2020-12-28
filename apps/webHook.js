@@ -12,7 +12,7 @@ const exec = require('child_process').exec;
 
  class WebHook {
 
-    webHook(req) {
+     webHook(req, logger) {
 
         const repo = "/var/www/my_website";
         const secret = process.env.WEBHOOK_PASS;
@@ -23,6 +23,7 @@ const exec = require('child_process').exec;
             let sig = "sha1=" + crypto.createHmac('sha1', secret).update(chunk.toString()).digest('hex');
 
             if (req.headers['x-hub-signature'] == sig) {
+                logger.log("Git Pull, Server Restart");      // LOG EVENT
                 exec('cd ' + repo + ' && git pull && pm2 restart all', (error, stdout, stderr) => { // CD, Pull, Restart
                     if (error) {
                         console.error(`exec error: ${error}`);
@@ -31,12 +32,7 @@ const exec = require('child_process').exec;
                     console.log(`stdout: ${stdout}`);
                     console.error(`stderr: ${stderr}`);
                 });
-                return true;  // UPDATE 
             } 
-
-            else {
-                return false; // NO UPDATE
-            }
         });
     }
 

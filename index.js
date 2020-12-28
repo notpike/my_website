@@ -57,10 +57,7 @@ const webHook = new WebHook();
 const server = http.createServer((req,res) => {
     
     // Check for WebHook
-    // Log if there's an update
-    if(webHook.webHook(req)) {
-        logger.log("Git Pull, Server Restart");
-    }
+    webHook.webHook(req, logger)
 
     // Handle Post Requests
     // /login 
