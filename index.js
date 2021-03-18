@@ -68,8 +68,9 @@ const server = http.createServer((req,res) => {
     }
 
     // Cookie
-    // var cookies = cookie.parse(req.headers.cookie || '');
-    // var name = cookies.name;
+    var cookies = cookie.parse(req.headers.cookie || '');
+    var name = cookies.name;
+    logger.log("Cookie Name: " + name);
 
     // if (name != 'bad-radio.solutions') {
     //     //Cookie test
