@@ -56,24 +56,24 @@ const webHook = new WebHook();
 /* ---------- MAIN SERVER LOOP ---------- */
 const server = http.createServer((req,res) => {
     // Cookie
-    var cookies = cookie.parse(req.headers.cookie || '');
-    var name = cookies.name;
-    logger.log("Cookie Name: " + name);
+    // var cookies = cookie.parse(req.headers.cookie || '');
+    // var name = cookies.name;
+    // logger.log("Cookie Name: " + name);
 
-    if (name != 'bad-radio.solutions') {
-        logger.log("Cookie Name: " + name);
+    // if (name != 'bad-radio.solutions') {
+    //     logger.log("Cookie Name: " + name);
 
-        //Cookie test
-        res.setHeader('Set-Cookie', cookie.serialize('name', 'bad-radio.solutions', {
-            httpOnly: true,
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-        }));
+    //     //Cookie test
+    //     res.setHeader('Set-Cookie', cookie.serialize('name', 'bad-radio.solutions', {
+    //         httpOnly: true,
+    //         maxAge: 60 * 60 * 24 * 7 // 1 week
+    //     }));
 
-        //res.statusCode = 302;
-        //res.setHeader('Location', req.headers.referer || '/')
-        res.end(); 
-        return;
-    }
+    //     //res.statusCode = 302;
+    //     //res.setHeader('Location', req.headers.referer || '/')
+    //     res.end(); 
+    //     return;
+    // }
 
     // Check for WebHook
     // Log if there's an update
