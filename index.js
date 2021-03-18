@@ -68,21 +68,21 @@ const server = http.createServer((req,res) => {
     }
 
     // Cookie
-    var cookies = cookie.parse(req.headers.cookie || '');
-    var name = cookies.name;
-    
-    if(name != 'bad-radio.solutions') {
-        //Cookie test
-        res.setHeader('Set-Cookie', cookie.serialize('name', 'bad-radio.solutions', {
-            httpOnly: true,
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-        }));
+    // var cookies = cookie.parse(req.headers.cookie || '');
+    // var name = cookies.name;
 
-        res.statusCode = 302;
-        res.setHeader('Location', req.headers.referer || '/')
-        res.end();
-        return;
-    }
+    // if (name != 'bad-radio.solutions') {
+    //     //Cookie test
+    //     res.setHeader('Set-Cookie', cookie.serialize('name', 'bad-radio.solutions', {
+    //         httpOnly: true,
+    //         maxAge: 60 * 60 * 24 * 7 // 1 week
+    //     }));
+
+    //     res.statusCode = 302;
+    //     res.setHeader('Location', req.headers.referer || '/')
+    //     res.end();
+    //     return;
+    // }
 
     // Build the file path
     let filePath = route.buildReqPath(req);
