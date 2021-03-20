@@ -15,6 +15,7 @@ const exec = require('child_process').exec;
      webHook(req, logger) {
 
         const repo = "/var/www/my_website";
+        const devRepo = "/var/www/my_website_dev";
         const secret = process.env.WEBHOOK_PASS;
         
         req.on('data', function (chunk) {
@@ -24,6 +25,16 @@ const exec = require('child_process').exec;
 
             if (req.headers['x-hub-signature'] == sig) {
                 logger.log("Git Pull, Server Restart");      // LOG EVENT
+                
+                exec('cd ' + devRepo + ' && git pull', (error, stdout, stderr) => { // CD, Pull, Restart
+                    if (error) {
+                        console.error(`exec error: ${error}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
+                    console.error(`stderr: ${stderr}`);
+                });
+
                 exec('cd ' + repo + ' && git pull && pm2 restart all', (error, stdout, stderr) => { // CD, Pull, Restart
                     if (error) {
                         console.error(`exec error: ${error}`);
