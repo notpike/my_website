@@ -92,7 +92,7 @@ class Krad {
                     }
                 }
 
-                links += " ".repeat(8) + "├────  <a href=\"../" + rootPath +  "/" + rootDir[file] + "\" download >" 
+                links += " ".repeat(8) + "├────  <a href=\"../" + rootPath + "/" + rootDir[file] + "\" download title=\"" + (fs.statSync(path + "/" + rootDir[file]).size / (1024 * 1024)).toFixed(2) + "Mb \">"; 
                 links += rootDir[file] + "</a><br/>";
                 
                 // TODO, Fix this loop
