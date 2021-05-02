@@ -42,7 +42,7 @@
                                                                           \----\\   / \    
                                                                          /_\----\\_/   \   
                                                                          \   ▄█▓█▄ \    \  
-                                                                        //\ █▓▓▓▓▓█ \   /  
+                                                                        //\ █▓▓<a class="hiddenLink" onclick="play()">▓</a>▓▓█ \   /  
                      $$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\    \| \_▀█▓█▀___\_/  *
                      $$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\    +     \----\\     
                      $$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|          \----\\    
@@ -74,80 +74,152 @@
 ||                                                                                 ||
 ||     <b>== INTRO ==</b>                                                                 ||
 ||                                                                                 ||
+||     Let’s get with the times and do some 25th century space phreaking and       ||
+||     learn how to decode Iridium sat phones! :3                                  ||
+||                                                                                 ||
+||     This is going to be one of those “Noir” write-ups so please understand      ||
+||     what I’m about to explain may be unlawful. Please treat this document as    ||
+||     an educational/entertainment piece and make good decisions with this        ||
+||     knologe. The disclaimer below outlines what laws may apply to decoding      ||
+||     Iridium communications so please read through it.                           ||
+||                                                                                 ||
+||     Any who, I hope you get to learn something fun here and happy hacking! :D   ||
+||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== Disclaimer ==</b>                                                            ||
 ||                                                                                 ||
 ||     Some of the practices and methods described in write up may be illegal      ||
 ||     in your area. Even though Iridium transmits in plain text it still may      ||
-||     be considered a felony to record and decode. Please use your better         ||
+||     be considered a crime to record and decode. Please use your better          ||
 ||     judgment while playing with this tech. If you live in the US please         ||
 ||     review the “Wiretap Act” before continuing.                                 ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>18 U.S. Code § 2511. Interception and disclosure of wire, oral, or          ||
 ||     electronic communications prohibited.</b>                                       ||
-||   +-------------------------------------------------------------------------+   ||
-||   | (1) Except as otherwise specifically provided in this chapter any       |   ||
-||   | person who---                                                           |   ||
-||   |                                                                         |   ||
-||   |      (a) intentionally intercepts, endeavors to intercept, or procures  |   ||
-||   |          any other person to intercept or endeavor to intercept, any    |   ||
-||   |          wire, oral, or electronic communication;                       |   ||
-||   |      (b) intentionally uses, endeavors to use, or procures any other    |   ||
-||   |          person to use or endeavor to use any electronic, mechanical,   |   ||
-||   |          or other device to intercept any oral communication when       |   ||
-||   |                                                                         |   ||
-||   |           (i) such device is affixed to, or otherwise transmits a       |   ||
-||   |               signal through, a wire, cable, or other like connection   |   ||
-||   |               used in wire communication; or                            |   ||
-||   |          (ii) such device transmits communications by radio, or         |   ||
-||   |               interferes with the transmission of such communication;   |   ||
-||   |               or                                                        |   ||
-||   |         (iii) such person knows, or has reason to know, that such       |   ||
-||   |               device or any component thereof has been sent through the |   ||
-||   |               mail or transported in interstate or foreign commerce; or |   ||
-||   |          (iv) such use or endeavor to use (A) takes place on the        |   ||
-||   |               premises of any business or other commercial              |   ||
-||   |               establishment the operations of which affect interstate   |   ||
-||   |               or foreign commerce; or (B) obtains or is for the purpose |   ||
-||   |               of obtaining information relating to the operations of    |   ||
-||   |               any business or other commercial establishment the        |   ||
-||   |               operations of which affect interstate or foreign          |   ||
-||   |               commerce; or                                              |   ||
-||   |           (v) such person acts in the District of Columbia, the         |   ||
-||   |               Commonwealth of Puerto Rico, or any territory or          |   ||
-||   |               possession of the United States;                          |   ||
-||   |                                                                         |   ||
-||   |      (c) intentionally discloses, or endeavors to disclose, to any      |   ||
-||   |          other person the contents of any wire, oral, or electronic     |   ||
-||   |          communication, knowing or having reason to know that the       |   ||
-||   |          information was obtained through the interception of a wire,   |   ||
-||   |          oral, or electronic communication in violation of this         |   ||
-||   |          subsection;                                                    |   ||
-||   |      (d) intentionally uses, or endeavors to use, the contents of any   |   ||
-||   |          wire, oral, or electronic communication, knowing or having     |   ||
-||   |          reason to know that the information was obtained through the   |   ||
-||   |          interception of a wire, oral, or electronic communication in   |   ||
-||   |          violation of this subsection; or                               |   ||
-||   |      (e) (i) intentionally discloses, or endeavors to disclose, to any  |   ||
-||   |          other person the contents of any wire, oral, or electronic     |   ||
-||   |          communication, intercepted by means authorized by sections     |   ||
-||   |          2511(2)(a)(ii), 2511(2)(b)(c), 2511(2)(e), 2516, and 2518 of   |   ||
-||   |          this chapter, (ii) knowing or having reason to know that the   |   ||
-||   |          information was obtained through the interception of such a    |   ||
-||   |          communication in connection with a criminal investigation,     |   ||
-||   |          (iii) having obtained or received the information in           |   ||
-||   |          connection with a criminal investigation, and (iv) with intent |   ||
-||   |          to improperly obstruct, impede, or interfere with a duly       |   ||
-||   |          authorized criminal investigation,                             |   ||
-||   |                                                                         |   ||
-||   | shall be punished as provided in subsection (4) or shall be subject to  |   ||
-||   | suit as provided in subsection (5).                                     |   ||
-||   +-------------------------------------------------------------------------+   ||
+||   █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█   ||
+||   █ (1) Except as otherwise specifically provided in this chapter any       █░░ ||
+||   █ person who---                                                           █░░ ||
+||   █                                                                         █░░ ||
+||   █      (a) intentionally intercepts, endeavors to intercept, or procures  █░░ ||
+||   █          any other person to intercept or endeavor to intercept, any    █░░ ||
+||   █          wire, oral, or electronic communication;                       █░░ ||
+||   █      (b) intentionally uses, endeavors to use, or procures any other    █░░ ||
+||   █          person to use or endeavor to use any electronic, mechanical,   █░░ ||
+||   █          or other device to intercept any oral communication when       █░░ ||
+||   █                                                                         █░░ ||
+||   █           (i) such device is affixed to, or otherwise transmits a       █░░ ||
+||   █               signal through, a wire, cable, or other like connection   █░░ ||
+||   █               used in wire communication; or                            █░░ ||
+||   █          (ii) such device transmits communications by radio, or         █░░ ||
+||   █               interferes with the transmission of such communication;   █░░ ||
+||   █               or                                                        █░░ ||
+||   █         (iii) such person knows, or has reason to know, that such       █░░ ||
+||   █               device or any component thereof has been sent through the █░░ ||
+||   █               mail or transported in interstate or foreign commerce; or █░░ ||
+||   █          (iv) such use or endeavor to use (A) takes place on the        █░░ ||
+||   █               premises of any business or other commercial              █░░ ||
+||   █               establishment the operations of which affect interstate   █░░ ||
+||   █               or foreign commerce; or (B) obtains or is for the purpose █░░ ||
+||   █               of obtaining information relating to the operations of    █░░ ||
+||   █               any business or other commercial establishment the        █░░ ||
+||   █               operations of which affect interstate or foreign          █░░ ||
+||   █               commerce; or                                              █░░ ||
+||   █           (v) such person acts in the District of Columbia, the         █░░ ||
+||   █               Commonwealth of Puerto Rico, or any territory or          █░░ ||
+||   █               possession of the United States;                          █░░ ||
+||   █                                                                         █░░ ||
+||   █      (c) intentionally discloses, or endeavors to disclose, to any      █░░ ||
+||   █          other person the contents of any wire, oral, or electronic     █░░ ||
+||   █          communication, knowing or having reason to know that the       █░░ ||
+||   █          information was obtained through the interception of a wire,   █░░ ||
+||   █          oral, or electronic communication in violation of this         █░░ ||
+||   █          subsection;                                                    █░░ ||
+||   █      (d) intentionally uses, or endeavors to use, the contents of any   █░░ ||
+||   █          wire, oral, or electronic communication, knowing or having     █░░ ||
+||   █          reason to know that the information was obtained through the   █░░ ||
+||   █          interception of a wire, oral, or electronic communication in   █░░ ||
+||   █          violation of this subsection; or                               █░░ ||
+||   █      (e) (i) intentionally discloses, or endeavors to disclose, to any  █░░ ||
+||   █          other person the contents of any wire, oral, or electronic     █░░ ||
+||   █          communication, intercepted by means authorized by sections     █░░ ||
+||   █          2511(2)(a)(ii), 2511(2)(b)(c), 2511(2)(e), 2516, and 2518 of   █░░ ||
+||   █          this chapter, (ii) knowing or having reason to know that the   █░░ ||
+||   █          information was obtained through the interception of such a    █░░ ||
+||   █          communication in connection with a criminal investigation,     █░░ ||
+||   █          (iii) having obtained or received the information in           █░░ ||
+||   █          connection with a criminal investigation, and (iv) with intent █░░ ||
+||   █          to improperly obstruct, impede, or interfere with a duly       █░░ ||
+||   █          authorized criminal investigation,                             █░░ ||
+||   █                                                                         █░░ ||
+||   █ shall be punished as provided in subsection (4) or shall be subject to  █░░ ||
+||   █ suit as provided in subsection (5).                                     █░░ ||
+||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░ ||
+||    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ||
 ||     Source: <a>https://www.law.cornell.edu/uscode/text/18/2511</a>                     ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== IRIDIUM ==</b>                                                               ||
+||                                                                                 ||
+||     With out getting too far into the weeds about how Iridium works here’s a    ||
+||     quick summery on it’s characteristics…                                      ||
+||                                                                                 ||
+||     -> <b>Security:</b> Iridium doesn't make use of encryption within the              ||
+||        spec so data in transit is plain text. Encryption can be implemented     ||
+||        by venders however it’s used outside of the spec.                        ||
+||     -> <b>Freq Range:</b> 1.6160GHz -> 1.6265GHz                                       ||
+||     -> <b>Channels:</b> 240 in total, 31.5KHz Bandwidth, 41.667KHz Spacing             ||
+||     -> <b>Modulation:</b> DEQPSK                                                       ||
+||     -> <b>Symbol Rate:</b> 25k                                                         ||
+||     -> <b>Voice:</b> AMBE vocoder by Digital Voice System Inc.                         ||
+||     -> Each Sat covers a 4500km^2 area                                          ||
+||     -> Each Sat has 48 spot beams for focused links (covers 400km^2 per beam)   ||
+||                                                                                 ||
+||     12 Frequency access bands reserved for simplex ring alert and messaging     ||
+||     channels                                                                    ||
+||      ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄       ||
+||      █   CHANNEL NUMBER   █   CENTER FREQUENCY   █      ALLOCATION      █░░     ||
+||      █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░     ||
+||      █         1          █   1626.020833 MHz    █ Guard Channel        █░░     ||
+||      █         2          █   1626.062500 MHz    █ Guard Channel        █░░     ||
+||      █         3          █   1626.104167 MHz    █ Quaternary Messaging █░░     ||
+||      █         4          █   1626.145833 MHz    █ Tertiary Messaging   █░░     ||
+||      █         5          █   1626.187500 MHz    █ Guard Channel        █░░     ||
+||      █         6          █   1626.229167 MHz    █ Guard Channel        █░░     ||
+||      █         7          █   1626.270833 MHz    █ Ring Alert           █░░     ||
+||      █         8          █   1626.312500 MHz    █ Guard Channel        █░░     ||
+||      █         9          █   1626.354167 MHz    █ Guard Channel        █░░     ||
+||      █         10         █   1626.395833 MHz    █ Secondary Messaging  █░░     ||
+||      █         11         █   1626.437500 MHz    █ Primary Messaging    █░░     ||
+||      █         12         █   1626.479167 MHz    █ Guard Channel        █░░     ||
+||      █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░     ||
+||        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░     ||
+||                                                                                 ||
+||     More information regarding Iridium can be found here...                     ||
+||     <b>Video:</b> <a href="https://www.youtube.com/watch?v=cvKaC4pNvck" target="_blank">https://www.youtube.com/watch?v=cvKaC4pNvck</a>                          ||
+||     <b>Wiki:</b> <a href="https://www.sigidwiki.com/wiki/Iridium" target="_blank">https://www.sigidwiki.com/wiki/Iridium</a>                                ||
+||     <b>Frame Format:</b> <a href="https://wiki.muc.ccc.de/iridium:toolkit#frame_format" target="_blank">https://wiki.muc.ccc.de/iridium:toolkit#frame_format</a>          ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== HARDWARE ==</b>                                                              ||
+||                                                                                 ||
+|| 
 
 
 
+
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ sudo pistar-mmdvmcal   // HELP: "h"                               █░░    ||
+||    █                          // TX: "SHIFT + D" (DMR DEVIATION MODE)    █░░    ||
+||    █                          // TX: TOGGLE "SPACEBAR" TO TURN ON AND    █░░    ||
+||    █                          //     OFF TX, MONITOR WITH SPECAN         █░░    ||
+||    █                          // RX: "b" (DMR BIT ERROR RATE "BER" MODE) █░░    ||
+||    █                          // RX: TEST RECEIVER WITH A 2ND RADIO,     █░░    ||
+||    █                          //     ADJUST RX GAIN POT SO BER IS AT     █░░    ||
+||    █                          //     ITS LOWEST.                         █░░    ||
+||    █                          // QUIT: "q"                               █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
 
 
 ||     -- NotPike                                                                  ||
@@ -163,26 +235,34 @@
         </div>
     </body>
     
-    <pre>
-        _ 
-       / \
-      /  /
-     /  / 
-    /  /  
-   /  /   
-____/__/_   
-/  _____  \  
-| / ;;; \ |  
-| _______ |  
-||_______||  
-||IRIDIUM||  
-||_______||  
-|'\[---]/'|  
-|  ¨'''¨  |  
-|  '''''  |  
-|         |  
-|         |  
-\_________/  
+<pre style="text-align: left;">
+               _
+              / \
+             /  /
+            /  / 
+           /  /  
+          /  /   
+     ____/__/_   
+    /  _____  \  
+    | / ;;; \ |  
+    | _______ |  
+    ||_______||  
+    ||IRIDIUM||  
+    ||_______||  
+    |'\[---]/'|  
+    |  ¨'''¨  |  
+    |  '''''  |  
+    |         |  
+    \_________/  
  </pre>
+
+    <!--Easter Eggs ;) -->
+    <script>
+        // Sat
+        function play() {
+            var audio = new Audio('/krad/media/voc.wav');
+            audio.play();
+        }
+    </script>
 
 @footer
