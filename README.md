@@ -20,7 +20,7 @@ firefox http://localhost:5000
 ```
 cp .env-example .env
 npm install
-pm2 index.js    // Cold Start
+pm2 start index.js    // Cold Start
 pm2 restart all // After Update
 ```
 
