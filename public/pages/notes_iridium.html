@@ -42,7 +42,7 @@
                                                                           \----\\   / \    
                                                                          /_\----\\_/   \   
                                                                          \   ▄█▓█▄ \    \  
-                                                                        //\ █▓▓▓▓▓█ \   /  
+                                                                        //\ █▓▓<a class="hiddenLink" onclick="play()">▓</a>▓▓█ \   /  
                      $$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\    \| \_▀█▓█▀___\_/  *
                      $$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\    +     \----\\     
                      $$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|          \----\\    
@@ -68,88 +68,312 @@
 ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ ╚═╝ ╚═════╝ ╚═╝     ╚═╝
 <!-- "ANSI Shadow" Font From http://patorjk.com --> 
 <!-- RFC 3339  Time Stamp -->                                                        
-//=====< 2021-01-25T12:24:54+00:00 >===============================================\\
+//=====< 2021-05-02T12:24:54+00:00 >===============================================\\
 ||                                                                                 ||
 ||     こんにちは! 再び! :D                                                           ||
 ||                                                                                 ||
 ||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||     Let’s get with the times and do some 25th century space phreaking and       ||
+||     learn how to decode Iridium sat phones! :3                                  ||
+||                                                                                 ||
+||     This is going to be one of those “Noir” write-ups so please understand      ||
+||     what I’m about to explain may be unlawful. Please treat this document as    ||
+||     an educational/entertainment piece and make good decisions with this        ||
+||     knowledge. The disclaimer below outlines what laws may apply to decoding    ||
+||     Iridium communications so please read through it.                           ||
+||                                                                                 ||
+||     Any who, I hope you get to learn something fun here and happy hacking! :D   ||
 ||                                                                                 ||
 ||                                                                                 ||
 ||     <b>== Disclaimer ==</b>                                                            ||
 ||                                                                                 ||
 ||     Some of the practices and methods described in write up may be illegal      ||
 ||     in your area. Even though Iridium transmits in plain text it still may      ||
-||     be considered a felony to record and decode. Please use your better         ||
+||     be considered a crime to record and decode. Please use your better          ||
 ||     judgment while playing with this tech. If you live in the US please         ||
 ||     review the “Wiretap Act” before continuing.                                 ||
 ||                                                                                 ||
-||                                                                                 ||
 ||     <b>18 U.S. Code § 2511. Interception and disclosure of wire, oral, or          ||
 ||     electronic communications prohibited.</b>                                       ||
-||   +-------------------------------------------------------------------------+   ||
-||   | (1) Except as otherwise specifically provided in this chapter any       |   ||
-||   | person who---                                                           |   ||
-||   |                                                                         |   ||
-||   |      (a) intentionally intercepts, endeavors to intercept, or procures  |   ||
-||   |          any other person to intercept or endeavor to intercept, any    |   ||
-||   |          wire, oral, or electronic communication;                       |   ||
-||   |      (b) intentionally uses, endeavors to use, or procures any other    |   ||
-||   |          person to use or endeavor to use any electronic, mechanical,   |   ||
-||   |          or other device to intercept any oral communication when       |   ||
-||   |                                                                         |   ||
-||   |           (i) such device is affixed to, or otherwise transmits a       |   ||
-||   |               signal through, a wire, cable, or other like connection   |   ||
-||   |               used in wire communication; or                            |   ||
-||   |          (ii) such device transmits communications by radio, or         |   ||
-||   |               interferes with the transmission of such communication;   |   ||
-||   |               or                                                        |   ||
-||   |         (iii) such person knows, or has reason to know, that such       |   ||
-||   |               device or any component thereof has been sent through the |   ||
-||   |               mail or transported in interstate or foreign commerce; or |   ||
-||   |          (iv) such use or endeavor to use (A) takes place on the        |   ||
-||   |               premises of any business or other commercial              |   ||
-||   |               establishment the operations of which affect interstate   |   ||
-||   |               or foreign commerce; or (B) obtains or is for the purpose |   ||
-||   |               of obtaining information relating to the operations of    |   ||
-||   |               any business or other commercial establishment the        |   ||
-||   |               operations of which affect interstate or foreign          |   ||
-||   |               commerce; or                                              |   ||
-||   |           (v) such person acts in the District of Columbia, the         |   ||
-||   |               Commonwealth of Puerto Rico, or any territory or          |   ||
-||   |               possession of the United States;                          |   ||
-||   |                                                                         |   ||
-||   |      (c) intentionally discloses, or endeavors to disclose, to any      |   ||
-||   |          other person the contents of any wire, oral, or electronic     |   ||
-||   |          communication, knowing or having reason to know that the       |   ||
-||   |          information was obtained through the interception of a wire,   |   ||
-||   |          oral, or electronic communication in violation of this         |   ||
-||   |          subsection;                                                    |   ||
-||   |      (d) intentionally uses, or endeavors to use, the contents of any   |   ||
-||   |          wire, oral, or electronic communication, knowing or having     |   ||
-||   |          reason to know that the information was obtained through the   |   ||
-||   |          interception of a wire, oral, or electronic communication in   |   ||
-||   |          violation of this subsection; or                               |   ||
-||   |      (e) (i) intentionally discloses, or endeavors to disclose, to any  |   ||
-||   |          other person the contents of any wire, oral, or electronic     |   ||
-||   |          communication, intercepted by means authorized by sections     |   ||
-||   |          2511(2)(a)(ii), 2511(2)(b)(c), 2511(2)(e), 2516, and 2518 of   |   ||
-||   |          this chapter, (ii) knowing or having reason to know that the   |   ||
-||   |          information was obtained through the interception of such a    |   ||
-||   |          communication in connection with a criminal investigation,     |   ||
-||   |          (iii) having obtained or received the information in           |   ||
-||   |          connection with a criminal investigation, and (iv) with intent |   ||
-||   |          to improperly obstruct, impede, or interfere with a duly       |   ||
-||   |          authorized criminal investigation,                             |   ||
-||   |                                                                         |   ||
-||   | shall be punished as provided in subsection (4) or shall be subject to  |   ||
-||   | suit as provided in subsection (5).                                     |   ||
-||   +-------------------------------------------------------------------------+   ||
-||     Source: <a>https://www.law.cornell.edu/uscode/text/18/2511</a>                     ||
-
-
-
-
-
+||   █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█   ||
+||   █ (1) Except as otherwise specifically provided in this chapter any       █░░ ||
+||   █ person who---                                                           █░░ ||
+||   █                                                                         █░░ ||
+||   █      (a) intentionally intercepts, endeavors to intercept, or procures  █░░ ||
+||   █          any other person to intercept or endeavor to intercept, any    █░░ ||
+||   █          wire, oral, or electronic communication;                       █░░ ||
+||   █      (b) intentionally uses, endeavors to use, or procures any other    █░░ ||
+||   █          person to use or endeavor to use any electronic, mechanical,   █░░ ||
+||   █          or other device to intercept any oral communication when       █░░ ||
+||   █                                                                         █░░ ||
+||   █           (i) such device is affixed to, or otherwise transmits a       █░░ ||
+||   █               signal through, a wire, cable, or other like connection   █░░ ||
+||   █               used in wire communication; or                            █░░ ||
+||   █          (ii) such device transmits communications by radio, or         █░░ ||
+||   █               interferes with the transmission of such communication;   █░░ ||
+||   █               or                                                        █░░ ||
+||   █         (iii) such person knows, or has reason to know, that such       █░░ ||
+||   █               device or any component thereof has been sent through the █░░ ||
+||   █               mail or transported in interstate or foreign commerce; or █░░ ||
+||   █          (iv) such use or endeavor to use (A) takes place on the        █░░ ||
+||   █               premises of any business or other commercial              █░░ ||
+||   █               establishment the operations of which affect interstate   █░░ ||
+||   █               or foreign commerce; or (B) obtains or is for the purpose █░░ ||
+||   █               of obtaining information relating to the operations of    █░░ ||
+||   █               any business or other commercial establishment the        █░░ ||
+||   █               operations of which affect interstate or foreign          █░░ ||
+||   █               commerce; or                                              █░░ ||
+||   █           (v) such person acts in the District of Columbia, the         █░░ ||
+||   █               Commonwealth of Puerto Rico, or any territory or          █░░ ||
+||   █               possession of the United States;                          █░░ ||
+||   █                                                                         █░░ ||
+||   █      (c) intentionally discloses, or endeavors to disclose, to any      █░░ ||
+||   █          other person the contents of any wire, oral, or electronic     █░░ ||
+||   █          communication, knowing or having reason to know that the       █░░ ||
+||   █          information was obtained through the interception of a wire,   █░░ ||
+||   █          oral, or electronic communication in violation of this         █░░ ||
+||   █          subsection;                                                    █░░ ||
+||   █      (d) intentionally uses, or endeavors to use, the contents of any   █░░ ||
+||   █          wire, oral, or electronic communication, knowing or having     █░░ ||
+||   █          reason to know that the information was obtained through the   █░░ ||
+||   █          interception of a wire, oral, or electronic communication in   █░░ ||
+||   █          violation of this subsection; or                               █░░ ||
+||   █      (e) (i) intentionally discloses, or endeavors to disclose, to any  █░░ ||
+||   █          other person the contents of any wire, oral, or electronic     █░░ ||
+||   █          communication, intercepted by means authorized by sections     █░░ ||
+||   █          2511(2)(a)(ii), 2511(2)(b)(c), 2511(2)(e), 2516, and 2518 of   █░░ ||
+||   █          this chapter, (ii) knowing or having reason to know that the   █░░ ||
+||   █          information was obtained through the interception of such a    █░░ ||
+||   █          communication in connection with a criminal investigation,     █░░ ||
+||   █          (iii) having obtained or received the information in           █░░ ||
+||   █          connection with a criminal investigation, and (iv) with intent █░░ ||
+||   █          to improperly obstruct, impede, or interfere with a duly       █░░ ||
+||   █          authorized criminal investigation,                             █░░ ||
+||   █                                                                         █░░ ||
+||   █ shall be punished as provided in subsection (4) or shall be subject to  █░░ ||
+||   █ suit as provided in subsection (5).                                     █░░ ||
+||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░ ||
+||    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ||
+||     Source: <a href="https://www.law.cornell.edu/uscode/text/18/2511" target="_blank">https://www.law.cornell.edu/uscode/text/18/2511</a>                     ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== IRIDIUM ==</b>                                                               ||
+||                                                                                 ||
+||     With out getting too far into the weeds about how Iridium works here’s a    ||
+||     quick summery on it’s characteristics…                                      ||
+||                                                                                 ||
+||          -> <b>Security:</b> Iridium doesn't make use of encryption within             ||
+||             the spec so data in transit is plain text. Encryption can be        ||
+||             implemented by venders however it’s used outside of the spec.       ||
+||          -> <b>Freq Range:</b> 1.6160GHz -> 1.6265GHz                                  ||
+||          -> <b>Channels:</b> 240 in total, 31.5KHz Bandwidth, 41.667KHz Spacing        ||
+||          -> <b>Modulation:</b> DEQPSK                                                  ||
+||          -> <b>Symbol Rate:</b> 25k                                                    ||
+||          -> <b>Voice:</b> AMBE vocoder by Digital Voice System Inc.                    ||
+||          -> Each Sat covers a 4500km^2 area                                     ||
+||          -> Each Sat has 48 spot beams for focused links                        ||
+||             (covers 400km^2 per beam)                                           ||
+||                                                                                 ||
+||     12 Frequency access bands reserved for simplex ring alert and messaging     ||
+||     channels                                                                    ||
+||      ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄       ||
+||      █   CHANNEL NUMBER   █   CENTER FREQUENCY   █      ALLOCATION      █░░     ||
+||      █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░     ||
+||      █         1          █   1626.020833 MHz    █ Guard Channel        █░░     ||
+||      █         2          █   1626.062500 MHz    █ Guard Channel        █░░     ||
+||      █         3          █   1626.104167 MHz    █ Quaternary Messaging █░░     ||
+||      █         4          █   1626.145833 MHz    █ Tertiary Messaging   █░░     ||
+||      █         5          █   1626.187500 MHz    █ Guard Channel        █░░     ||
+||      █         6          █   1626.229167 MHz    █ Guard Channel        █░░     ||
+||      █         7          █   1626.270833 MHz    █ Ring Alert           █░░     ||
+||      █         8          █   1626.312500 MHz    █ Guard Channel        █░░     ||
+||      █         9          █   1626.354167 MHz    █ Guard Channel        █░░     ||
+||      █         10         █   1626.395833 MHz    █ Secondary Messaging  █░░     ||
+||      █         11         █   1626.437500 MHz    █ Primary Messaging    █░░     ||
+||      █         12         █   1626.479167 MHz    █ Guard Channel        █░░     ||
+||      █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░     ||
+||        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░     ||
+||                                                                                 ||
+||     More information regarding Iridium can be found here...                     ||
+||     <b>Video:</b> <a href="https://www.youtube.com/watch?v=cvKaC4pNvck" target="_blank">https://www.youtube.com/watch?v=cvKaC4pNvck</a>                          ||
+||     <b>Wiki:</b> <a href="https://www.sigidwiki.com/wiki/Iridium" target="_blank">https://www.sigidwiki.com/wiki/Iridium</a>                                ||
+||     <b>Frame Format:</b> <a href="https://wiki.muc.ccc.de/iridium:toolkit#frame_format" target="_blank">https://wiki.muc.ccc.de/iridium:toolkit#frame_format</a>          ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== HARDWARE ==</b>                                                              ||
+||                                                                                 ||
+||     Below is the hardware I used to successfully capture Iridium packets.       ||
+||                                                                                 ||
+||          -> RPI 4                                                               ||
+||          -> Nooelec NESDR SMArTee (RTL2832U with TXCO and an “always-on”        ||
+||             Bias Tee)                                                           ||
+||          -> Nuand BT-200 LNA (Low Noise Amplifier)                              ||
+||          -> 1.6GHz QFH Antenna (Custom, also has a bunny ear ground plane! :D)  ||
+||                                                                                 ||
+||     <b>Image:</b> <a href="../img/Iridium_RX_Rig.jpg" target="_blank">Receiver Setup</a>                                                       ||
+||                                                                                 ||
+||     If you want to save money with the antenna and LNA, you can hack a $10      ||
+||     active GPS antenna by removing the filter and bridging the transmission     ||
+||     line (Or replacing it with an L-Band filter). The image below is an         ||
+||     example of a hacked GPS antenna.                                            ||
+||                                                                                 ||
+||     <b>Image:</b> <a href="../img/Hacked_GPS.jpg" target="_blank">Hacked GPS Antenna</a>                                                   ||
+||                                                                                 ||
+||     Just a heads up but your mileage may very. Because these active antennas    ||
+||     are built cheaply they may fail right after you mod it. For your reference  ||
+||     the image bellow shows what a bad active antenna looks like in a FFT with   ||
+||     the Bias Tee on.                                                            ||
+||                                                                                 ||
+||     <b>Image:</b> <a href="../img/Bad_Antenna.jpg" target="_blank">Bad Antenna</a>                                                          ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== SOFTWARE ==</b>                                                              ||
+||                                                                                 ||
+||     As mentioned above I’m using a Rpi 4 with the latest RPi OS Lite build.     ||
+||     The apt packages below are what I used to get the RTL-SDR and the           ||
+||     gr-iridium software to work. This is RPi OS specific however there may be   ||
+||     some carry over with what’s below if you’re using another Debian flavored   ||
+||     Linux (Ubuntu, Kali, etc).                                                  ||
+||                                                                                 ||
+||     Install the basics                                                          ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ sudo apt update                                                   █░░    ||
+||    █ $ sudo apt upgrade                                                  █░░    ||
+||    █ $ sudo apt install git rtl-sdr gnuradio gr-osmosdr python3-numpy    █░░    ||
+||    █   pypy cmake swig3.0  bison flex unp p7zip-full python-pip screen   █░░    ||
+||    █ $ pip install matplotlib                                            █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Next lets install the gr-iridium software                                   ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ git clone https://github.com/muccc/gr-iridium                     █░░    ||
+||    █ $ cd gr-iridium                                                     █░░    ||
+||    █ $ git checkout maint-3.7               // RPi OS uses GNU Radio 3.7 █░░    ||
+||    █ $ mkdir build                                                       █░░    ||
+||    █ $ cd build                                                          █░░    ||
+||    █ $ cmake ..                                                          █░░    ||
+||    █ $ make                                                              █░░    ||
+||    █ $ sudo make install                                                 █░░    ||
+||    █ $ sudo iridium-extractor -h            // Check to see if           █░░    ||
+||    █                                        // iridium-extractor works   █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     To decode the packets captured by gr-iridium you’ll need Iridium Toolkit    ||
+||     and the AMBE decoder if you want to decode voice. You have two options for  ||
+||     the AMBE decoder, you can either install the open source version            ||
+||     (osmo-ir77) or rip the codec from commercial firmware. I’ve had more        ||
+||     success with ripping the codec, however I’ll go over both processes.        ||
+||                                                                                 ||
+||     First lets download the Iridium Toolkit                                     ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ git clone https://github.com/muccc/iridium-toolkit                █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     <b>[Voice Option 1]</b>                                                            ||
+||     The following outlines what you need to do to get the Osmo AMBE decoder     ||
+||     installed. This is needed for stats-voc.py from the iridium-toolkit which   ||
+||     will play Iridium voice.                                                    ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ git clone http://git.osmocom.org/osmo-ir77      // Download AMBE  █░░    ||
+||    █                                                   // decoder        █░░    ||
+||    █ $ cd osmo-ir77/codec                                                █░░    ||
+||    █ $ make                                            // Compile AMBE   █░░    ||
+||    █                                                   // decoder        █░░    ||
+||    █ $ export PATH=$PATH:/home/pi/osmo-ir77/codec/     // Export bin     █░░    ||
+||    █                                                   // to path        █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     <b>[Voice Option 2]</b>                                                            ||
+||     To rip the codec which is my preferred method you’ll need to do the         ||
+||     following.                                                                  ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ cd iridium-toolkit/ambe_emu/                                      █░░    ||
+||    █ $ wget <a href="https://bad-radio.solutions/files/IRDM_9601_UpgradTool_TD10003_FIRMWARE.zip" target="_blank">https://bad-radio.solutions/files/</a>                           █░░    ||
+||    █        <a href="https://bad-radio.solutions/files/IRDM_9601_UpgradTool_TD10003_FIRMWARE.zip" target="_blank">IRDM_9601_UpgradTool_TD10003_FIRMWARE.zip</a>                    █░░    ||
+||    █ $ ./mk_objdump.sh                                                   █░░    ||
+||    █ $ ./get_binary.sh                                                   █░░    ||
+||    █ $ make all                                                          █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== USAGE ==</b>                                                                 ||
+||                                                                                 ||
+||     Capture and Demodulate Iridium Frames                                       ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ sudo iridium-extractor -D 4 ~/gr-iridium/examples/rtl-sdr.conf |  █░░    ||
+||    █   grep "A:OK" > output.bits                                         █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Poor man’s headless operations so you don’t kill the process when you       ||
+||     log off.                                                                    ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ screen                 // Ctrl+a d  Detach without closing screen █░░    ||
+||    █                          // Crtl+d Kill current screen              █░░    ||
+||    █ $ sudo iridium-extractor -D 4 ~/gr-iridium/examples/rtl-sdr.conf |  █░░    ||
+||    █   grep "A:OK" > output.bits                                         █░░    ||
+||    █ $ screen -r              // List screen sessions or reconnect if    █░░    ||
+||    █                          // only one’s active                       █░░    ||
+||    █ $ screen -r [pid.]tty.host           // Connect to spasific screen  █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Parse Iridium Frames [Required before decoding]                             ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ pypy ~/iridium-toolkit/iridium-parser.py output.bits >            █░░    ||
+||    █   output.parsed                                                     █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Decode Messages                                                             ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ ~/iridium-toolkit/reassembler.py -i output.parsed -m [MODE]       █░░    ||
+||    █      // Modes                                                       █░░    ||
+||    █      // ida - outputs Um Layer 3 messages as hex                    █░░    ||
+||    █      // lap - GSM-compatible L3 messages as GSMtap compatible .pcap █░░    ||
+||    █      // page - paging requests (Ring Alert Channel)                 █░░    ||
+||    █      // msg - Pager messages                                        █░░    ||
+||    █      // sbd - Short Burst Data messages                             █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Decode Voice [Option 1]                                                     ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ ~/iridium-toolkit/stats-voc.py output.parsed                      █░░    ||
+||    █      // Requires X display, left click on red dot to play audio.    █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Decode Voice [Option 2]                                                     ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ grep “VOC” output.parsed > voc.bits         // Copy over VOC      █░░    ||
+||    █                                               // frames to voc.bits █░░    ||
+||    █ $ pypy ~/iridium-toolkit/bits_to_dfs.py voc.bits voc.dfs            █░░    ||
+||    █                                               // Convert the VOC    █░░    ||
+||    █                                               // frames to dfs      █░░    ||
+||    █ $ ~/iridium-toolkit/ambe_emu/ambe -w voc.dfs  // dfs to wav         █░░    ||
+||    █ $ play voc.wav                                // Play wav           █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== CONCLUSION ==</b>                                                            ||
+||                                                                                 ||
+||     This was just a quick and dirty example on how you can surf the waves of    ||
+||     SIN by poking around Iridium! :D                                            ||
+||                                                                                 ||
+||     I encourage you to read up on Iridium and to review the source code to      ||
+||     see how this all works. I would also like to thank the MUCCC for            ||
+||     maintaining this code and making this possible for us to explore satellite  ||
+||     communications!                                                             ||
+||                                                                                 ||
+||     Until we meet again, happy hacking!                                         ||
 ||     -- NotPike                                                                  ||
 ||                                                                                 ||
 \\=================================================================================//
@@ -163,26 +387,34 @@
         </div>
     </body>
     
-    <pre>
-        _ 
-       / \
-      /  /
-     /  / 
-    /  /  
-   /  /   
-____/__/_   
-/  _____  \  
-| / ;;; \ |  
-| _______ |  
-||_______||  
-||IRIDIUM||  
-||_______||  
-|'\[---]/'|  
-|  ¨'''¨  |  
-|  '''''  |  
-|         |  
-|         |  
-\_________/  
+<pre style="text-align: left;">
+               _
+              / \
+             /  /
+            /  / 
+           /  /  
+          /  /   
+     ____/__/_   
+    /  _____  \  
+    | / ;;; \ |  
+    | _______ |  
+    ||_______||  
+    ||IRIDIUM||  
+    ||_______||  
+    |'\[---]/'|  
+    |  ¨'''¨  |  
+    |  '''''  |  
+    |         |  
+    \_________/  
  </pre>
+
+    <!--Easter Eggs ;) -->
+    <script>
+        // Sat
+        function play() {
+            var audio = new Audio('/krad/media/voc.wav');
+            audio.play();
+        }
+    </script>
 
 @footer

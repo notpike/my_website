@@ -131,6 +131,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                                                                                ||
 ||     --> The-Fonz:  <a href="https://github.com/notpike/The-Fonz" target="_blank">https://github.com/notpike/The-Fonz</a>                         ||
 ||     --> Havoc:     <a href="https://github.com/furrtek/portapack-havoc" target="_blank">https://github.com/furrtek/portapack-havoc</a>                  ||
+||     --> Mayhem:    <a href="https://github.com/eried/portapack-mayhem" target="_blank">https://github.com/eried/portapack-mayhem</a>                   ||
 ||     --> goodwatch: <a href="https://github.com/travisgoodspeed/goodwatch" target="_blank">https://github.com/travisgoodspeed/goodwatch</a>                ||
 ||                                                                                ||
 ||                                                                                ||
@@ -151,11 +152,11 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||     * Short(0): 10   (ON OFF)                                                  ||
 ||     * Long (1): 1000 (ON OFF OFF OFF)                                          ||
 ||                                                                                ||
-||     * Structure:                 {SYNC} {PREAMBLE} {PIN} {COMMAND} {TAIL}      ||
-||     * Sync (Literal Symbols):    0xFFFF00                                      ||
-||     * Preamble (Decoded NEC):    0x5D                                          ||
-||     * PIN 000-255 (Decoded NEC): 0x00-0xFF (LSB)                               ||
-||     * Tail (Literal Symbols):    0x8                                           ||
+||     * Structure:                  {PREAMBLE} {SYNC} {PIN} {COMMAND} {TAIL}     ||
+||     * Preamble (Literal Symbols): 0xFFFF00                                     ||
+||     * Sync (Decoded NEC):         0x5D                                         ||
+||     * PIN 000-255 (Decoded NEC):  0x00-0xFF (LSB)                              ||
+||     * Tail (Literal Symbols):     0x8                                          ||
 ||                                                                                ||
 ||     * Commands:                                                                ||
 ||     * Note: Commands are doubled with the 2nd half being reversed.             ||
@@ -203,7 +204,7 @@ $$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
 ||                            1000 1000 10 10 10 1000 10 10 10 10 1000 1000       ||
 ||                            1000 100000                                         ||
 ||                                                                                ||
-||     * Decoded Symbols:     SYNC         S  L    S  L    L    L    S  L         ||
+||     * Decoded Symbols:     PREAMBLE     S  L    S  L    L    L    S  L         ||
 ||                            S  S  S  S  S  S  S  S  S  L    L    L    L         ||
 ||                            S  S  S  L    S  S  S  S  L    L    L    TAIL       ||
 ||                                                                                ||

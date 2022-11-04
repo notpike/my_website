@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="How to build a MMDVM repeater using a Motorola GM300 and PI-STAR">
+        <meta name="keywords" content="pi, rpi, raspbery, motorola, gm300, gm, 300, MMDVM, ham, radio, hacking, DMR, PI-STAR, pocsag">
+        <meta name="author" content="NotPike">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>NotPike |  MMDVM_GM300</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/pike_style.css">
+
+        <!-- Fav Icon -->
+        <link rel="apple-touch-icon" sizes="57x57" href="/img/fav/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/img/fav/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/img/fav/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/img/fav/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/img/fav/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/img/fav/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/img/fav/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/img/fav/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/fav/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/img/fav/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/img/fav/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/img/fav/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/img/fav/favicon-16x16.png">
+        <link rel="manifest" href="/img/fav/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/img/fav/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">        
+    </head>
+    <body>
+        <div id="mainBanner">
+            <pre>
+            <banner>
+        
+        
+$$\   $$\  $$$$$$\ $$$$$$$$\ $$$$$$$$\  $$$$$$\  
+$$$\  $$ |$$  __$$\\__$$  __|$$  _____|$$  __$$\ 
+$$$$\ $$ |$$ /  $$ |  $$ |   $$ |      $$ /  \__|
+$$ $$\$$ |$$ |  $$ |  $$ |   $$$$$\    \$$$$$$\  
+$$ \$$$$ |$$ |  $$ |  $$ |   $$  __|    \____$$\ 
+$$ |\$$$ |$$ |  $$ |  $$ |   $$ |      $$\   $$ |
+$$ | \$$ | $$$$$$  |  $$ |   $$$$$$$$\ \$$$$$$  |
+\__|  \__| \______/   \__|   \________| \______/ 
+        
+@linkBar
+
+@noteBar
+            </banner>
+            </pre>                                                                                                                      
+        </div>
+        <div id="welcome"> 
+            <pre>
+  ███╗   ███╗ ██████╗ ████████╗ ██████╗ ██████╗  ██████╗ ██╗      █████╗      ██████╗ ███╗   ███╗ ██████╗  ██████╗  ██████╗ 
+  ████╗ ████║██╔═══██╗╚══██╔══╝██╔═══██╗██╔══██╗██╔═══██╗██║     ██╔══██╗    ██╔════╝ ████╗ ████║ ╚════██╗██╔═████╗██╔═████╗
+  ██╔████╔██║██║   ██║   ██║   ██║   ██║██████╔╝██║   ██║██║     ███████║    ██║  ███╗██╔████╔██║  █████╔╝██║██╔██║██║██╔██║
+  ██║╚██╔╝██║██║   ██║   ██║   ██║   ██║██╔══██╗██║   ██║██║     ██╔══██║    ██║   ██║██║╚██╔╝██║  ╚═══██╗████╔╝██║████╔╝██║
+  ██║ ╚═╝ ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║╚██████╔╝███████╗██║  ██║    ╚██████╔╝██║ ╚═╝ ██║ ██████╔╝╚██████╔╝╚██████╔╝
+  ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═╝     ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝ 
+                                                                                                                            
+   ███╗   ███╗███╗   ███╗██████╗ ██╗   ██╗███╗   ███╗     ██████╗ ███████╗██████╗ ███████╗ █████╗ ████████╗███████╗██████╗  
+   ████╗ ████║████╗ ████║██╔══██╗██║   ██║████╗ ████║     ██╔══██╗██╔════╝██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗ 
+   ██╔████╔██║██╔████╔██║██║  ██║██║   ██║██╔████╔██║     ██████╔╝█████╗  ██████╔╝█████╗  ███████║   ██║   █████╗  ██████╔╝ 
+   ██║╚██╔╝██║██║╚██╔╝██║██║  ██║╚██╗ ██╔╝██║╚██╔╝██║     ██╔══██╗██╔══╝  ██╔═══╝ ██╔══╝  ██╔══██║   ██║   ██╔══╝  ██╔══██╗ 
+   ██║ ╚═╝ ██║██║ ╚═╝ ██║██████╔╝ ╚████╔╝ ██║ ╚═╝ ██║     ██║  ██║███████╗██║     ███████╗██║  ██║   ██║   ███████╗██║  ██║ 
+   ╚═╝     ╚═╝╚═╝     ╚═╝╚═════╝   ╚═══╝  ╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ 
+<!-- "ANSI Shadow" Font From http://patorjk.com --> 
+<!-- RFC 3339  Time Stamp -->                                                        
+//=====< 2021-11-12T01:33:49+00:00 >===============================================\\
+||                                                                                 ||
+||     你好!                                                                        ||
+||                                                                                 ||
+||     <b>== INTRO ==</b>                                                                 ||
+||                                                                                 ||
+||     Standing up communication networks, in my honest opinion is the most        ||
+||     hacker thing anyone can do. Additionally, recycling old tech is just        ||
+||     morally correct. So instead of just letting old radios go to waste          ||
+||     (Like the Motorola GM300) let's upgrade them to support modern data         ||
+||     modes! :D                                                                   ||
+||                                                                                 ||
+||     So a little of history about why the GM300 radio is a popular choice        ||
+||     for people like us. Back in 2013 there was a mandate from the FCC           ||
+||     requiring all commercial FM radios to switch from having a bandwidth        ||
+||     of 25KHz to 12.5KHz to help save space on the radio spectrum. The GM300     ||
+||     was a popular mobile radio for emergency and commercial applications but    ||
+||     become obsolete after 2013 because it couldn't support 12.5KHz. Amateurs    ||
+||     quickly jumped on this opportunity to pick up commercial equipment on the   ||
+||     cheap because they where still allowed to use 25KHz. The GM300 being that   ||
+||     cheap commercial radio the pros are practically throwing away also          ||
+||     supports 9k6 (9600) Baud which is critical if we want to TX/RX data from    ||
+||     it. If you would like to learn more about the GM300 the site linked below   ||
+||     is full of good information.                                                ||
+||                                                                                 ||
+||     <a href=http://www.repeater-builder.com/motorola/maxtrac/gm300-info.html target="_blank">>>> http://www.repeater-builder.com/motorola/maxtrac/gm300-info.html</a>        ||
+||                                                                                 ||
+||                                                                                 ||
+||     The MMDVM (Multi Mode Digital Voice Modem) is a device we can use to        ||
+||     interface these older radios to support digital modes. They’re normally     ||
+||     powered with a Raspberry Pi and use the Pi-Star OS however, there are       ||
+||     various options available. Most MMDVMs you’ll come across include an on     ||
+||     board transceiver (or even two!). MMDVMs with one transceiver are often     ||
+||     refereed to as “Hot Spots” and act as an internet gateway. Hot Spots can    ||
+||     TX and RX however, they can not do both at the same time. MMDVM Repeaters   ||
+||     (modules that have or can support two transceivers) can TX and RX at the    ||
+||     same time and rebroadcast what is transmitted to it. These repeaters can    ||
+||     also linked over the internet the same way as the Hot Spots. This tech      ||
+||     supports the following digital modes...                                     ||
+||                                                                                 ||
+||          <b>-> DMR</b>                                                                 ||
+||          <b>-> P25</b>                                                                 ||
+||          <b>-> NXDN</b>                                                                ||
+||          <b>-> YSF</b>                                                                 ||
+||          <b>-> DSTAR</b>                                                               ||
+||          <b>-> POCSAG</b>                                                              ||
+||          <b>-> M17</b>                                                                 ||
+||                                                                                 ||
+||     There’s also analog FM support for some models however your mileage may     ||
+||     very depending on which MMDVM you pick up.                                  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== THE PLAN ==</b>                                                              ||
+||                                                                                 ||
+||     Using two GM300s I picked up from eBay I wanted to build a MMDVM repeater   ||
+||     to support DMR and P25. To make this repeater work I used the following.    ||
+||     I chose a STM32 MMDVM Pi Hat from Repeater Builders for this build. I’m a   ||
+||     huge fan of their work however they’re not the only ones making these. In   ||
+||     short, other options are available. Below is the link for the RB MMDVM I'm  ||
+||     useing for this build.                                                      ||
+||                                                                                 ||
+||     <a href="http://www.repeater-builder.com/products/stm32-dvm.html" target="_blank">http://www.repeater-builder.com/products/stm32-dvm.html</a>                     ||
+||                                                                                 ||
+||          <b>1x</b> GM300 M34GMC20D3AA (TX)                                             ||
+||          <b>1x</b> GM300 M44GMC293AA (RX)                                              ||
+||          <b>1x</b> Rpi 3B+ w/ 16G Mico SD Card                                         ||
+||          <b>1x</b> SL-14M 13.8v PSU                                                    ||
+||          <b>1x</b> 6 Cavity Duplexer UHF                                               ||
+||          <b>2x</b> N-Type / Mini UHF Cable <!--err <3-->                                            ||
+||          <b>1x</b> Repeater Builder STM32 MMDVM Pi Hat                                 ||
+||                                                                                 ||
+||          <b>=Optional Parts=</b>                                                       ||
+||          <b>*1x</b> Repeater Builder Pi Case                                           ||
+||          <b>*1x</b> Repeater Builder Motorola 16Pin Duplex Cable                       ||
+||          <b>*1x</b> Repeater Builder DC-DC Converter                                   ||
+||          <b>*1x</b> Nextion 3.5in Display                                              ||
+||          <b>*1x</b> GR300 Case                                                         ||
+||                                                                                 ||
+||     The optional parts are not required and you can still have a functioning    ||
+||     repeater with out them. I just wanted something nice so I spent the extra   ||
+||     money with no regrets. :3                                                   ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== h i g h   l e v e l ==</b>                                                   ||
+||                                                                                 ||
+||     Here’s a high level view of what we’re going to build here. :3              ||
+||          <!-- bad-radio.solutions/audio/dmr.wav -->                                                                       ||
+||          <!-- $ sox dmr.wav -t wav -c 1 - | dsd -pe -i - -w test.wav  -->                                                                       ||
+||          <!-- $ play test.wav -->                         ╓▄        ▄╓                                  ||
+||                                  ▄█└,▄      ▄ ▀▄                                ||
+||                                ▄▀ █▀ ▄    ▄ ▀█ ▀▄                               ||
+||                                █ ║▌ █  <a class="hiddenLink" onclick="play()">▄▄</a>  █ ╙█ █                               ||
+||                                █ ║▌ █p <a class="hiddenLink" onclick="play()">██</a> ,█ ╓█ █                               ||
+||                                ▀▄ ▀▄ ╙╓▀╙▌▀ ▄█ ▄▀                               ||
+||                                 ╙█▄ ▀,▌}Φ▀▄▀└,▓▀                                ||
+||                                   └▀ █▀  ╙█ ╙└                                  ||
+||                                     █ ,▀▀▄ █                                    ||
+||                                    ▄▌└    `▀▌                                   ||
+||                                   ╓▌  "▄φ"  ╙▄                                  ||
+||                                   █=⌐" || "ⁿw█⌐                                 ||
+||                                  █     ||     █                                 ||
+||                                        ||                                       ||
+||                                        ||                                       ||
+||                                        ##================================##     ||
+||                                                                          ||     ||
+||                     TX RADIO                                             ||     ||
+||            //======================\\                DUPLEXER            ||     ||
+||            || <a class="hiddenLink" name="r1" onClick="radioPower(this)">██</a> | <b id="r1">01</b> |            ||          //=================\\     ||     ||
+||     ##=====||[  ]+----+      GM300 ||==##    +-||  TX             ||     ||     ||
+||     ||     \\======================//  ##====| || 443.125MHz      ||     ||     ||
+||     ||                                       +-||                 ||-+   ||     ||
+||     ||                                         ||             ANT || |===##     ||
+||     ||              RX RADIO                 +-||  RX             ||-+          ||
+||     ||     //======================\\  ##====| || 448.125MHz      ||            ||
+||     ||  ##=|| <a class="hiddenLink" name="r2" onClick="radioPower(this)">██</a> | <b id="r2">02</b> |            ||==##    +-||                 ||            ||
+||     ||  || ||[  ]+----+      GM300 ||          \\=================//            ||
+||     ||  || \\======================//                                           ||
+||     ||  ||                                                                      ||
+||     ||  ##===============================##                                     ||
+||     ||                                   ||                                     ||
+||     ##===============================##  ||                                     ||
+||                                      ||  ||                                     ||
+||                                      ||  ||                                     ||
+||                                      ||  ||                                     ||
+||                ███▄ ▄███▓ ███▄ ▄███▓▓█████▄  ██▒   █▓ ███▄ ▄███▓                ||
+||                ▓██▒▀█▀ ██▒▓██▒▀█▀ ██▒▒██▀ ██▌▓██░   █▒▓██▒▀█▀ ██▒               ||
+||                ▓██    ▓██░▓██    ▓██░░██   █▌ ▓██  █▒░▓██    ▓██░               ||
+||                ▒██    ▒██ ▒██    ▒██ ░▓█▄   ▌  ▒██ █░░▒██    ▒██                ||
+||                ▒██▒   ░██▒▒██▒   ░██▒░▒████▓    ▒▀█░  ▒██▒   ░██▒               ||
+||                ░ ▒░   ░  ░░ ▒░   ░  ░ ▒▒▓  ▒    ░ ▐░  ░ ▒░   ░  ░               ||
+||                ░  ░      ░░  ░      ░ ░ ▒  ▒    ░ ░░  ░  ░      ░               ||
+||                ░      ░   ░      ░    ░ ░  ░      ░░  ░      ░                  ||
+||                       ░          ░      ░          ░         ░                  ||
+||                                       ░           ░                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     Nothing too complicated here. The MMDVM is used to interface the TX/RX      ||
+||     radio which then goes to a Duplexer then the Antenna. Duplexers are         ||
+||     required if you want a repeater and they make it so two radios can share    ||
+||     the same antenna. Using two antennas is possible however, you need to space ||
+||     them out because the energy from the TX radio may overwhelm the RX radio    ||
+||     and your system will fail.                                                  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== RADIO CONFIG ==</b>                                                          ||
+||                                                                                 ||
+||     To be sure we’re all on the same piece of music here, the TX and RX radio   ||
+||     need to be separate frequencies. Standard Ham practice for UHF repeaters    ||
+||     have a +/- 5MHz (+/- 500KHz for VHF) offset between the TX and RX           ||
+||     frequencies. Additionally your duplexer also needs to be tuned for those    ||
+||     two frequencies. The duplexer I got for this project was tuned by the       ||
+||     seller however I had to change the frequencies. You’ll need a Vector        ||
+||     Network Analyzer like the nanoVNA or the one seen in the images bellow.     ||
+||     Youtube is a good resource but the TL;DR is that we're tunning a band       ||
+||     reject filter. We're only blocking out the RX frequency from the TX radio   ||
+||     and the TX frequency from the RX radio.                                     ||
+||                                                                                 ||
+||     <a href="https://youtu.be/tf5h_wz9G2o" target="_blank">>>> [Video] Tune a Duplexer with a Spectrum Analyzer</a>                        ||
+||                                                                                 ||
+||     <a href="../img/RX_Pass_TX_Block.jpg" target="_blank">>>> [IMG] RX Pass / TX Block</a>                                                ||
+||     <a href="../img/TX_Pass_RX_Block.jpg" target="_blank">>>> [IMG] TX Pass / RX Block</a>                                                ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 ==</b>                                                        ||
+||                                                                                 ||
+||     The GM300 is a solid sub $100 VHF/UHF mobile radio however it was           ||
+||     built during the 90’s and the programming software requires MS-DOS.         ||
+||     To make matters more complicated the serial timing used to send and         ||
+||     receive data from radio to computer is CPU based. In short, if your         ||
+||     computer is too fast you’re out of luck and will be out of sync with your   ||
+||     radio. The good news is that you can use DOSBox to run the software and     ||
+||     slow down the CPU’s cycle rate to make it work. Below is the guide I used   ||
+||     to make this work. Just a heads up it’s still finicky and may not be        ||
+||     consistent.                                                                 ||
+||                                                                                 ||
+||     <a href="https://kk6jyt.com/motorola-radius-gm300-programming/" target="_blank">>>> Motorola Radius GM300 Programming</a>                                       ||
+||                                                                                 ||
+||     Not all USB to serial cables are built the same and you may have limited    ||
+||     success with what you have. I had to build my own programming cable using   ||
+||     a FT232 and Cat5 Cable. Below is the schematic I used to accomplish this.   ||
+||                                                                                 ||
+||           FT232 -> Motorola GM300 (RJ-45)                                       ||
+||       ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄       ||
+||       █                                                                 █░░     ||
+||       █           <b>FT232</b>                              <b>RJ45</b>               █░░     ||
+||       █           +---+  1N4148                   1 +-----+             █░░     ||
+||       █           |TXD|----|<---+       +-------- 2 |     |             █░░     ||
+||       █           +---+         |       |         3 |     |---+         █░░     ||
+||       █           +---+         |       |         4 |         |         █░░     ||
+||       █           |RXD|---------+-------+   +---- 5 |         |         █░░     ||
+||       █           +---+                     |     6 |     *---*         █░░     ||
+||       █           +---+                     |     7 |     |             █░░     ||
+||       █           |GND|---------------------+     8 +-----*             █░░     ||
+||       █           +---+                                                 █░░     ||
+||       █                                                                 █░░     ||
+||       █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░     ||
+||        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░     ||
+||                                                                                 ||
+||     Nothing special is needed when you program your GM300, just create an       ||
+||     analog channel for 25KHz FM at the desired frequency. Also be sure to set   ||
+||     the squelch to <b>CSQ</b> (Carrier Squelch) so it RXs everything The link.         ||
+||     Below is a copy of the programming software I used. And again, this step    ||
+||     is kinda a pain but with a little trial and error you should be fine. :3    ||
+||                                                                                 ||
+||     <b>Download:</b> <a href="../files/gm300v5.zip" target="_blank">Motorola Radius GM300 V5</a>                                          ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 JUMPERS ==</b>                                                ||
+||                                                                                 ||
+||     Below are the jumper settings for both my TX and RX radio. These jumpers    ||
+||     can be found on the bottom side of the radio. You’ll need to pop open the   ||
+||     radio to access them.                                                       ||
+||                                                                                 ||
+||                             ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄                               ||
+||                             █ JUMPER █ POSITION █░░                             ||
+||                             █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░                             ||
+||                             █ P701   -->   B    █░░                             ||
+||                             █ P651   -->   A    █░░                             ||
+||                             █ P551   -->   A    █░░                             ||
+||                             █ P808   -->   A    █░░                             ||
+||                             █ P601   -->   B    █░░                             ||
+||                             █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                             ||
+||                              ░░░░░░░░░░░░░░░░░░░░░░                             ||
+||                                                                                 ||
+||                                  ╔╗ ╔═╗╔═╗╦╔═                                   ||
+||                                  ╠╩╗╠═╣║  ╠╩╗                                   ||
+||                                  ╚═╝╩ ╩╚═╝╩ ╩                                   ||
+||     ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄      ||
+||     █                                                         ||||||||   █░░    ||
+||     █ *-----------------------------+                                    █░░    ||
+||     █ |                             |                                    █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |    P701           P551             █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |    +■■■   P651    A ▄    +---------█░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |    A  B   B +       █    |         █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |             █     B +    |≡░░░░░░░ █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |           A ▀            |≡░░░░░░░ █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |                          |         █░░    ||
+||     █ |   ░░░░░   ░░░░░░░░░         |                          |         █░░    ||
+||     █ |                             |                          |≡░░░░░░░ █░░    ||
+||     █ |  ░░░░░░░░░░░░  ░░░░░░░░░░   |                          |≡░░░░░░░ █░░    ||
+||     █ |  ░░▄██████▄░░  ░░░░░░░░░░   |    P808                  |         █░░    ||
+||     █ |  ▄███ ██ ███▄  ░░░░░░░░░░   |    ■■■+                  |         █░░    ||
+||     █ |  ███ ,▐▌, ███  ░░░░░░░░░░   |    A  B                  |≡░░░░░░░ █░░    ||
+||     █ |  ▀█ ██▄▄██ █▀  ░░░░░░░░░░   |     P601                 |≡░░░░░░░ █░░    ||
+||     █ |  ░░▀██████▀░░               |     ■■■+                 |≡░░░░░░░ █░░    ||
+||     █ |  ░░░░░░░░░░░░               |     B  A                 |≡░░░░░░░ █░░    ||
+||     █ |                             |                          |≡░░░░░░░ █░░    ||
+||     █ +-----------------------------+                          |         █░░    ||
+||     █                    |||||||||||||||||||||||||||||||       |         █░░    ||
+||     █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                  ╔═╗╦═╗╔═╗╔╗╔╔╦╗                                ||
+||                                  ╠╣ ╠╦╝║ ║║║║ ║                                 ||
+||                                  ╚  ╩╚═╚═╝╝╚╝ ╩                                 ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 PINOUT ==</b>                                                 ||
+||                                                                                 ||
+||     Below is the pinout for the Motorola GM300 which is found in the back of    ||
+||     the radio.                                                                  ||
+||                                                                                 ||
+||                                    RADIO TOP                                    ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                        | 2 | 4 | 6 | 8 | 10| 12| 14| 16|                        ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                        | 1 | 3 | 5 | 7 | 9 | 11| 13| 15|                        ||
+||                        +---+---+---+---+---+---+---+---+                        ||
+||                                   RADIO BOTTOM                                  ||
+||                                 AS SEEN FROM BACK                               ||
+||                                                                                 ||
+||                     1 EXT SPKR             9 EMERGENCY ALARM                    ||
+||                     2 MIC AUDIO IN        10 IGNITION CONTROL                   ||
+||                     3 PTT                 11 RX AUDIO OUT                       ||
+||                     4 EXTERNAL ALARM      12 PROG I/O 12                        ||
+||                     5 FLAT TX AUDIO       13 SW A+ SENSE                        ||
+||                     6 PROG I/P 6          14 PROG I/O 14                        ||
+||                     7 GROUND              15 INT SPKR +                         ||
+||                     8 COS (PROG)          16 EXT SPKR +                         ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MOTOROLA GM300 NOTE ==</b>                                                   ||
+||                                                                                 ||
+||     Please keep in mind most of these radios have been to hell and back and     ||
+||     some might not work for this application. I’ve bought six of these radios   ||
+||     to experiment with and in my experience...                                  ||
+||                                                                                 ||
+||     I’ve had the most success with the M34GMC20D3AA (25W UHF) for TX and the    ||
+||     M44GMC293AA (40W UHF) for RX. Not saying you can make over models of the    ||
+||     GM300 work however this how mine is set up now.                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== PI-STAR / MMDVM INSTALL ==</b>                                               ||
+||                                                                                 ||
+||     First download and flash SD card with Pi-Star OS. Because I use Linux       ||
+||     for my daily driver the process I used below will different if your         ||
+||     using Mac or Windows. Also At the time of this write up I used Pi-Star      ||
+||     version 4.1.2_20. Pi-Star can be downloaded with the link below.            ||
+||                                                                                 ||
+||     <a href="https://www.pistar.uk/downloads/" target="_blank">https://www.pistar.uk/downloads/</a>                                            ||
+||                                                                                 ||
+||     Below are the commands I used to flash the SD card.                         ||
+||                                                                                 ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ unzip Pi-Star_Rpi_V4.1.2_20-May-2021.zip                          █░░    ||
+||    █ $ cd Pi-Star_Rpi_V4.1.2_20-May-2021                                 █░░    ||
+||    █ $ dd if=Pi-Star_Rpi_V4.1.2_20-May-2021.img of=/dev/{YOUR SSD} bs=4M █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     If you want this device to connect to your WiFi you can add a               ||
+||     wpa_supplicant.conf file to the Boot partition of the newly flashed SD      ||
+||     card. Below is an example wpa_supplicant.conf. If the device fails to       ||
+||     connect to a network or becomes disconnected it will become an AP with      ||
+||     the SSID of “Pi Star”.                                                      ||
+||                                                                                 ||
+||         <b>wpa_supplicant.conf</b>                                                     ||
+||                                                                                 ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev             █░░    ||
+||    █ update_config=1                                                     █░░    ||
+||    █ ap_scan=1                                                           █░░    ||
+||    █ fast_reauth=1                                                       █░░    ||
+||    █ country=US                                                          █░░    ||
+||    █                                                                     █░░    ||
+||    █ network={                                                           █░░    ||
+||    █      ssid=”YOUR WIFI”                                               █░░    ||
+||    █      psk="YOUR PASSWORD"                                            █░░    ||
+||    █      id_str="0"                                                     █░░    ||
+||    █      priority=100                                                   █░░    ||
+||    █ }                                                                   █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||     Pi-Star uses a Web UI so you’ll need to fire up your favorit web browser    ||
+||     and enter in the RPi’s local IP. address If you have access to your local   ||
+||     router the hostname for this device should come up as “Pi-Star”.            ||
+||     The default login is...                                                     ||
+||                                                                                 ||
+||                         █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█                         ||
+||                         █ <b>User:</b> pi-star               █░░                       ||
+||                         █ <b>Password:</b> raspberry         █░░                       ||
+||                         █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                       ||
+||                          ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░                       ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== Rpi / MMDVM Config ==</b>                                                    ||
+||                                                                                 ||
+||     Below are the following settings I used to make the Repeater Builder        ||
+||     MMDVM work with Pi-Star.                                                    ||
+||                                                                                 ||
+||     <b>>>> Configuration</b>                                                           ||
+||                                                                                 ||
+||       >> Control Software                                                       ||
+||          -> Controller Software: MMDVMHost                                      ||
+||          -> MMDVMHost: Duplex Repeater                                          ||
+||                                                                                 ||
+||       >> MMDVMHost Configuration                                                ||
+||          -> DMR Mode: ON, RF/Net Hangtime 20Sec                                 ||
+||          -> P25 Mode: ON, RF/Net Hangtime 20Sec                                 ||
+||          -> MMDVM Display Type: Nextion, Port: Modem, Layout:G4KLX              ||
+||                                                                                 ||
+||       >> General Configuration                                                  ||
+||          -> Hostname: pi-star                                                   ||
+||          -> Node Callsign: {YOUR CALLSIGN}                                      ||
+||          -> CCS7/DMR ID: {YOUR ID}                                              ||
+||          -> Radio Frequency RX: 448.1250MHz                                     ||
+||          -> Radio Frequency TX: 443.1250MHz                                     ||
+||          -> Latitude: {YOUR LATITUDE}                                           ||
+||          -> Longitude: {YOUR Longitude}                                         ||
+||          -> Town: {YOUR TOWN}                                                   ||
+||          -> Country: {YOUR COUNTRY}                                             ||
+||          -> URL: http://www.mw0mwz.co.uk/pi-star/                               ||
+||          -> Radio/Modem Type: STM320DVM/MMDVM_HS-RASPBERRY PI HAT (GPIO)        ||
+||          -> Node Type: Public                                                   ||
+||          -> APRS Host: vancouver.aprs2.net                                      ||
+||          -> System Time Zone: {YOUR TIMEZONE}                                   ||
+||          -> Dashboard Language: {YOUR LANGUAGE}                                 ||
+||                                                                                 ||
+||       >> DMR Configuration                                                      ||
+||          -> DMR Master: BM_UnitedStates_3102                                    ||
+||          -> Hotspot Security: {YOUR PASSWORD}                                   ||
+||          -> DMR ESSID: {DEVICE ID}                                              ||
+||          -> DMR Color Code: 1                                                   ||
+||          -> DMR EmbeddedLConly: OFF                                             ||
+||          -> DMR DumpTAData: ON                                                  ||
+||                                                                                 ||
+||       >> P25 Configuration                                                      ||
+||          -> P25 Startup Host: 10-Parrot                                         ||
+||          -> P25 NAC: 293                                                        ||
+||                                                                                 ||
+||     <b>>>> Configuration --> Expert --> MMDVMHOST</b>                                  ||
+||                                                                                 ||
+||       >> CW ID         // Repeater ID Function                                  ||
+||          -> Enable: 1  // ON                                                    ||
+||          -> Time: 10   // Time in Min                                           ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== RB MMDVM PINOUT ==</b>                                                       ||
+||                                                                                 ||
+||     Below is the pinout for the Repeater Builder's MMDVM Pi Hat.                ||
+||                                                                                 ||
+||                                     FRONT                                       ||
+||                             +---+---+---+---+---+                               ||
+||                             | 5 | 4 | 3 | 4 | 1 |                               ||
+||                             +---+---+---+---+---+                               ||
+||                              \| 9 | 8 | 7 | 6 |/                                ||
+||                               +---+---+---+---+                                 ||
+||                                                                                 ||
+||                          1 (NONE)           6 RXA_R                             ||
+||                          2 TXA_R            7 (NONE)                            ||
+||                          3 INHIBIT_R        8 GND                               ||
+||                          4 RSSI_R           9 *VIN                              ||
+||                          5 PTT_R                                                ||
+||                                                                                 ||
+||                  *OPTIONAL, REQUIRES 24V --> 5V DC-DC MODULE.                   ||
+||                   NOTE: IF DC-DC MODULE IS INSTALLED DON'T POWER                ||
+||                         RPi THROUGH 5V GPIO OR USB.                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MMDVM TO GM300 SCHEMATIC ==</b>                                              ||
+||                                                                                 ||
+||     If you didn’t buy the Repeater Builder’s MMDVM cable here’s the schematic   ||
+||     on how everything is wired.                                                 ||
+||                                                                                 ||
+||           MMDVM -> TX/RX Motorola GM300                                         ||
+||   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄    ||
+||   █                                                                        █░░  ||
+||   █   +-----------------------------------+                                █░░  ||
+||   █   |                             <b>MMDVM</b> |           <b>╔═╗╦═╗╔═╗╔╗╔╔╦╗</b>      █░░  ||
+||   █   |                     +---+---+---+---+---+     <b>╠╣ ╠╦╝║ ║║║║ ║ </b>      █░░  ||
+||   █   |  +------------------| <span style="background-color:currentColor"><span style="color:black">5</span></span> | 4 | 3 | <span style="background-color:currentColor"><span style="color:black">2</span></span> | 1 |     <b>╚  ╩╚═╚═╝╝╚╝ ╩ </b>      █░░  ||
+||   █   |  |                  +---+---+---+---+---+                          █░░  ||
+||   █   |  |                   \| <span style="background-color:currentColor"><span style="color:black">9</span></span> | <span style="background-color:currentColor"><span style="color:black">8</span></span> | 7 | <span style="background-color:currentColor"><span style="color:black">6</span></span> |/                           █░░  ||
+||   █   |  |                    +---+---+---+---+                            █░░  ||
+||   █   |  |                      |   |       |                              █░░  ||
+||   █   |  |                      |   +-+     +-------------------------+    █░░  ||
+||   █   |  |                      +-----|----------------------------+  |    █░░  ||
+||   █   |  |                            |                            |  |    █░░  ||
+||   █   |  |         <b>TX GM300</b>           |          <b>RX GM300</b>          |  |    █░░  ||
+||   █   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    █░░  ||
+||   █   |  | | 2| 4| 6| 8|10|12|14|16|  |  | 2| 4| 6| 8|10|12|14|16| |  |    █░░  ||
+||   █   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    █░░  ||
+||   █   |  | | 1| <span style="background-color:currentColor"><span style="color:black">3</span></span>| <span style="background-color:currentColor"><span style="color:black">5</span></span>| <span style="background-color:currentColor"><span style="color:black">7</span></span>| 9|11|13|15|  |  | 1| 3| 5| <span style="background-color:currentColor"><span style="color:black">7</span></span>| 9|<span style="background-color:currentColor"><span style="color:black">11</span></span>|<span style="background-color:currentColor"><span style="color:black">13</span></span>|15| |  |    █░░  ||
+||   █   |  | +--+--+--+--+--+--+--+--+  |  +--+--+--+--+--+--+--+--+ |  |    █░░  ||
+||   █   |  |      |  |  |               |             |     |  |     |  |    █░░  ||
+||   █   |  +------+  |  +---------------+-------------+     |  +-----+  |    █░░  ||
+||   █   +------------+                                      +-----------+    █░░  ||
+||   █                                                                        █░░  ||
+||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░  ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== NEXTION TOUCH DISPLAY (OPTIONAL) ==</b>                                      ||
+||                                                                                 ||
+||     Below is the pinout needed to interface the Nextion display with the        ||
+||     MMDVM's UART.                                                               ||
+||                                                                                 ||
+||                    ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄                     ||
+||                    █      NEXTION      █       MMDVM      █░░                   ||
+||                    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█░░                   ||
+||                    █ VCC +5V (RED)    -->       +5V       █░░                   ||
+||                    █ GND     (BLACK)  -->       GND       █░░                   ||
+||                    █ UART_TX (GREEN)  -->      SR_RX      █░░                   ||
+||                    █ UART_RX (YELLOW) -->      SR_TX      █░░                   ||
+||                    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░                   ||
+||                     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░                   ||
+||                                                                                 ||
+||     You’ll need to flash the Nextion display with the firmware provided in      ||
+||     the MMDVM repo. You can either flash the firmware via the display’s UART    ||
+||     or the easier option of putting the firmware on a microSD Card (FAT32)      ||
+||     and booting the device with the card loaded. Firmware for the Nextion       ||
+||     displays can be found here…                                                 ||
+||                                                                                 ||
+||     <a href="https://github.com/g4klx/MMDVMHost" target="_blank">>>> https://github.com/g4klx/MMDVMHost</a>                                      ||
+||                                                                                 ||
+||     You have multiple options available depending on the size or layout style   ||
+||     you desire. The per-compiled firmware has a “.tft” extension.               ||
+||                                                                                 ||
+||     Here are the settings you need adjust from the Pi-Star Web UI to make       ||
+||     this display work.                                                          ||
+||                                                                                 ||
+||     <a href="../img/nextion_config.jpg" target="_blank">>>> PI-STAR NEXTION CONFIG</a>                                                  ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== MMDVM FIRMWARE UPGRADE FOR M17 AND FM SUPPORT (OPTIONAL) ==</b>              ||
+||                                                                                 ||
+||
+
+
+
+
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== TX / RX Tuning ==</b>                                                        ||
+||                                                                                 ||
+||     The following procedure is from the Repeater Builder’s FAQ on how they      ||
+||     recommend you tune the MMDVM for your TX and RX radio.                      ||
+||                                                                                 ||
+||   █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█   ||
+||   █ The tuning process can be separated into TWO parts: RX and TX (from the █░░ ||
+||   █ node's point of view) For each there are TWO things to be concerned     █░░ ||
+||   █ with:                                                                   █░░ ||
+||   █                                                                         █░░ ||
+||   █      -> Level and Audio Inversion.                                      █░░ ||
+||   █      -> Inversion is mostly by trial and error.                         █░░ ||
+||   █      -> Rx Audio level into the board is easily set by using the "CLIP" █░░ ||
+||   █         indicator. Just set it and forget it for now. The TX audio      █░░ ||
+||   █         level going to the radio, not so much.                          █░░ ||
+||   █                                                                         █░░ ||
+||   █                                                                         █░░ ||
+||   █               <b>----------------------RX----------------------</b>            █░░ ||
+||   █                                                                         █░░ ||
+||   █ The correct method to adjust the RX audio chain is to turn the          █░░ ||
+||   █ Multi-turn gain pot (RX_G) down the whole way. (CCW until it starts     █░░ ||
+||   █ clicking - no more than 25 turns) With the gain set to unity (gain pot  █░░ ||
+||   █ at minimum) turn the single turn pot (RX_IN) up until the CLIP light    █░░ ||
+||   █ comes on, then back it off slightly until the CLIP LED just goes out.   █░░ ||
+||   █ If you can't get the CLIP light to come on with the RX_IN pot at full   █░░ ||
+||   █ CW, then leave the RX_IN pot wide open and start turning the multi-turn █░░ ||
+||   █ gain pot (RX_G) CW until the CLIP light comes on, then back if off      █░░ ||
+||   █ slightly.                                                               █░░ ||
+||   █                                                                         █░░ ||
+||   █ Once you have done the above, the DVM *should* respond to incoming      █░░ ||
+||   █ digital signals of the protocols that are enabled in the software.      █░░ ||
+||   █ If not, you may need to flip the RX invert setting.                     █░░ ||
+||   █ (PiStar: Config>Expert>MMDVMHost)                                       █░░ ||
+||   █                                                                         █░░ ||
+||   █ If you can't get the clip light to come on with BOTH pots fully CW,     █░░ ||
+||   █ there is something wrong with the discriminator input to the board!!    █░░ ||
+||   █                                                                         █░░ ||
+||   █                                                                         █░░ ||
+||   █               <b>----------------------TX----------------------</b>            █░░ ||
+||   █                                                                         █░░ ||
+||   █ The BEST way to adjust the TX level is by using a service monitor or    █░░ ||
+||   █ deviation meter. (~2.8Khz on DMR) Barring that, the EASIEST way is to   █░░ ||
+||   █ do it via the adjust and test method. First connect to an active        █░░ ||
+||   █ reflector that has lots of traffic. While the node is transmitting,     █░░ ||
+||   █ adjust the TX pot until the subscriber radio (HT) begins to decode.     █░░ ||
+||   █ Keep turning, counting turns as you go, until the radio quits decoding. █░░ ||
+||   █ From that point turn the pot CCW half that number of turns to "center"  █░░ ||
+||   █ the level. If you can't get the radio to decode at all, change the      █░░ ||
+||   █ invert setting and try again.                                           █░░ ||
+||   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░ ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ||
+||            <a href="http://www.repeater-builder.com/products/stm32-dvm-faq.html" target="_blank">http://www.repeater-builder.com/products/stm32-dvm-faq.html</a>          ||
+||                                                                                 ||
+||     There’s also these YouTube videos created by W1MSG that demonstrate the     ||
+||     above tuning procedure.                                                     ||
+||                                                                                 ||
+||     <b>RX:</b> <a href= "https://youtu.be/dYBRPLysazg" target="_blank">https://youtu.be/dYBRPLysazg</a>                                            ||
+||     <b>TX:</b> <a href= "https://youtu.be/tHummBrS0C4" target="_blank">https://youtu.be/tHummBrS0C4</a>                                            ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== TROUBLESHOOTING ==</b>                                                       ||
+||                                                                                 ||
+||     Pi-Star comes with calibration tool for the MMDVM which you can use to      ||
+||     test the TX and RX functions of your setup. To use this program you’ll      ||
+||     need to access to the command line which you can gain threw ssh or the      ||
+||     Web UI’s virtual terminal. The virtual terminal  be found by going to…      ||
+||                                                                                 ||
+||          <b>Admin --> Configuration --> Expert --> SSH Access</b>                      ||
+||                                                                                 ||
+||     Below are the commands I used for pistar-mmdvmcal. When this program        ||
+||     runs it actively listens for key press events. Pressing the “h” key will    ||
+||     give you a list of options you can chose from.  This calibration tool       ||
+||     supports a wide range of digital modes however I only tested my repeater    ||
+||     for DMR. It would be a good idea to pull out a spectrum analyzer or a       ||
+||     RTL-SDR to see what the wave form looks like when you TX.                   ||
+||                                                                                 ||
+||    █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█      ||
+||    █ $ sudo pistar-mmdvmcal   // HELP: "h"                               █░░    ||
+||    █                          // TX: "SHIFT + D" (DMR DEVIATION MODE)    █░░    ||
+||    █                          // TX: TOGGLE "SPACEBAR" TO TURN ON AND    █░░    ||
+||    █                          //     OFF TX, MONITOR WITH SPECAN         █░░    ||
+||    █                          // RX: "b" (DMR BIT ERROR RATE "BER" MODE) █░░    ||
+||    █                          // RX: TEST RECEIVER WITH A 2ND RADIO,     █░░    ||
+||    █                          //     ADJUST RX GAIN POT SO BER IS AT     █░░    ||
+||    █                          //     ITS LOWEST.                         █░░    ||
+||    █                          // QUIT: "q"                               █░░    ||
+||    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█░░    ||
+||     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== PROJECT GALLERY ==</b>                                                       ||
+||                                                                                 ||
+||          <b>== Phase 1: POC ==</b>             <b>== Phase 2: Added Touch Screen ==</b>       ||
+||                                                                                 ||
+||          IMG: <a href="../img/mmdvm_poc_1.jpg" target="_blank">Testing and Config</a>        VIDEO: <a href="../img/mmdmv_screen_video.mp4" target="_blank">Touch Screen Test</a>                ||
+||          VIDEO: <a href="../img/mmdvm_poc_video.mp4" target="_blank">Function Test</a>                                                   ||
+||                                                                                 ||
+||                                                                                 ||
+||          <b>== Phase 3: Paint ==</b>           <b>== Phase 4: Final Build ==</b>              ||
+||                                                                                 ||
+||          IMG: <a href="../img/mmdvm_poc_screen_2.jpg" target="_blank">3D Printed Display</a>        IMG: <a href="../img/mmdvm_final.jpg" target="_blank">Finshed MMDVM Repeater</a>             ||
+||          IMG: <a href="../img/mmdvm_screen_3.jpg" target="_blank">Paint</a>                                                             ||
+||                                                                                 ||
+||                                                                                 ||
+||     <b>== CONCLUSION ==</b>                                                            ||
+||                                                                                 ||
+||     OK!                                                                         ||
+||                                                                                 ||
+||     We just built our self’s a MMDVM Repeater! :D                               ||
+||     Go a head and pat yourself on the back!                                     ||
+||                                                                                 ||
+||     -- NotPike                                                                  ||
+||                                                                                 ||
+\\=================================================================================//
+                                                            \                        
+                                                             \  ^__^                 
+                                                              \ (VV)\_______         
+                                                                (__)\        )\/\    
+                                                                 U  ||----w |        
+                                                                    ||     ||        
+            </pre>
+        </div>        
+    </body>
+
+    <!--Easter Eggs ;) -->
+    <script>
+        // Antenna
+        function play() {
+            var audio = new Audio('/audio/dmr.wav');
+            audio.play();
+        }
+
+
+        // On and Off function for the GM300
+        function radioPower(e) {
+            var audio = new Audio('/audio/motorola.wav');
+            var element = document.getElementById(e.getAttribute("name"));
+            
+            if (element.style.visibility === "hidden") {
+                audio.play();
+                element.style.visibility = "visible";
+            } else {
+                element.style.visibility = "hidden";
+            }
+        }
+    </script>
+
+@footer
