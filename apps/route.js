@@ -49,6 +49,9 @@ class Route {
                 break;   
             case '/notes_math':
                 target = "pages/notes_math.html";
+                break;   
+            case '/notes_lte':
+                target = "pages/notes_lte.html";
                 break;                                   
             case '/contact':
                 target = "pages/contact.html";
