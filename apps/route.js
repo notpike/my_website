@@ -52,7 +52,13 @@ class Route {
                 break;   
             case '/notes_lte':
                 target = "pages/notes_lte.html";
-                break;                                   
+                break; 
+            case '/anarchy_bombs':
+                target = "pages/anarchy_bombs.html";
+                break; 
+            case '/anarchy_guns':
+                target = "pages/anarchy_guns.html";
+                break;                                             
             case '/contact':
                 target = "pages/contact.html";
                 break;
